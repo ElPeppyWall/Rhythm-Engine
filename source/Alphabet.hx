@@ -1,9 +1,6 @@
 package;
 
 import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
 
@@ -12,14 +9,14 @@ using StringTools;
 /**
  * Loosley based on FlxTypeText lolol
  */
-class Alphabet extends FlxSpriteGroup
+class Alphabet extends flixel.group.FlxSpriteGroup
 {
 	public var delay:Float = 0.05;
 	public var paused:Bool = false;
 
 	// for menu shit
 	public var targetY:Float = 0;
-	public var isMenuItem:Bool = false;
+	public var type:Array<AlphabetType> = [];
 
 	public var text:String = "";
 
@@ -51,13 +48,9 @@ class Alphabet extends FlxSpriteGroup
 		if (text != "")
 		{
 			if (typed)
-			{
 				startTypedText();
-			}
 			else
-			{
 				addText();
-			}
 		}
 	}
 
@@ -68,10 +61,6 @@ class Alphabet extends FlxSpriteGroup
 		var xPos:Float = 0;
 		for (character in splitWords)
 		{
-			// if (character.fastCodeAt() == " ")
-			// {
-			// }
-
 			if (character == " " || character == "-")
 			{
 				lastWasSpace = true;
@@ -145,13 +134,8 @@ class Alphabet extends FlxSpriteGroup
 				lastWasSpace = true;
 			}
 
-			#if (haxe >= "4.0.0")
 			var isNumber:Bool = AlphaCharacter.numbers.contains(splitWords[loopNum]);
 			var isSymbol:Bool = AlphaCharacter.symbols.contains(splitWords[loopNum]);
-			#else
-			var isNumber:Bool = AlphaCharacter.numbers.indexOf(splitWords[loopNum]) != -1;
-			var isSymbol:Bool = AlphaCharacter.symbols.indexOf(splitWords[loopNum]) != -1;
-			#end
 
 			if (AlphaCharacter.alphabet.indexOf(splitWords[loopNum].toLowerCase()) != -1 || isNumber || isSymbol)
 				// if (AlphaCharacter.alphabet.contains(splitWords[loopNum].toLowerCase()) || isNumber || isSymbol)
@@ -220,19 +204,24 @@ class Alphabet extends FlxSpriteGroup
 
 	override function update(elapsed:Float)
 	{
-		if (isMenuItem)
-		{
-			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
+		var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 
-			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16);
-			x = FlxMath.lerp(x, (targetY * 20) + 90, 0.16);
-		}
+		if (!type.contains(IGNORE_Y))
+			y = CoolUtil.coolLerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16);
+		if (!type.contains(IGNORE_X))
+			x = CoolUtil.coolLerp(x, (targetY * 20) + 90, 0.16);
 
 		super.update(elapsed);
 	}
 }
 
-class AlphaCharacter extends FlxSprite
+enum AlphabetType
+{
+	IGNORE_Y;
+	IGNORE_X;
+}
+
+class AlphaCharacter extends flixel.FlxSprite
 {
 	public static var alphabet:String = "abcdefghijklmnopqrstuvwxyz";
 
@@ -248,7 +237,7 @@ class AlphaCharacter extends FlxSprite
 		var tex = Paths.getSparrowAtlas('alphabet');
 		frames = tex;
 
-		antialiasing = true;
+		antialiasing = getPref('antialiasing');
 	}
 
 	public function createBold(letter:String)

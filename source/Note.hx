@@ -1,59 +1,67 @@
 package;
 
-import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.math.FlxMath;
-import flixel.util.FlxColor;
+using StringTools;
+
 #if polymod
 import polymod.format.ParseRules.TargetSignatureElement;
 #end
 
-using StringTools;
-
-class Note extends FlxSprite
+class Note extends flixel.FlxSprite
 {
-	public var strumTime:Float = 0;
+	public static final swagWidth:Float = 160 * 0.7;
 
+	public var strumTime:Float = 0;
 	public var mustPress:Bool = false;
 	public var noteData:Int = 0;
+	public var noteJSONData:Int = 0;
+	public var noteType:Int = 0;
+	public var noteStyle:String = '';
 	public var canBeHit:Bool = false;
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
 	public var prevNote:Note;
+	public var isAlt = false;
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 
 	public var noteScore:Float = 1;
 
-	public static var swagWidth:Float = 160 * 0.7;
-	public static var PURP_NOTE:Int = 0;
-	public static var GREEN_NOTE:Int = 2;
-	public static var BLUE_NOTE:Int = 1;
-	public static var RED_NOTE:Int = 3;
-
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
+	public function new(_strumTime:Float, _noteData:Int, ?_prevNote:Note, ?_sustainNote:Bool = false, ?isChartingNote:Bool = false)
 	{
 		super();
+		noteStyle = getNoteStyle();
 
 		if (prevNote == null)
 			prevNote = this;
 
-		this.prevNote = prevNote;
-		isSustainNote = sustainNote;
+		prevNote = _prevNote;
+		isSustainNote = _sustainNote;
 
 		x += 50;
-		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
-		this.strumTime = strumTime;
 
-		this.noteData = noteData;
+		strumTime = _strumTime;
 
-		var daStage:String = PlayState.curStage;
+		noteData = _noteData % 4;
+		noteJSONData = _noteData;
+		noteType = Std.int(noteJSONData / 8);
 
-		switch (daStage)
+		var downscroll = getPref('downscroll') && !isChartingNote;
+		switch (noteStyle)
 		{
-			case 'school' | 'schoolEvil':
+			default:
+				frames = Paths.getSparrowAtlas('NOTE_assets');
+
+				var note = PlayState.notesColor[noteData];
+				animation.addByPrefix('${note}Scroll', '${note}0', 24, false, false, downscroll);
+				animation.addByPrefix('${note}holdend', '${note} hold end', 24, false);
+				animation.addByPrefix('${note}hold', '${note} hold piece', 24, false);
+
+				setGraphicSize(Std.int(width * 0.7));
+				updateHitbox();
+
+			case 'pixel':
 				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
 
 				animation.add('greenScroll', [6]);
@@ -78,29 +86,9 @@ class Note extends FlxSprite
 
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
-
-			default:
-				frames = Paths.getSparrowAtlas('NOTE_assets');
-
-				animation.addByPrefix('greenScroll', 'green0');
-				animation.addByPrefix('redScroll', 'red0');
-				animation.addByPrefix('blueScroll', 'blue0');
-				animation.addByPrefix('purpleScroll', 'purple0');
-
-				animation.addByPrefix('purpleholdend', 'pruple end hold');
-				animation.addByPrefix('greenholdend', 'green hold end');
-				animation.addByPrefix('redholdend', 'red hold end');
-				animation.addByPrefix('blueholdend', 'blue hold end');
-
-				animation.addByPrefix('purplehold', 'purple hold piece');
-				animation.addByPrefix('greenhold', 'green hold piece');
-				animation.addByPrefix('redhold', 'red hold piece');
-				animation.addByPrefix('bluehold', 'blue hold piece');
-
-				setGraphicSize(Std.int(width * 0.7));
-				updateHitbox();
-				antialiasing = true;
 		}
+
+		antialiasing = getPref('antialiasing') && noteStyle != 'pixel';
 
 		switch (noteData)
 		{
@@ -122,9 +110,7 @@ class Note extends FlxSprite
 
 		if (isSustainNote && prevNote != null)
 		{
-			noteScore * 0.2;
 			alpha = 0.6;
-
 			x += width / 2;
 
 			switch (noteData)
@@ -143,7 +129,7 @@ class Note extends FlxSprite
 
 			x -= width / 2;
 
-			if (PlayState.curStage.startsWith('school'))
+			if (noteStyle == 'pixel')
 				x += 30;
 
 			if (prevNote.isSustainNote)
@@ -196,5 +182,23 @@ class Note extends FlxSprite
 			if (alpha > 0.3)
 				alpha = 0.3;
 		}
+	}
+
+	public static function getNoteStyle():String
+	{
+		var _noteStyle = '';
+		switch (curSong())
+		{
+			default:
+				_noteStyle = 'normal';
+		}
+		switch (PlayState.curStage)
+		{
+			case 'school', 'schoolEvil':
+				_noteStyle = 'pixel';
+			default:
+				_noteStyle = 'normal';
+		}
+		return _noteStyle;
 	}
 }

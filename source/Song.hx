@@ -2,7 +2,6 @@ package;
 
 import Section.SwagSection;
 import haxe.Json;
-import haxe.format.JsonParser;
 import lime.utils.Assets;
 
 using StringTools;
@@ -17,7 +16,6 @@ typedef SwagSong =
 
 	var player1:String;
 	var player2:String;
-	var validScore:Bool;
 }
 
 class Song
@@ -38,31 +36,28 @@ class Song
 		this.bpm = bpm;
 	}
 
+	public static inline function curSong():String
+		return PlayState.SONG.song.toLowerCase();
+
+	public static inline function prettySong():String
+		return CoolUtil.capitalize(curSong()).replace('-', ' ');
+
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
 		var rawJson = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
 
 		while (!rawJson.endsWith("}"))
-		{
 			rawJson = rawJson.substr(0, rawJson.length - 1);
-			// LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
-		}
 
-		// FIX THE CASTING ON WINDOWS/NATIVE
-		// Windows???
-		// trace(songData);
+		return parseJSONshit(rawJson);
+	}
 
-		// trace('LOADED FROM JSON: ' + songData.notes);
-		/* 
-			for (i in 0...songData.notes.length)
-			{
-				trace('LOADED FROM JSON: ' + songData.notes[i].sectionNotes);
-				// songData.notes[i].sectionNotes = songData.notes[i].sectionNotes
-			}
+	public static function loadFromJsonFILE(jsonPath:String):SwagSong
+	{
+		var rawJson = sys.io.File.getContent(jsonPath).trim();
 
-				daNotes = songData.notes;
-				daSong = songData.song;
-				daBpm = songData.bpm; */
+		while (!rawJson.endsWith("}"))
+			rawJson = rawJson.substr(0, rawJson.length - 1);
 
 		return parseJSONshit(rawJson);
 	}
@@ -70,7 +65,6 @@ class Song
 	public static function parseJSONshit(rawJson:String):SwagSong
 	{
 		var swagShit:SwagSong = cast Json.parse(rawJson).song;
-		swagShit.validScore = true;
 		return swagShit;
 	}
 }

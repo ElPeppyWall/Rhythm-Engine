@@ -23,12 +23,14 @@ class AnimationDebug extends FlxState
 	var curAnim:Int = 0;
 	var isDad:Bool = true;
 	var daAnim:String = 'spooky';
+	var isPlayer = false;
 	var camFollow:FlxObject;
 
-	public function new(daAnim:String = 'spooky')
+	public function new(daAnim:String = 'spooky', _isPlayer:Bool)
 	{
 		super();
 		this.daAnim = daAnim;
+		isPlayer = _isPlayer;
 	}
 
 	override function create()
@@ -44,7 +46,7 @@ class AnimationDebug extends FlxState
 
 		if (isDad)
 		{
-			dad = new Character(0, 0, daAnim);
+			dad = new Character(0, 0, daAnim, [], false);
 			dad.screenCenter();
 			dad.debugMode = true;
 			add(dad);
@@ -54,7 +56,7 @@ class AnimationDebug extends FlxState
 		}
 		else
 		{
-			bf = new Boyfriend(0, 0);
+			bf = new Boyfriend(0, 0, 'bf', []);
 			bf.screenCenter();
 			bf.debugMode = true;
 			add(bf);

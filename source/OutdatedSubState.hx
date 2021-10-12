@@ -21,7 +21,7 @@ class OutdatedSubState extends MusicBeatState
 			"HEY! You're running an outdated version of the game!\nCurrent version is "
 			+ ver
 			+ " while the most recent version is "
-			+ NGio.GAME_VER
+			+ GameVars.gameVer
 			+ "! Press Space to go to itch.io, or ESCAPE to ignore this!!",
 			32);
 		txt.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
@@ -38,7 +38,7 @@ class OutdatedSubState extends MusicBeatState
 		if (controls.BACK)
 		{
 			leftState = true;
-			FlxG.switchState(new MainMenuState());
+			switchState(MainMenuState);
 		}
 		super.update(elapsed);
 	}

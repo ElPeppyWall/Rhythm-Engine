@@ -29,7 +29,7 @@ class OptionsMenu extends MusicBeatState
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
+		menuBG.antialiasing = getPref('antialiasing');
 		add(menuBG);
 
 		/* 
@@ -58,31 +58,29 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		/* 
-			if (controls.ACCEPT)
-			{
-				changeBinding();
-			}
+		if (controls.ACCEPT)
+		{
+			changeBinding();
+		}
 
-			if (isSettingControl)
-				waitingInput();
-			else
-			{
-				if (controls.BACK)
-					FlxG.switchState(new MainMenuState());
-				if (controls.UP_P)
-					changeSelection(-1);
-				if (controls.DOWN_P)
-					changeSelection(1);
-			}
-		 */
+		if (isSettingControl)
+			waitingInput();
+		else
+		{
+			if (controls.BACK)
+				switchState(MainMenuState);
+			if (controls.UI_UP_P)
+				changeSelection(-1);
+			if (controls.UI_DOWN_P)
+				changeSelection(1);
+		}
 	}
 
 	function waitingInput():Void
 	{
 		if (FlxG.keys.getIsDown().length > 0)
 		{
-			PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxG.keys.getIsDown()[0].ID, null);
+			PlayerSettings.player1.controls.replaceBinding(Control.UI_LEFT, Keys, FlxG.keys.getIsDown()[0].ID, null);
 		}
 		// PlayerSettings.player1.controls.replaceBinding(Control)
 	}
@@ -99,10 +97,6 @@ class OptionsMenu extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		#if !switch
-		NGio.logEvent('Fresh');
-		#end
-
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		curSelected += change;

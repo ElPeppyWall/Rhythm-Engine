@@ -107,6 +107,12 @@ class Paths
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)
 	{
+		#if assetsLogger
+		if (!OpenFlAssets.exists(image(key, library)))
+			trace('ERROR: Could not find $library/images/$key');
+		if (!OpenFlAssets.exists(file('images/$key.xml', library)))
+			trace('ERROR: Could not find $library/images/$key.xml');
+		#end
 		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));
 	}
 

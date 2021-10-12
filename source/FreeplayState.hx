@@ -8,6 +8,8 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 
@@ -25,7 +27,7 @@ class FreeplayState extends MusicBeatState
 	var diffText:FlxText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
-	var coolColors = [-7179779, -7179779, -14535868, -7072173, -223529, -6237697, -34625, -608764,];
+	var coolColors = [-7179779, -7179779, -14535868, -7072173, -223529, -6237697, -34625, -608764];
 	var bg = new MenuBG(DESAT);
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
@@ -35,17 +37,11 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
-
-		for (i in 0...initSonglist.length)
-		{
-			songs.push(new SongMetadata(initSonglist[i], 0, 'gf'));
-		}
-
 		#if desktop
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		addWeek(['Tutorial'], 0, ['gf']);
 		addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
 		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
 		addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
@@ -53,7 +49,7 @@ class FreeplayState extends MusicBeatState
 		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
 		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
 
-		// bg.color = -7179779;
+		bg.color = -7179779;
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -79,7 +75,8 @@ class FreeplayState extends MusicBeatState
 		}
 
 		scoreText = new FlxText(0.7 * FlxG.width, 5, 0, "", 32);
-		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
+		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreText.borderSize = 1.5;
 
 		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, FlxColor.BLACK);
 		scoreBG.antialiasing = (false);
@@ -87,7 +84,8 @@ class FreeplayState extends MusicBeatState
 		add(scoreBG);
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
-		diffText.font = (scoreText.font);
+		diffText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		diffText.borderSize = 1.5;
 		add(diffText);
 
 		add(scoreText);
@@ -140,8 +138,9 @@ class FreeplayState extends MusicBeatState
 		scoreText.x = (FlxG.width - scoreText.width - 6);
 		scoreBG.scale.x = (FlxG.width - scoreText.x + 6);
 		scoreBG.x = (FlxG.width - scoreBG.scale.x / 2);
-		diffText.x = (scoreBG.x + scoreBG.width / 2);
-		diffText.x = (diffText.x - diffText.width / 2);
+		diffText.x = (Std.int(scoreBG.x + scoreBG.width / 2));
+		var a = diffText;
+		a.x = (a.x - diffText.width / 2);
 	}
 
 	override function update(elapsed:Float)
@@ -164,13 +163,9 @@ class FreeplayState extends MusicBeatState
 		var accepted = controls.ACCEPT;
 
 		if (upP)
-		{
 			changeSelection(-1);
-		}
 		if (downP)
-		{
 			changeSelection(1);
-		}
 
 		if (controls.UI_LEFT_P)
 			changeDiff(-1);
@@ -210,6 +205,8 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		diffText.text = '< ${CoolUtil.getDiffByIndex(curDifficulty)} >';
+		FlxTween.color(diffText, CoolUtil.camLerpShit(.45), diffText.color, CoolUtil.difficultyColorArray[curDifficulty]);
+		positionHighscore();
 	}
 
 	function changeSelection(change:Int = 0)
@@ -230,7 +227,7 @@ class FreeplayState extends MusicBeatState
 		// lerpScore = 0;
 		#end
 
-		#if PRELOAD_ALL
+		#if false
 		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 		#end
 
@@ -261,20 +258,21 @@ class FreeplayState extends MusicBeatState
 
 	private function changeBGColor():Void
 	{
+		var a:Dynamic = bg;
+		var b = bg.color;
 		var c = coolColors[songs[curSelected].week % coolColors.length];
 		var d = CoolUtil.camLerpShit(0.045);
-
-		var e:Dynamic = ((((c >> 16) & 255) - ((bg.color >> 16) & 255)) * d + ((bg.color >> 16) & 255));
-		var f:Dynamic = ((((c >> 8) & 255) - ((bg.color >> 8) & 255)) * d + ((bg.color >> 8) & 255));
-		var h:Dynamic = (((c & 255) - (bg.color & 255)) * d + (bg.color & 255));
-		var c:Dynamic = ((((c >> 24) & 255) - ((bg.color >> 24) & 255)) * d + ((bg.color >> 24) & 255));
-
-		bg.color = new FlxColor();
-		bg.color = (((bg.color & -16711681) | ((255 < e ? 255 : 0 > e ? 0 : e) << 16)) & -65281) | ((255 < f ? 255 : 0 > f ? 0 : f) << 8);
-		bg.color &= -256;
-		bg.color |= 255 < h ? 255 : 0 > h ? 0 : h;
-		bg.color &= 16777215;
-		bg.color |= (255 < c ? 255 : 0 > c ? 0 : c) << 24;
+		var e = Std.int((((c >> 16) & 255) - ((b >> 16) & 255)) * d + ((b >> 16) & 255));
+		var f = Std.int((((c >> 8) & 255) - ((b >> 8) & 255)) * d + ((b >> 8) & 255));
+		var h = Std.int(((c & 255) - (b & 255)) * d + (b & 255));
+		c = Std.int((((c >> 24) & 255) - ((b >> 24) & 255)) * d + ((b >> 24) & 255));
+		b = new FlxColor();
+		b = (((b & -16711681) | ((255 < e ? 255 : 0 > e ? 0 : e) << 16)) & -65281) | ((255 < f ? 255 : 0 > f ? 0 : f) << 8);
+		b &= -256;
+		b |= 255 < h ? 255 : 0 > h ? 0 : h;
+		b &= 16777215;
+		b |= (255 < c ? 255 : 0 > c ? 0 : c) << 24;
+		a.set_color(b);
 	}
 }
 
