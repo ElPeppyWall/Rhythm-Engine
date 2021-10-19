@@ -29,8 +29,6 @@ class Main extends Sprite
 	public function setFPSCap(cap:Int)
 	{
 		openfl.Lib.current.stage.frameRate = cap;
-		FlxG.updateFramerate = cap;
-		FlxG.drawFramerate = cap;
 	}
 
 	public function new()
@@ -69,6 +67,15 @@ class Main extends Sprite
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 
 		addChild(fpsCounter);
+	}
+
+	@:noCompletion private override function __update(transformOnly:Bool, updateChildren:Bool):Void
+	{
+		if (checkKey('F11'))
+			FlxG.fullscreen = !FlxG.fullscreen;
+
+		PreferencesMenu.checkPrefValue('fpsCap');
+		super.__update(transformOnly, updateChildren);
 	}
 
 	public function getFPS():Float

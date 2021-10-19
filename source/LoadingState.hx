@@ -146,7 +146,7 @@ class LoadingState extends MusicBeatState
 
 	inline static public function loadAndSwitchState(target:Class<FlxState>, stopMusic = false)
 	{
-		switchState(getNextState(target, stopMusic));
+		CoolUtil.switchState(getNextState(target, stopMusic));
 	}
 
 	static function getNextState(target:Class<FlxState>, stopMusic = false):Class<FlxState>

@@ -27,7 +27,9 @@ class Note extends flixel.FlxSprite
 
 	public var noteScore:Float = 1;
 
-	public function new(_strumTime:Float, _noteData:Int, ?_prevNote:Note, ?_sustainNote:Bool = false, ?isChartingNote:Bool = false)
+	var isChartingNote:Bool = false;
+
+	public function new(_strumTime:Float, _noteData:Int, ?_prevNote:Note, ?_sustainNote:Bool = false, ?_isChartingNote:Bool = false)
 	{
 		super();
 		noteStyle = getNoteStyle();
@@ -47,110 +49,8 @@ class Note extends flixel.FlxSprite
 		noteJSONData = _noteData;
 		noteType = Std.int(noteJSONData / 8);
 
-		var downscroll = getPref('downscroll') && !isChartingNote;
-		switch (noteStyle)
-		{
-			default:
-				frames = Paths.getSparrowAtlas('NOTE_assets');
-
-				var note = PlayState.notesColor[noteData];
-				animation.addByPrefix('${note}Scroll', '${note}0', 24, false, false, downscroll);
-				animation.addByPrefix('${note}holdend', '${note} hold end', 24, false);
-				animation.addByPrefix('${note}hold', '${note} hold piece', 24, false);
-
-				setGraphicSize(Std.int(width * 0.7));
-				updateHitbox();
-
-			case 'pixel':
-				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
-
-				animation.add('greenScroll', [6]);
-				animation.add('redScroll', [7]);
-				animation.add('blueScroll', [5]);
-				animation.add('purpleScroll', [4]);
-
-				if (isSustainNote)
-				{
-					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
-
-					animation.add('purpleholdend', [4]);
-					animation.add('greenholdend', [6]);
-					animation.add('redholdend', [7]);
-					animation.add('blueholdend', [5]);
-
-					animation.add('purplehold', [0]);
-					animation.add('greenhold', [2]);
-					animation.add('redhold', [3]);
-					animation.add('bluehold', [1]);
-				}
-
-				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
-				updateHitbox();
-		}
-
-		antialiasing = getPref('antialiasing') && noteStyle != 'pixel';
-
-		switch (noteData)
-		{
-			case 0:
-				x += swagWidth * 0;
-				animation.play('purpleScroll');
-			case 1:
-				x += swagWidth * 1;
-				animation.play('blueScroll');
-			case 2:
-				x += swagWidth * 2;
-				animation.play('greenScroll');
-			case 3:
-				x += swagWidth * 3;
-				animation.play('redScroll');
-		}
-
-		// trace(prevNote);
-
-		if (isSustainNote && prevNote != null)
-		{
-			alpha = 0.6;
-			x += width / 2;
-
-			switch (noteData)
-			{
-				case 2:
-					animation.play('greenholdend');
-				case 3:
-					animation.play('redholdend');
-				case 1:
-					animation.play('blueholdend');
-				case 0:
-					animation.play('purpleholdend');
-			}
-
-			updateHitbox();
-
-			x -= width / 2;
-
-			if (noteStyle == 'pixel')
-				x += 30;
-
-			if (prevNote.isSustainNote)
-			{
-				switch (prevNote.noteData)
-				{
-					case 0:
-						prevNote.animation.play('purplehold');
-					case 1:
-						prevNote.animation.play('bluehold');
-					case 2:
-						prevNote.animation.play('greenhold');
-					case 3:
-						prevNote.animation.play('redhold');
-				}
-
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
-				prevNote.updateHitbox();
-				// prevNote.setGraphicSize();
-			}
-		}
+		isChartingNote = _isChartingNote;
+		loadNote();
 	}
 
 	override function update(elapsed:Float)
@@ -177,10 +77,81 @@ class Note extends flixel.FlxSprite
 				wasGoodHit = true;
 		}
 
+		var downscroll = getPref('downscroll') && !isChartingNote;
+		if (animation.curAnim != null)
+			if (animation.curAnim.name.endsWith('Scroll'))
+				flipY = downscroll;
 		if (tooLate)
 		{
 			if (alpha > 0.3)
 				alpha = 0.3;
+		}
+	}
+
+	public function loadNote()
+	{
+		@:privateAccess
+		animation._animations = null;
+
+		var downscroll = false;
+		var note = PlayState.notesColor[noteData];
+		switch (noteStyle)
+		{
+			default:
+				frames = Paths.getSparrowAtlas('NOTE_assets');
+
+				animation.addByPrefix('${note}Scroll', '${note}0', 24, false, false, downscroll);
+				animation.addByPrefix('${note}holdend', '${note} hold end', 24, false);
+				animation.addByPrefix('${note}hold', '${note} hold piece', 24, false);
+
+				setGraphicSize(Std.int(width * 0.7));
+				updateHitbox();
+
+			case 'pixel':
+				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
+
+				animation.add('${note}Scroll', [4 + noteData], 24, false, false, downscroll);
+
+				if (isSustainNote)
+				{
+					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
+
+					animation.add('${note}holdend', [4 + noteData]);
+					animation.add('${note}hold', [noteData]);
+				}
+
+				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
+				updateHitbox();
+		}
+
+		var note = PlayState.notesColor[noteData];
+
+		antialiasing = getPref('antialiasing') && noteStyle != 'pixel';
+
+		x += swagWidth * noteData;
+		animation.play('${note}Scroll');
+
+		if (isSustainNote && prevNote != null)
+		{
+			alpha = 0.6;
+			x += width / 2;
+
+			animation.play('${note}holdend');
+			updateHitbox();
+
+			x -= width / 2;
+
+			if (noteStyle == 'pixel')
+				x += 30;
+
+			if (prevNote.isSustainNote)
+			{
+				prevNote.animation.play('${note}hold');
+
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
+				prevNote.updateHitbox();
+				// prevNote.setGraphicSize();
+			}
 		}
 	}
 

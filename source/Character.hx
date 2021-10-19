@@ -1,15 +1,21 @@
 package;
 
+import PlayState.notesDir;
 import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 
+/**
+ * TODO: Rework all characters
+ */
 class Character extends flixel.FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
 	public var characterArgs:Array<String> = [];
-
+	public var characterAttribs:Array<CharacterAttrib> = [];
+	public var altNoteAnim = '';
+	public var altAnim = '';
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 
@@ -36,50 +42,18 @@ class Character extends flixel.FlxSprite
 
 					addAnim('BF idle dance', {
 						name: 'idle',
-						frameRate: 24,
-						loop: false,
 						offsets: [-5, 0],
 						playerOffsets: [-5, 0],
-						useIndices: false,
-						indices: [0]
 					});
 
-					addAnim('BF NOTE LEFT0', {
-						name: 'singLEFT',
-						frameRate: 24,
-						loop: false,
-						offsets: [-38, -6],
-						playerOffsets: [12, -6],
-						useIndices: false,
-						indices: [0]
-					});
-					addAnim('BF NOTE DOWN0', {
-						name: 'singDOWN',
-						frameRate: 24,
-						loop: false,
-						offsets: [-40, -50],
-						playerOffsets: [-10, -50],
-						useIndices: false,
-						indices: [0]
-					});
-					addAnim('BF NOTE UP0', {
-						name: 'singUP',
-						frameRate: 24,
-						loop: false,
-						offsets: [1, 27],
-						playerOffsets: [-29, 27],
-						useIndices: false,
-						indices: [0]
-					});
-					addAnim('BF NOTE RIGHT0', {
-						name: 'singRIGHT',
-						frameRate: 24,
-						loop: false,
-						offsets: [32, -7],
-						playerOffsets: [-38, -7],
-						useIndices: false,
-						indices: [0]
-					});
+					var singOffsets = [[-38, -6], [-40, -50], [1, 27], [32, -7]];
+					var singOffsetsPlayer = [[12, -6], [-10, -50], [-29, 27], [-38, -7]];
+					for (dir in 0...4)
+						addAnim('BF NOTE ${notesDir[dir]}0', {
+							name: 'sing${notesDir[dir]}',
+							offsets: singOffsets[dir],
+							playerOffsets: singOffsetsPlayer[dir],
+						});
 
 					animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
 					animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
@@ -171,37 +145,17 @@ class Character extends flixel.FlxSprite
 
 				case 'pico':
 					frames = getCharacterFrames('Pico_FNF_assetss', 'week3');
-					animation.addByPrefix('idle', "Pico Idle Dance", 24);
-					animation.addByPrefix('singUP', 'pico Up note0', 24, false);
-					animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
-					if (isPlayer)
-					{
-						animation.addByPrefix('singLEFT', 'Pico NOTE LEFT0', 24, false);
-						animation.addByPrefix('singRIGHT', 'Pico Note Right0', 24, false);
-						animation.addByPrefix('singRIGHTmiss', 'Pico Note Right Miss', 24, false);
-						animation.addByPrefix('singLEFTmiss', 'Pico NOTE LEFT miss', 24, false);
-					}
-					else
-					{
-						// Need to be flipped! REDO THIS LATER!
-						animation.addByPrefix('singLEFT', 'Pico Note Right0', 24, false);
-						animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
-						animation.addByPrefix('singRIGHTmiss', 'Pico NOTE LEFT miss', 24, false);
-						animation.addByPrefix('singLEFTmiss', 'Pico Note Right Miss', 24, false);
-					}
 
-					animation.addByPrefix('singUPmiss', 'pico Up note miss', 24);
-					animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24);
+					addAnim('Pico Idle Dance', {
+						name: 'idle',
+					});
 
-					addOffset('idle');
-					addOffset("singUP", -29, 27);
-					addOffset("singRIGHT", -68, -7);
-					addOffset("singLEFT", 65, 9);
-					addOffset("singDOWN", 200, -70);
-					addOffset("singUPmiss", -19, 67);
-					addOffset("singRIGHTmiss", -60, 41);
-					addOffset("singLEFTmiss", 62, 64);
-					addOffset("singDOWNmiss", 210, -28);
+					var singOffsets = [[57, 0], [192, -83], [-36, 20], [-86, -11]];
+					for (dir in 0...4)
+						addAnim('Pico Note ${notesDir[dir]}0', {
+							name: 'sing${notesDir[dir]}',
+							offsets: singOffsets[dir],
+						});
 
 					playAnim('idle');
 
@@ -352,15 +306,15 @@ class Character extends flixel.FlxSprite
 					animation.addByPrefix('singLEFT-alt', 'Parent Left Note Mom', 24, false);
 					animation.addByPrefix('singRIGHT-alt', 'Parent Right Note Mom', 24, false);
 
-					addOffset('idle');
-					addOffset("singUP", -47, 24);
-					addOffset("singRIGHT", -1, -23);
-					addOffset("singLEFT", -30, 16);
-					addOffset("singDOWN", -31, -29);
-					addOffset("singUP-alt", -47, 24);
-					addOffset("singRIGHT-alt", -1, -24);
-					addOffset("singLEFT-alt", -30, 15);
-					addOffset("singDOWN-alt", -30, -27);
+					addOffset('singRIGHT-alt', -1, -24);
+					addOffset('singDOWN', -39, -24);
+					addOffset('singLEFT-alt', -30, 15);
+					addOffset('singUP', -43, 25);
+					addOffset('idle', 0, 0);
+					addOffset('singDOWN-alt', -30, -27);
+					addOffset('singRIGHT', 0, -20);
+					addOffset('singLEFT', -28, 20);
+					addOffset('singUP-alt', -47, 24);
 
 					playAnim('idle');
 				case 'monster-christmas':
@@ -510,17 +464,11 @@ class Character extends flixel.FlxSprite
 
 			curCharacter = 'dad';
 			frames = getCharacterFrames('DADDY_DEAREST');
-			animation.addByPrefix('idle', 'Dad idle dance', 24);
-			animation.addByPrefix('singUP', 'Dad Sing Note UP', 24);
-			animation.addByPrefix('singRIGHT', 'Dad Sing Note RIGHT', 24);
-			animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24);
-			animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
+			addAnim('Dad idle dance', {name: 'idle'});
 
-			addOffset('idle');
-			addOffset("singUP", -6, 50);
-			addOffset("singRIGHT", 0, 27);
-			addOffset("singLEFT", -10, 10);
-			addOffset("singDOWN", 0, -30);
+			var singOffsets = [[-6, 10], [-3, -31], [-7, 51], [-5, 27]];
+			for (dir in 0...4)
+				addAnim('Dad Sing Note ${notesDir[dir]}', {name: 'sing${notesDir[dir]}', offsets: singOffsets[dir]});
 
 			playAnim('idle');
 		}
@@ -583,6 +531,7 @@ class Character extends flixel.FlxSprite
 
 	function addAnim(animOnXML:String, animClass:Anims.Anim)
 	{
+		animClass = Anims.animFilter(animClass);
 		if (animClass.useIndices)
 			animation.addByIndices(animClass.name, animOnXML, animClass.indices, '', 24, animClass.loop);
 		else
@@ -658,7 +607,7 @@ class Character extends flixel.FlxSprite
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
-		animation.play(AnimName, Force, Reversed, Frame);
+		animation.play(AnimName + altAnim, Force, Reversed, Frame);
 
 		var daOffset = animOffsets.get(AnimName);
 		if (animOffsets.exists(AnimName))
@@ -686,10 +635,21 @@ class Character extends flixel.FlxSprite
 		}
 	}
 
-	public function addOffset(name:String, x:Float = 0, y:Float = 0)
+	public function sing(daNote:Note, ?playState:PlayState)
 	{
-		animOffsets[name] = [x, y];
+		playAnim('sing${notesDir[daNote.noteData]}$altNoteAnim', !daNote.isSustainNote);
+		// true -> !daNote.isSustainNote since character shakes with double notes with trail
+
+		if (playState != null)
+		{
+			switch (curCharacter)
+			{
+			}
+		}
 	}
+
+	public function addOffset(name:String, x:Float = 0, y:Float = 0)
+		animOffsets[name] = [x, y];
 
 	private static function joinFrames(spriteArray:Array<String>, ?library:String):FlxAtlasFrames
 	{
@@ -715,8 +675,15 @@ class Character extends flixel.FlxSprite
 			spriteName.push('${spriteName[0]}_${i}');
 
 		if (spriteName.contains('DEAD'))
-			spriteName = ['DEAD'];
+			spriteName = ['${key}_DEAD'];
 
 		return joinFrames(spriteName, library);
 	}
+}
+
+enum CharacterAttrib
+{
+	PIXEL;
+	USE_DANCE_DIRS;
+	HAS_DEAD;
 }

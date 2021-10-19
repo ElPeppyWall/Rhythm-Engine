@@ -8,7 +8,7 @@ using StringTools;
 
 class CoolUtil
 {
-	public static var difficultyArray:Array<String> = ['EASY', 'NORMAL', 'HARD'];
+	static var difficultyArray:Array<String> = ['EASY', 'NORMAL', 'HARD'];
 	public static var difficultyColorArray:Array<Int> = [FlxColor.LIME, FlxColor.YELLOW, FlxColor.RED];
 
 	public static function _trace():Void
@@ -43,11 +43,11 @@ class CoolUtil
 		};
 	}
 
-	public static inline function getDiffByIndex(index:Int):String
-		return difficultyArray[index];
+	public static inline function getDiffByIndex(index:Int, isPath:Bool):String
+		return isPath ? 'JSON File' : difficultyArray[index];
 
 	public static inline function diffForJSON(index:Int):String
-		return '-${getDiffByIndex(index).toLowerCase()}';
+		return '-${getDiffByIndex(index, false).toLowerCase()}';
 
 	public static inline function formatSong(song:String, diff:Int):String
 		return '${song.toLowerCase()}${CoolUtil.diffForJSON(diff)}';
@@ -56,9 +56,12 @@ class CoolUtil
 	{
 		if (args == null)
 			args = [];
-		trace('Next State is: $state');
-		FlxG.switchState(Type.createInstance(state, args));
+		trace('switchState -> $state');
+		curState = Type.createInstance(state, args);
+		FlxG.switchState(curState);
 	}
+
+	public static var curState:flixel.FlxState;
 
 	public static function coolTextFile(path:String):Array<String>
 	{

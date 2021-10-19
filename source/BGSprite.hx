@@ -30,13 +30,19 @@ class BGSprite extends flixel.FlxSprite
 
 		spriteArgs = _spriteArgs;
 		for (anim in _anims)
+			_anims[_anims.indexOf(anim)] = Anims.animFilter(anim);
+
+		for (anim in _anims)
 			anims[anim.name] = anim;
 
 		firstAnim = _anims[0];
 
 		if (haveAnims)
 		{
-			frames = Paths.getSparrowAtlas(spriteName[0], spriteName[1]);
+			if (spriteArgs.contains(PACKER_ATLAS))
+				frames = Paths.getPackerAtlas(spriteName[0], spriteName[1]);
+			else
+				frames = Paths.getSparrowAtlas(spriteName[0], spriteName[1]);
 			for (anim in anims)
 			{
 				if (!anim.useIndices)
@@ -60,20 +66,16 @@ class BGSprite extends flixel.FlxSprite
 	public inline function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
 		animation.play(AnimName, Force, Reversed, Frame);
-		offset.set(anims[AnimName].offsets[0], anims[AnimName].offsets[1]);
+		if (anims[AnimName].offsets[0] != 0 && anims[AnimName].offsets[1] != 0)
+			offset.set(anims[AnimName].offsets[0], anims[AnimName].offsets[1]);
 	}
 
 	public inline function dance(force:Bool = false):Void
 		playAnim(firstAnim.name, force);
 
-	override public function setGraphicSize(Width:Dynamic = 0, Height:Dynamic = 0)
+	override public function setGraphicSize(Width:Float = 0, Height:Float = 0)
 	{
-		if (Std.isOfType(Width, Float))
-			Width = Std.int(Width);
-		if (Std.isOfType(Height, Float))
-			Height = Std.int(Height);
-
-		super.setGraphicSize(Width, Height);
+		super.setGraphicSize(Std.int(Width), Std.int(Height));
 		if (!spriteArgs.contains(NO_UPDATEHITBOX))
 			updateHitbox();
 	}
@@ -83,4 +85,5 @@ enum SpriteArgs
 {
 	PIXEL;
 	NO_UPDATEHITBOX;
+	PACKER_ATLAS;
 }

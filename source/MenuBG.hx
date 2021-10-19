@@ -4,7 +4,7 @@ class MenuBG extends flixel.FlxSprite
 {
 	public function new(type:MenuBGType = NORMAL, x = 0.0, y = 0.0)
 	{
-		super(x, y, Paths.image('menu' + switch (type)
+		super(x, y, Paths.image('menuBG/menu' + switch (type)
 		{
 			case NORMAL:
 				'BG';
@@ -14,6 +14,10 @@ class MenuBG extends flixel.FlxSprite
 				'BGMagenta';
 			case DESAT:
 				'Desat';
+			case DESAT_BORDER:
+				'DesatBorder';
+			case OPTIONS:
+				'Options';
 		}));
 
 		scrollFactor.set();
@@ -35,4 +39,6 @@ private enum MenuBGType
 	BLUE;
 	MAGENTA;
 	DESAT;
+	DESAT_BORDER;
+	OPTIONS;
 }

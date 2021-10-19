@@ -1,11 +1,14 @@
 package;
 
 import Conductor.BPMChangeEvent;
+import flixel.FlxG;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
+import flixel.math.FlxRect;
+import flixel.util.FlxTimer;
 
 class MusicBeatState extends FlxUIState
 {
-	private var addVirtualPad = true;
 	private var lastBeat:Float = 0;
 	private var lastStep:Float = 0;
 
@@ -15,14 +18,6 @@ class MusicBeatState extends FlxUIState
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
-
-	override public function create()
-	{
-		super.create();
-		if (addVirtualPad)
-		{
-		}
-	}
 
 	override function update(elapsed:Float)
 	{

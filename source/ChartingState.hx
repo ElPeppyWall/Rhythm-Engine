@@ -43,7 +43,7 @@ class ChartingState extends MusicBeatState
 	var bpmTxt:FlxText;
 
 	var strumLine:FlxSprite;
-	var curSong:String = 'Dadbattle';
+	var curSong:String = 'Dad-Battle';
 	var amountSteps:Int = 0;
 	var bullshitUI:FlxGroup;
 
@@ -491,10 +491,8 @@ class ChartingState extends MusicBeatState
 				{
 					if (FlxG.mouse.overlaps(note))
 					{
-						if (FlxG.keys.pressed.CONTROL)
-						{
+						if (checkKey('CONTROL', PRESSED))
 							selectNote(note);
-						}
 						else
 						{
 							trace('tryin to delete note...');

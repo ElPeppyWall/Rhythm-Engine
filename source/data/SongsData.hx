@@ -20,6 +20,7 @@ class SongsData
 			var num = 0;
 			var numArray:Array<Int> = [];
 
+			@:privateAccess
 			for (i in 0...CoolUtil.difficultyArray.length)
 			{
 				numArray.push(num);

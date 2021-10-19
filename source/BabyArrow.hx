@@ -56,4 +56,19 @@ class BabyArrow extends flixel.FlxSprite
 		x += 50;
 		x += ((flixel.FlxG.width / 2) * playerID);
 	}
+
+	public function playAnim(AnimName:String, ?Force:Bool = false)
+	{
+		animation.play(AnimName, Force);
+		centerOffsets();
+		if (animation.curAnim.name == 'confirm' && noteStyle != 'pixel')
+			confirmAnimOffsets();
+	}
+
+	private function confirmAnimOffsets():Void
+	{
+		centerOffsets();
+		offset.x -= 13;
+		offset.y -= 13;
+	}
 }

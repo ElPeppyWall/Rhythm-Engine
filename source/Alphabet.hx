@@ -210,6 +210,8 @@ class Alphabet extends flixel.group.FlxSpriteGroup
 			y = CoolUtil.coolLerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16);
 		if (!type.contains(IGNORE_X))
 			x = CoolUtil.coolLerp(x, (targetY * 20) + 90, 0.16);
+		else
+			screenCenter(X);
 
 		super.update(elapsed);
 	}

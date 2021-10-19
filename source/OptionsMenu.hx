@@ -15,7 +15,8 @@ import lime.utils.Assets;
 class OptionsMenu extends MusicBeatState
 {
 	var selector:FlxText;
-	var curSelected:Int = 0;
+
+	static var curSelected:Int = 0;
 
 	var controlsStrings:Array<String> = [];
 
@@ -23,7 +24,7 @@ class OptionsMenu extends MusicBeatState
 
 	override function create()
 	{
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBG/menuDesat'));
 		controlsStrings = CoolUtil.coolTextFile(Paths.txt('controls'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -50,8 +51,6 @@ class OptionsMenu extends MusicBeatState
 		 */
 
 		super.create();
-
-		openSubState(new OptionsSubState());
 	}
 
 	override function update(elapsed:Float)
@@ -80,7 +79,6 @@ class OptionsMenu extends MusicBeatState
 	{
 		if (FlxG.keys.getIsDown().length > 0)
 		{
-			PlayerSettings.player1.controls.replaceBinding(Control.UI_LEFT, Keys, FlxG.keys.getIsDown()[0].ID, null);
 		}
 		// PlayerSettings.player1.controls.replaceBinding(Control)
 	}

@@ -1,6 +1,6 @@
 package;
 
-#if desktop
+#if (windows && !hl)
 import Discord.DiscordClient;
 #end
 import flixel.FlxG;
@@ -10,7 +10,6 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 
 using StringTools;
@@ -19,8 +18,9 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
 
-	var curSelected:Int = 0;
-	var curDifficulty:Int = 1;
+	static var curSelected:Int = 0;
+
+	static var curDifficulty:Int = 1;
 
 	var scoreText:FlxText;
 	var scoreBG:FlxSprite;
@@ -37,19 +37,22 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		#if desktop
+		#if (windows && !hl)
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
 		addWeek(['Tutorial'], 0, ['gf']);
-		addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
+		addWeek(['Bopeebo', 'Fresh', 'Dad-Battle'], 1, ['dad']);
 		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
-		addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
-		addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
+		addWeek(['Pico', 'Philly-Nice', 'Blammed'], 3, ['pico']);
+		addWeek(['Satin-Panties', 'High', 'M.I.L.F'], 4, ['mom']);
 		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
 		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
+		#if windows
+		addWeek(['Alone-Funkin\''], 0, ['']);
+		#end
 
-		bg.color = -7179779;
+		bg.color = coolColors[0];
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -58,7 +61,6 @@ class FreeplayState extends MusicBeatState
 		for (i in 0...songs.length)
 		{
 			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
-			// songText.type = [IGNORE_X];
 			songText.targetY = i;
 			grpSongs.add(songText);
 
@@ -67,7 +69,8 @@ class FreeplayState extends MusicBeatState
 
 			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
-			add(icon);
+			if (songs[i].songCharacter != '')
+				add(icon);
 
 			songText.x -= 40;
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
@@ -155,7 +158,8 @@ class FreeplayState extends MusicBeatState
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
 
-		changeBGColor();
+		FlxTween.color(bg, CoolUtil.camLerpShit(.25), bg.color, coolColors[songs[curSelected].week]);
+		// changeBGColor();
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
 		positionHighscore();
 		var upP = controls.UI_UP_P;
@@ -177,17 +181,13 @@ class FreeplayState extends MusicBeatState
 
 		if (accepted)
 		{
-			var poop:String = CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
-
-			trace(poop);
-
-			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
-			PlayState.isStoryMode = false;
-			PlayState.storyDifficulty = curDifficulty;
-
-			PlayState.storyWeek = songs[curSelected].week;
-			trace('CUR WEEK' + PlayState.storyWeek);
-			LoadingState.loadAndSwitchState(PlayState);
+			switch (songs[curSelected].songName.toLowerCase())
+			{
+				case 'alone-funkin\'':
+					switchState(AloneFunkinState);
+				default:
+					PlayState.loadSong(CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty), songs[curSelected].week, false);
+			}
 		}
 	}
 
@@ -204,7 +204,7 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		#end
 
-		diffText.text = '< ${CoolUtil.getDiffByIndex(curDifficulty)} >';
+		diffText.text = '< ${CoolUtil.getDiffByIndex(curDifficulty, false)} >';
 		FlxTween.color(diffText, CoolUtil.camLerpShit(.45), diffText.color, CoolUtil.difficultyColorArray[curDifficulty]);
 		positionHighscore();
 	}
@@ -262,10 +262,10 @@ class FreeplayState extends MusicBeatState
 		var b = bg.color;
 		var c = coolColors[songs[curSelected].week % coolColors.length];
 		var d = CoolUtil.camLerpShit(0.045);
-		var e = Std.int((((c >> 16) & 255) - ((b >> 16) & 255)) * d + ((b >> 16) & 255));
-		var f = Std.int((((c >> 8) & 255) - ((b >> 8) & 255)) * d + ((b >> 8) & 255));
-		var h = Std.int(((c & 255) - (b & 255)) * d + (b & 255));
-		c = Std.int((((c >> 24) & 255) - ((b >> 24) & 255)) * d + ((b >> 24) & 255));
+		var e = ((((c >> 16) & 255) - ((b >> 16) & 255)) * d + ((b >> 16) & 255));
+		var f = ((((c >> 8) & 255) - ((b >> 8) & 255)) * d + ((b >> 8) & 255));
+		var h = (((c & 255) - (b & 255)) * d + (b & 255));
+		c = ((((c >> 24) & 255) - ((b >> 24) & 255)) * d + ((b >> 24) & 255));
 		b = new FlxColor();
 		b = (((b & -16711681) | ((255 < e ? 255 : 0 > e ? 0 : e) << 16)) & -65281) | ((255 < f ? 255 : 0 > f ? 0 : f) << 8);
 		b &= -256;

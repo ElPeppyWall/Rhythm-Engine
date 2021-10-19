@@ -44,9 +44,13 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		super();
 		for (i in SongsData.getSongDiffies(curSong()))
-			difficultyChoices.push(CoolUtil.getDiffByIndex(i));
+			difficultyChoices.push(CoolUtil.getDiffByIndex(i, PlayState.songLoadedFromPATH));
 
 		difficultyChoices.push('BACK');
+		if (!PlayState.isStoryMode)
+			pauseOG.remove('Skip Song');
+		if (SongsData.getSongDiffies(curSong()).length == 1)
+			pauseOG.remove('Change Difficulty');
 		menuItems = pauseOG;
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
@@ -68,7 +72,7 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelInfo);
 
 		var levelDifficulty = new FlxText(20, 30 + 32, 0, "", 32);
-		levelDifficulty.text += CoolUtil.getDiffByIndex(PlayState.storyDifficulty);
+		levelDifficulty.text += CoolUtil.getDiffByIndex(PlayState.storyDifficulty, PlayState.songLoadedFromPATH);
 		levelDifficulty.scrollFactor.set();
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 54);
 		levelDifficulty.updateHitbox();
@@ -128,20 +132,12 @@ class PauseSubState extends MusicBeatSubstate
 
 		super.update(elapsed);
 
-		var upP = controls.UI_UP_P;
-		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
-
-		if (upP)
-		{
+		if (controls.UI_UP_P)
 			changeSelection(-1);
-		}
-		if (downP)
-		{
+		if (controls.UI_DOWN_P)
 			changeSelection(1);
-		}
 
-		if (accepted)
+		if (controls.ACCEPT)
 		{
 			var daSelected:String = menuItems[curSelected];
 			switch (daSelected)
@@ -177,21 +173,18 @@ class PauseSubState extends MusicBeatSubstate
 						switch (curSelected)
 						{
 							case 0:
-								switchState(AnimationDebug, [PlayState.dad.curCharacter, false]);
+								switchState(AnimationDebug, [PlayState.dad.curCharacter, true]);
 							case 1:
-								switchState(AnimationDebug, [PlayState.gf.curCharacter, false]);
+								switchState(AnimationDebug, [PlayState.gf.curCharacter, true]);
 							case 2:
-								switchState(AnimationDebug, [PlayState.boyfriend.curCharacter, true]);
+								switchState(AnimationDebug, [PlayState.boyfriend.curCharacter, false]);
 						}
 					}
 			}
 		}
 
-		if (FlxG.keys.justPressed.J)
-		{
-			// for reference later!
-			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
-		}
+		if (controls.BACK)
+			close();
 	}
 
 	override function destroy()
@@ -251,6 +244,7 @@ class PauseSubState extends MusicBeatSubstate
 		{
 			var songText = new Alphabet(0, (70 * i) + 30, menuItems[i], true, false);
 			songText.targetY = i;
+			songText.type = [IGNORE_X];
 			grpMenuShit.add(songText);
 
 			#if debug

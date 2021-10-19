@@ -1,16 +1,29 @@
 package;
 
 import Alphabet.AlphaCharacter.alphabet;
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
 using StringTools;
 
-class PreferencesMenu
+class PreferencesMenu extends MusicBeatSubstate
 {
 	public static var preferences:Map<String, Dynamic> = [];
 
 	var checkboxes:Array<FlxSprite>;
+	var menuCamera:FlxCamera;
+
+	public function new()
+	{
+		super();
+		menuCamera = new FlxCamera();
+		FlxG.cameras.add(menuCamera, false);
+		menuCamera.bgColor = 0;
+		set_camera(menuCamera);
+		add(new MenuBG(OPTIONS));
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+	}
 
 	public static function getPref(preference:String):Dynamic
 		return preferences[preference];
@@ -81,6 +94,7 @@ class PreferencesMenu
 			preferenceCheck("midscroll", false);
 			preferenceCheck("ghostTapping", true);
 			preferenceCheck("fpsCap", Main.getHZ());
+			preferenceCheck("hitsound", false);
 			preferenceCheck("ultra-optimize", false);
 			// apparence
 			preferenceCheck("note-splashes", true);
@@ -92,6 +106,8 @@ class PreferencesMenu
 			preferenceCheck("camera-zoom", true);
 			preferenceCheck("fps-counter", true);
 			preferenceCheck("auto-pause", false);
+			preferenceCheck("first-time", true);
+			preferenceCheck("allowReset", true);
 		}
 	}
 

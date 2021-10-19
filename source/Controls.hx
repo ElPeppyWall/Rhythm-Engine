@@ -71,14 +71,6 @@ enum Control
 	CHEAT;
 }
 
-enum KeyboardScheme
-{
-	Solo;
-	Duo(first:Bool);
-	None;
-	Custom;
-}
-
 /**
  * A list of actions that a player would invoke via some input device.
  * Uses FlxActions to funnel various inputs to a single action.
@@ -98,29 +90,28 @@ class Controls extends FlxActionSet
 	var _note_rightR = new FlxActionDigital(Action.NOTE_RIGHT_R);
 	var _note_downR = new FlxActionDigital(Action.NOTE_DOWN_R);
 
-	var _ui_up = new FlxActionDigital(Action.UI_UP).addMouseWheel(true, PRESSED);
+	var _ui_up = new FlxActionDigital(Action.UI_UP);
 	var _ui_left = new FlxActionDigital(Action.UI_LEFT);
 	var _ui_right = new FlxActionDigital(Action.UI_RIGHT);
-	var _ui_down = new FlxActionDigital(Action.UI_DOWN).addMouseWheel(false, PRESSED);
-	var _ui_upP = new FlxActionDigital(Action.UI_UP_P).addMouseWheel(true, JUST_PRESSED);
+	var _ui_down = new FlxActionDigital(Action.UI_DOWN);
+	var _ui_upP = new FlxActionDigital(Action.UI_UP_P);
 	var _ui_leftP = new FlxActionDigital(Action.UI_LEFT_P);
 	var _ui_rightP = new FlxActionDigital(Action.UI_RIGHT_P);
-	var _ui_downP = new FlxActionDigital(Action.UI_DOWN_P).addMouseWheel(false, JUST_PRESSED);
-	var _ui_upR = new FlxActionDigital(Action.UI_UP_R).addMouseWheel(true, JUST_RELEASED);
+	var _ui_downP = new FlxActionDigital(Action.UI_DOWN_P);
+	var _ui_upR = new FlxActionDigital(Action.UI_UP_R);
 	var _ui_leftR = new FlxActionDigital(Action.UI_LEFT_R);
 	var _ui_rightR = new FlxActionDigital(Action.UI_RIGHT_R);
-	var _ui_downR = new FlxActionDigital(Action.UI_DOWN_R).addMouseWheel(false, JUST_RELEASED);
+	var _ui_downR = new FlxActionDigital(Action.UI_DOWN_R);
 
 	var _accept = new FlxActionDigital(Action.ACCEPT);
-	var _back = new FlxActionDigital(Action.BACK) #if android .addAndroidKey(flixel.input.android.FlxAndroidKey.BACK, JUST_PRESSED) #end;
-	var _pause = new FlxActionDigital(Action.PAUSE) #if android .addAndroidKey(flixel.input.android.FlxAndroidKey.BACK, JUST_PRESSED) #end;
+	var _back = new FlxActionDigital(Action.BACK);
+	var _pause = new FlxActionDigital(Action.PAUSE);
 	var _reset = new FlxActionDigital(Action.RESET);
 	var _cheat = new FlxActionDigital(Action.CHEAT);
 
 	var byName:Map<String, FlxActionDigital> = [];
 
 	public var gamepadsAdded:Array<Int> = [];
-	public var keyboardScheme = KeyboardScheme.None;
 
 	public var NOTE_UP(get, never):Bool;
 
@@ -267,7 +258,7 @@ class Controls extends FlxActionSet
 	inline function get_CHEAT()
 		return _cheat.check();
 
-	public function new(name:String, scheme = None)
+	public function new(name:String)
 	{
 		super(name);
 		add(_note_up);
@@ -303,7 +294,7 @@ class Controls extends FlxActionSet
 		add(_cheat);
 		for (action in digitalActions)
 			byName[action.name] = action;
-		setKeyboardScheme(scheme, false);
+		setKeyboardScheme();
 	}
 
 	override function update()
@@ -422,72 +413,6 @@ class Controls extends FlxActionSet
 		}
 	}
 
-	public function replaceBinding(control:Control, device:Device, ?toAdd:Int, ?toRemove:Int)
-	{
-		if (toAdd == toRemove)
-			return;
-
-		switch (device)
-		{
-			case Keys:
-				if (toRemove != null)
-					unbindKeys(control, [toRemove]);
-				if (toAdd != null)
-					bindKeys(control, [toAdd]);
-
-			case Gamepad(id):
-				if (toRemove != null)
-					unbindButtons(control, id, [toRemove]);
-				if (toAdd != null)
-					bindButtons(control, id, [toAdd]);
-		}
-	}
-
-	public function copyFrom(controls:Controls, ?device:Device)
-	{
-		for (name => action in controls.byName)
-		{
-			for (input in action.inputs)
-			{
-				if (device == null || isDevice(input, device))
-					byName[name].add(cast input);
-			}
-		}
-
-		switch (device)
-		{
-			case null:
-				// add all
-				for (gamepad in controls.gamepadsAdded)
-					if (!gamepadsAdded.contains(gamepad))
-						gamepadsAdded.push(gamepad);
-
-				mergeKeyboardScheme(controls.keyboardScheme);
-
-			case Gamepad(id):
-				gamepadsAdded.push(id);
-			case Keys:
-				mergeKeyboardScheme(controls.keyboardScheme);
-		}
-	}
-
-	inline public function copyTo(controls:Controls, ?device:Device)
-		controls.copyFrom(this, device);
-
-	function mergeKeyboardScheme(scheme:KeyboardScheme):Void
-	{
-		if (scheme != None)
-		{
-			switch (keyboardScheme)
-			{
-				case None:
-					keyboardScheme = scheme;
-				default:
-					keyboardScheme = Custom;
-			}
-		}
-	}
-
 	/**
 	 * Sets all actions that pertain to the binder to trigger when the supplied keys are used.
 	 * If binder is a literal you can inline this
@@ -519,11 +444,14 @@ class Controls extends FlxActionSet
 		}
 	}
 
-	public function setKeyboardScheme(scheme:KeyboardScheme, reset = true)
+	public function setKeyboardScheme():Void
+	{
+		loadKeyBinds();
+	}
+
+	public function loadKeyBinds()
 	{
 		removeKeyboard();
-
-		keyboardScheme = scheme;
 
 		inline bindKeys(Control.NOTE_LEFT, [FlxKey.fromString(FlxG.save.data.noteBinds[0]), FlxKey.LEFT]);
 		inline bindKeys(Control.NOTE_DOWN, [FlxKey.fromString(FlxG.save.data.noteBinds[1]), FlxKey.DOWN]);
@@ -536,13 +464,13 @@ class Controls extends FlxActionSet
 		inline bindKeys(Control.UI_RIGHT, [FlxKey.fromString(FlxG.save.data.uiBinds[3]), FlxKey.RIGHT]);
 
 		inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
-		inline bindKeys(Control.BACK, [BACKSPACE]);
-		inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
+		inline bindKeys(Control.BACK, [ESCAPE, BACKSPACE]);
+		inline bindKeys(Control.PAUSE, [ENTER, ESCAPE, BACKSPACE]);
 		inline bindKeys(Control.RESET, [R]);
 	}
 
 	public function refreshBinds()
-		setKeyboardScheme(None, true);
+		setKeyboardScheme();
 
 	function removeKeyboard()
 	{
@@ -656,7 +584,7 @@ class Controls extends FlxActionSet
 		switch (device)
 		{
 			case Keys:
-				setKeyboardScheme(None);
+				setKeyboardScheme();
 			case Gamepad(id):
 				removeGamepad(id);
 		}
@@ -670,24 +598,4 @@ class Controls extends FlxActionSet
 
 	inline static function isGamepad(input:FlxActionInput, deviceID:Int)
 		return input.device == GAMEPAD && (deviceID == FlxInputDeviceID.ALL || input.deviceID == deviceID);
-
-	public static function initBinds():Void
-	{
-		if (FlxG.save.data.noteBinds == null)
-			FlxG.save.data.noteBinds = ['A', 'S', 'W', 'D'];
-		if (FlxG.save.data.uiBinds == null)
-			FlxG.save.data.uiBinds = ['A', 'S', 'W', 'D'];
-
-		FlxG.save.flush();
-	}
-
-	public static function setBind(dir:Int, key:String, isUI:Bool):Void
-	{
-		if (isUI)
-			FlxG.save.data.uiBinds[dir] = key;
-		else
-			FlxG.save.data.noteBinds[dir] = key;
-		FlxG.save.flush();
-		PlayerSettings.player1.controls.refreshBinds();
-	}
 }

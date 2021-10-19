@@ -1,6 +1,6 @@
 package;
 
-#if desktop
+#if (windows && !hl)
 import Discord.DiscordClient;
 #end
 import flixel.FlxG;
@@ -20,11 +20,12 @@ class StoryMenuState extends MusicBeatState
 	var yellowBG:FlxSprite;
 	var scoreText:FlxText;
 	var weeks:Array<WeekData.WeekClass> = [];
-	var curDifficulty:Int = 1;
+
+	static var curDifficulty:Int = 1;
 
 	var txtWeekTitle:FlxText;
 
-	var curWeek:Int = 0;
+	static var curWeek:Int = 0;
 
 	var txtTracklist:FlxText;
 
@@ -119,7 +120,7 @@ class StoryMenuState extends MusicBeatState
 
 		trace("Line 70");
 
-		#if desktop
+		#if (windows && !hl)
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -311,27 +312,13 @@ class StoryMenuState extends MusicBeatState
 			}
 
 			PlayState.storyPlaylist = weeks[curWeek].weekSongs;
-			PlayState.isStoryMode = true;
 			selectedWeek = true;
-
-			var diffic = "";
-
-			switch (curDifficulty)
-			{
-				case 0:
-					diffic = '-easy';
-				case 2:
-					diffic = '-hard';
-			}
 
 			PlayState.storyDifficulty = curDifficulty;
 
-			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
-			PlayState.storyWeek = curWeek;
-			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
-				LoadingState.loadAndSwitchState(PlayState, true);
+				PlayState.loadSong(CoolUtil.formatSong(PlayState.storyPlaylist[0].toLowerCase(), curDifficulty), curWeek, true, true);
 			});
 		}
 	}

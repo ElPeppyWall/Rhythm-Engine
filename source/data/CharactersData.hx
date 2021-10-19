@@ -31,7 +31,7 @@ class CharactersData
 			characterNames['bf-pixel'] = 'Boyfriend';
 			characterNames['gf-pixel'] = 'Girlfriend';
 			characterNames['senpai'] = 'Senpai';
-			characterNames['senpai'] = 'Senpai Angry';
+			characterNames['senpai-angry'] = 'Senpai';
 			characterNames['spirit'] = '???Senpai???';
 		}
 	}

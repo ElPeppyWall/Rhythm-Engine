@@ -40,4 +40,16 @@ class NoteSplash extends flixel.FlxSprite
 
 		super.update(elapsed);
 	}
+
+	public static function spawnSplash(playState:PlayState, daNote:Note, player:Int):Void
+	{
+		if (!getPref('note-splashes') || daNote.isSustainNote)
+			return;
+		if (player == 2 && getPref('midscroll'))
+			return;
+
+		var splash = playState.grpNoteSplashes.recycle(NoteSplash);
+		splash.setupNoteSplash(daNote.x, daNote.y, daNote.noteData);
+		playState.grpNoteSplashes.add(splash);
+	}
 }

@@ -24,22 +24,22 @@ class PlayerSettings
 	// public var avatar:Player;
 	// public var camera(get, never):PlayCamera;
 
-	function new(id, scheme)
+	function new(id)
 	{
 		this.id = id;
-		this.controls = new Controls('player$id', scheme);
+		this.controls = new Controls('player$id');
 	}
 
-	public function setKeyboardScheme(scheme)
+	public function setKeyboardScheme()
 	{
-		controls.setKeyboardScheme(scheme);
+		controls.setKeyboardScheme();
 	}
 
 	static public function init():Void
 	{
 		if (player1 == null)
 		{
-			player1 = new PlayerSettings(0, Solo);
+			player1 = new PlayerSettings(0);
 			++numPlayers;
 		}
 
@@ -57,7 +57,7 @@ class PlayerSettings
 		{
 			if (player2 == null)
 			{
-				player2 = new PlayerSettings(1, None);
+				player2 = new PlayerSettings(1);
 				++numPlayers;
 			}
 

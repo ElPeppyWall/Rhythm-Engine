@@ -1,6 +1,6 @@
 package;
 
-#if desktop
+#if (windows && !hl)
 import Discord.DiscordClient;
 import sys.thread.Thread;
 #end
@@ -46,7 +46,7 @@ class TitleState extends MusicBeatState
 			FlxG.android.preventDefaultKeys = [BACK];
 			#end
 			PreferencesMenu.initPrefs();
-			Controls.initBinds();
+			KeyBinds.initBinds();
 			PlayerSettings.init();
 			Highscore.load();
 			AllData.init();
@@ -89,10 +89,18 @@ class TitleState extends MusicBeatState
 		add(gfDance);
 		add(logoBl);
 
+		var gradient = new FlxSprite(0, 0, Paths.image('gradientTitle'));
+		gradient.alpha = gradient.alpha / 2;
+		add(gradient);
+
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
-		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
+		if (!getPref('flashing-menu'))
+			titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
+		else
+			titleText.animation.addByIndices('press', "ENTER PRESSED", [1], '', 24);
+
 		titleText.antialiasing = getPref('antialiasing');
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
@@ -110,6 +118,8 @@ class TitleState extends MusicBeatState
 		switchState(FreeplayState);
 		#elseif CHARTING
 		switchState(ChartingState);
+		#elseif PLAYSTATE
+		PlayState.loadSong('m.i.l.f-hard', 4, false);
 		#else
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
@@ -146,7 +156,7 @@ class TitleState extends MusicBeatState
 		credTextShit = new Alphabet(0, 0, "ninjamuffin99\nPhantomArcade\nkawaisprite\nevilsk8er", true);
 		credTextShit.type = [IGNORE_X, IGNORE_Y];
 
-		credTextShit.screenCenter();
+		credTextShit.screenCenter(Y);
 
 		// credTextShit.alignment = CENTER;
 
@@ -240,7 +250,7 @@ class TitleState extends MusicBeatState
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
 				firstTime = false;
-				FlxG.switchState(new MainMenuState());
+				switchState(MainMenuState);
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
@@ -259,7 +269,6 @@ class TitleState extends MusicBeatState
 		{
 			var money = new Alphabet(0, 0, textArray[i], true, false);
 			money.type = [IGNORE_X, IGNORE_Y];
-			money.screenCenter(X);
 			money.y += (i * 60) + 200;
 			credGroup.add(money);
 			textGroup.add(money);
@@ -270,7 +279,6 @@ class TitleState extends MusicBeatState
 	{
 		var coolText = new Alphabet(0, 0, text, true, false);
 		coolText.type = [IGNORE_X, IGNORE_Y];
-		coolText.screenCenter(X);
 		coolText.y += (textGroup.length * 60) + 200;
 		credGroup.add(coolText);
 		textGroup.add(coolText);

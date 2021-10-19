@@ -24,10 +24,10 @@ class Weeks
 	];
 	public static var weeksSongs = [
 		['Tutorial'],
-		['Bopeebo', 'Fresh', 'Dadbattle'],
+		['Bopeebo', 'Fresh', 'Dad-Battle'],
 		['Spookeez', 'South', "Monster"],
-		['Pico', 'Philly', "Blammed"],
-		['Satin-Panties', "High", "Milf"],
+		['Pico', 'Philly-Nice', "Blammed"],
+		['Satin-Panties', "High", "M.I.L.F"],
 		['Cocoa', 'Eggnog', 'Winter-Horrorland'],
 		['Senpai', 'Roses', 'Thorns']
 	];

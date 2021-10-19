@@ -5,9 +5,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.effects.FlxFlicker;
-import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.system.debug.interaction.Interaction;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -17,13 +15,13 @@ import lime.app.Application;
 
 using StringTools;
 
-#if desktop
+#if (windows && !hl)
 import Discord.DiscordClient;
 #end
 
 class MainMenuState extends MusicBeatState
 {
-	var curSelected:Int = 0;
+	static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
@@ -38,8 +36,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
-		#if desktop
-		// Updating Discord Rich Presence
+		#if (windows && !hl)
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
@@ -51,7 +48,7 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		var bg = new FlxSprite(0, 0, Paths.image('menuBG'));
+		var bg = new FlxSprite(0, 0, Paths.image('menuBG/menuBG'));
 		bg.scrollFactor.set(0, .17);
 		bg.setGraphicSize(Std.int(bg.width * 1.2));
 		bg.updateHitbox();
@@ -62,7 +59,7 @@ class MainMenuState extends MusicBeatState
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		magenta = new FlxSprite(0, 0, Paths.image('menuDesat'));
+		magenta = new FlxSprite(0, 0, Paths.image('menuBG/menuDesat'));
 		magenta.scrollFactor.set(0, .17);
 		magenta.setGraphicSize(Std.int(bg.width));
 		magenta.updateHitbox();
@@ -94,30 +91,27 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "v" + Application.current.meta.get('version'), 12);
+		var versionShit = new FlxText(5, FlxG.height - 20, 0, 'Better Funkin\' v${GameVars.engineVer}', 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.borderSize = 1.25;
+		versionShit.screenCenter(X);
 		add(versionShit);
 
-		// NG.core.calls.event.logEvent('swag').send();
+		if (getPref("first-time"))
+		{
+			FlxG.fullscreen = false;
+			Application.current.window.alert('This game contains flashing lights! Make sure check your options before play!', 'Alert!!');
+		}
 
 		changeItem();
-		promptInput = new flixel.addons.ui.FlxUIInputText(10, 10, FlxG.width, '', 32, null, 0x64FFFFFF);
+		promptInput = new flixel.addons.ui.FlxUIInputText(10, 10, FlxG.width, '', 32, FlxColor.BLACK, 0x64FFFFFF);
 		promptInput.setFormat(Paths.font("CascadiaCode.ttf"), 42, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		promptInput.borderSize = 1.25;
 		promptInput.scrollFactor.set();
 		promptInput.screenCenter();
 		promptInput.y = FlxG.height - 60;
 		promptInput.antialiasing = getPref('antialiasing');
-		lime.app.Application.current.window.onDropFile.add(function(path:String)
-		{
-			PlayState.SONG = Song.loadFromJsonFILE(path);
-			PlayState.isStoryMode = false;
-			PlayState.storyDifficulty = 1;
-
-			PlayState.storyWeek = 0;
-			LoadingState.loadAndSwitchState(PlayState);
-		});
 
 		super.create();
 	}
@@ -129,7 +123,7 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.ESCAPE)
+		if (FlxG.keys.justPressed.F7)
 		{
 			promptInput.caretIndex = 0;
 			if (writing)
@@ -162,7 +156,7 @@ class MainMenuState extends MusicBeatState
 		if (FlxG.keys.justPressed.UP && writing)
 		{
 			promptInput.text = lastPrompt;
-			promptInput.caretIndex = promptInput.text.length - 1;
+			promptInput.caretIndex = promptInput.text.length;
 		}
 		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.06);
 		if (FlxG.sound.music.volume < 0.8)
@@ -188,6 +182,9 @@ class MainMenuState extends MusicBeatState
 			{
 				switchState(TitleState);
 			}
+
+			if (checkKey('I'))
+				Prompt.open();
 
 			if (controls.ACCEPT)
 			{
@@ -298,16 +295,7 @@ class MainMenuState extends MusicBeatState
 				switch (argsArray[1])
 				{
 					case 'loadSong':
-						var splited:Array<String> = argsArray[2].split('-');
-						splited.remove(splited[splited.length - 1]);
-						var songFOLDER = splited.join('-');
-						var songJSON:String = argsArray[2];
-						PlayState.SONG = Song.loadFromJson(songJSON, songFOLDER);
-						PlayState.isStoryMode = false;
-						PlayState.storyDifficulty = 1;
-
-						PlayState.storyWeek = 0;
-						LoadingState.loadAndSwitchState(PlayState);
+						PlayState.loadSong(argsArray[2], 0, false);
 				}
 			case 'binds': // ! "binds.note.setBind.up.K"
 				var dir:Int = switch (argsArray[3])
@@ -327,7 +315,7 @@ class MainMenuState extends MusicBeatState
 						switch (argsArray[2])
 						{
 							case 'setBind':
-								Controls.setBind(dir, argsArray[4].toUpperCase(), false);
+								KeyBinds.setBind(dir, argsArray[4].toUpperCase(), false);
 							case 'getBind':
 								trace('\u001b[96m'
 									+ 'bind ${argsArray[1].toUpperCase()}_${argsArray[3].toUpperCase()} = ${FlxG.save.data.noteBinds[dir]}\u001b[0m');
@@ -336,7 +324,7 @@ class MainMenuState extends MusicBeatState
 						switch (argsArray[2])
 						{
 							case 'setBind':
-								Controls.setBind(dir, argsArray[4].toUpperCase(), true);
+								KeyBinds.setBind(dir, argsArray[4].toUpperCase(), true);
 							case 'getBind':
 								trace('\u001b[96m' + 'bind ${argsArray[1]}_${argsArray[2]} = ${FlxG.save.data.uiBinds[dir]}\u001b[0m');
 						}
