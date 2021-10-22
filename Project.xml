@@ -36,7 +36,6 @@
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<!-- _____________________________ DEFINES ____________________________ -->
-	<define name="PRELOAD_ALL" unless="web"/>
 	<define name="assetsLogger" if="debug" unless="web"/>
 	<define name="mobileC" if='mobile'/>         
 	<!-- _____________________________ DEFINES ____________________________ -->

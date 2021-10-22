@@ -2,7 +2,7 @@ package;
 
 import flixel.FlxSprite;
 
-class MenuItem extends FlxSprite
+class MainMenuItem extends FlxSprite
 {
 	var fireInstantly = false;
 	var name:String;

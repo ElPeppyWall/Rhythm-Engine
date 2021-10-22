@@ -21,7 +21,7 @@ class Prompt extends flixel.addons.ui.FlxUIInputText
 
 	public static function open(?callback:Void->Void)
 	{
-		var state = CoolUtil.curState;
+		var state = FlxG.state;
 		state.persistentUpdate = false;
 		state.persistentDraw = true;
 		state.openSubState(new PromptSubstate(callback));

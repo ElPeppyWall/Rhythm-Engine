@@ -318,7 +318,8 @@ class StoryMenuState extends MusicBeatState
 
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
-				PlayState.loadSong(CoolUtil.formatSong(PlayState.storyPlaylist[0].toLowerCase(), curDifficulty), curWeek, true, true);
+				PlayState.loadSong(CoolUtil.formatSong(PlayState.storyPlaylist[0].toLowerCase(), curDifficulty), curWeek, flixel.util.FlxColor.WHITE, true,
+					true);
 			});
 		}
 	}

@@ -51,18 +51,7 @@ class TitleState extends MusicBeatState
 			Highscore.load();
 			AllData.init();
 			FlxG.sound.muteKeys = [48];
-			{
-				var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
-				diamond.persist = true;
-				diamond.destroyOnNoUse = false;
-				FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 1, new FlxPoint(-1, 0),
-					{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-				FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.7, new FlxPoint(1, 0),
-					{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-
-				transIn = FlxTransitionableState.defaultTransIn;
-				transOut = FlxTransitionableState.defaultTransOut;
-			}
+			loadTransition(transIn, transOut);
 		}
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -75,7 +64,7 @@ class TitleState extends MusicBeatState
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
 		logoBl.antialiasing = getPref('antialiasing');
-		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
+		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
 		// logoBl.screenCenter();
@@ -207,10 +196,7 @@ class TitleState extends MusicBeatState
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 
-		if (FlxG.keys.justPressed.F)
-		{
-			FlxG.fullscreen = !FlxG.fullscreen;
-		}
+		FlxG.camera.zoom = (1 + 0.95 * (FlxG.camera.zoom - 1));
 
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
 
@@ -296,9 +282,11 @@ class TitleState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
-
-		logoBl.animation.play('bump');
+		logoBl.animation.play('bump', true);
 		danceLeft = !danceLeft;
+
+		if (getPref('camera-zoom'))
+			FlxG.camera.zoom += 0.03;
 
 		if (danceLeft)
 			gfDance.animation.play('danceRight');
@@ -372,7 +360,20 @@ class TitleState extends MusicBeatState
 		}
 	}
 
-	public static function initGame():Void
+	public static function loadTransition(?transIn:flixel.addons.transition.TransitionData, ?transOut:flixel.addons.transition.TransitionData):Void
 	{
+		var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
+		diamond.persist = true;
+		diamond.destroyOnNoUse = false;
+		FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 1, new FlxPoint(-1, 0), {asset: diamond, width: 32, height: 32},
+			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+		FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.7, new FlxPoint(1, 0), {asset: diamond, width: 32, height: 32},
+			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+
+		if (transIn != null)
+		{
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;
+		}
 	}
 }

@@ -91,7 +91,7 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var versionShit = new FlxText(5, FlxG.height - 20, 0, 'Better Funkin\' v${GameVars.engineVer}', 12);
+		var versionShit = new FlxText(5, FlxG.height - 50, 0, 'Better Funkin\' v${GameVars.engineVer}', 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		versionShit.borderSize = 1.25;
@@ -295,7 +295,7 @@ class MainMenuState extends MusicBeatState
 				switch (argsArray[1])
 				{
 					case 'loadSong':
-						PlayState.loadSong(argsArray[2], 0, false);
+						PlayState.loadSong(argsArray[2], 0, flixel.util.FlxColor.WHITE, false);
 				}
 			case 'binds': // ! "binds.note.setBind.up.K"
 				var dir:Int = switch (argsArray[3])

@@ -44,7 +44,7 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		super();
 		for (i in SongsData.getSongDiffies(curSong()))
-			difficultyChoices.push(CoolUtil.getDiffByIndex(i, PlayState.songLoadedFromPATH));
+			difficultyChoices.push(CoolUtil.getDiffByIndex(i, PlayState.isAloneFunkin));
 
 		difficultyChoices.push('BACK');
 		if (!PlayState.isStoryMode)
@@ -72,7 +72,7 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelInfo);
 
 		var levelDifficulty = new FlxText(20, 30 + 32, 0, "", 32);
-		levelDifficulty.text += CoolUtil.getDiffByIndex(PlayState.storyDifficulty, PlayState.songLoadedFromPATH);
+		levelDifficulty.text += CoolUtil.getDiffByIndex(PlayState.storyDifficulty, PlayState.isAloneFunkin);
 		levelDifficulty.scrollFactor.set();
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 54);
 		levelDifficulty.updateHitbox();

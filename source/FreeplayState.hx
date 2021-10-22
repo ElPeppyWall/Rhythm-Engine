@@ -1,14 +1,8 @@
-package;
+package; #if (windows && !hl) import Discord.DiscordClient; #end import flixel.FlxG;
 
-#if (windows && !hl)
-import Discord.DiscordClient;
-#end
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxMath;
 import flixel.text.FlxText;
-import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 
@@ -72,7 +66,6 @@ class FreeplayState extends MusicBeatState
 			if (songs[i].songCharacter != '')
 				add(icon);
 
-			songText.x -= 40;
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 			// songText.screenCenter(X);
 		}
@@ -96,30 +89,11 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 
-		// JUST DOIN THIS SHIT FOR TESTING!!!
-		/* 
-			var md:String = Markdown.markdownToHtml(Assets.getText('CHANGELOG.md'));
-
-			var texFel:TextField = new TextField();
-			texFel.width = FlxG.width;
-			texFel.height = FlxG.height;
-			// texFel.
-			texFel.htmlText = md;
-
-			FlxG.stage.addChild(texFel);
-
-			// scoreText.textField.htmlText = md;
-
-			trace(md);
-		 */
-
 		super.create();
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String)
-	{
 		songs.push(new SongMetadata(songName, weekNum, songCharacter));
-	}
 
 	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>)
 	{
@@ -159,7 +133,12 @@ class FreeplayState extends MusicBeatState
 			lerpScore = intendedScore;
 
 		FlxTween.color(bg, CoolUtil.camLerpShit(.25), bg.color, coolColors[songs[curSelected].week]);
-		// changeBGColor();
+
+		// ninjamuffin color change sucks in windows lol
+		// var color2 = coolColors[songs[curSelected].week % coolColors.length];
+		// if (bg.color != color2)
+		// 	bg.color = FlxColor.interpolate(bg.color, color2, CoolUtil.camLerpShit(.045));
+
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
 		positionHighscore();
 		var upP = controls.UI_UP_P;
@@ -177,16 +156,21 @@ class FreeplayState extends MusicBeatState
 			changeDiff(1);
 
 		if (controls.BACK)
+		{
+			FlxTween.cancelTweensOf(bg);
 			switchState(MainMenuState);
+		}
 
 		if (accepted)
 		{
+			FlxTween.cancelTweensOf(bg);
 			switch (songs[curSelected].songName.toLowerCase())
 			{
 				case 'alone-funkin\'':
 					switchState(AloneFunkinState);
 				default:
-					PlayState.loadSong(CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty), songs[curSelected].week, false);
+					PlayState.loadSong(CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty), songs[curSelected].week,
+						coolColors[songs[curSelected].week], false);
 			}
 		}
 	}
@@ -254,25 +238,6 @@ class FreeplayState extends MusicBeatState
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
-	}
-
-	private function changeBGColor():Void
-	{
-		var a:Dynamic = bg;
-		var b = bg.color;
-		var c = coolColors[songs[curSelected].week % coolColors.length];
-		var d = CoolUtil.camLerpShit(0.045);
-		var e = ((((c >> 16) & 255) - ((b >> 16) & 255)) * d + ((b >> 16) & 255));
-		var f = ((((c >> 8) & 255) - ((b >> 8) & 255)) * d + ((b >> 8) & 255));
-		var h = (((c & 255) - (b & 255)) * d + (b & 255));
-		c = ((((c >> 24) & 255) - ((b >> 24) & 255)) * d + ((b >> 24) & 255));
-		b = new FlxColor();
-		b = (((b & -16711681) | ((255 < e ? 255 : 0 > e ? 0 : e) << 16)) & -65281) | ((255 < f ? 255 : 0 > f ? 0 : f) << 8);
-		b &= -256;
-		b |= 255 < h ? 255 : 0 > h ? 0 : h;
-		b &= 16777215;
-		b |= (255 < c ? 255 : 0 > c ? 0 : c) << 24;
-		a.set_color(b);
 	}
 }
 

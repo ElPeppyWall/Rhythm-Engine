@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
 import haxe.io.Path;
 import lime.app.Future;
@@ -19,10 +20,12 @@ class LoadingState extends MusicBeatState
 	var target:Class<FlxState>;
 	var stopMusic = false;
 	var callbacks:MultiCallback;
-
-	var logo:FlxSprite;
-	var gfDance:FlxSprite;
-	var danceLeft = false;
+	var loadBar:FlxSprite;
+	var funkay:FlxSprite;
+	var targetShit = 0.0;
+	#if PRELOAD_ALL
+	var fakeRemaining = 4;
+	#end
 
 	function new(target:Class<FlxState>, stopMusic:Bool)
 	{
@@ -33,23 +36,30 @@ class LoadingState extends MusicBeatState
 
 	override function create()
 	{
-		logo = new FlxSprite(-150, -100);
-		logo.frames = Paths.getSparrowAtlas('logoBumpin');
-		logo.antialiasing = getPref('antialiasing');
-		logo.animation.addByPrefix('bump', 'logo bumpin', 24);
-		logo.animation.play('bump');
-		logo.updateHitbox();
-		// logoBl.screenCenter();
-		// logoBl.color = FlxColor.BLACK;
+		#if PRELOAD_ALL
+		FlxG.bitmap.clearCache();
+		FlxG.bitmap.clearUnused();
+		FlxG.bitmap.dumpCache();
+		// FlxG.bitmap.reset();
+		Assets.cache.clear();
+		LimeAssets.cache.clear();
+		#end
+		var funkayBG = new FlxSprite(-900, -900).makeGraphic(10000, 10000, 0xFFcaff4d);
+		funkayBG.antialiasing = getPref('antialiasing');
+		add(funkayBG);
+		funkay = new FlxSprite();
+		funkay.loadGraphic(Paths.image('funkay'));
+		funkay.setGraphicSize(0, FlxG.height);
+		funkay.updateHitbox();
+		funkay.antialiasing = getPref('antialiasing');
+		add(funkay);
+		funkay.scrollFactor.set();
+		funkay.screenCenter();
+		loadBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, -59694);
+		loadBar.screenCenter(X);
+		add(loadBar);
 
-		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
-		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
-		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = getPref('antialiasing');
-		add(gfDance);
-		add(logo);
-
+		#if NO_PRELOAD_ALL
 		initSongsManifest().onComplete(function(lib)
 		{
 			callbacks = new MultiCallback(onLoad);
@@ -67,6 +77,16 @@ class LoadingState extends MusicBeatState
 			FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
 			new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
 		});
+		#else
+		new FlxTimer().start(FlxG.random.float(.05, .25), function(tmr:FlxTimer)
+		{
+			fakeRemaining--;
+		}, 4);
+		new FlxTimer().start(1, function(tmr:FlxTimer)
+		{
+			fakeRemaining = 0;
+		});
+		#end
 	}
 
 	function checkLoadSong(path:String)
@@ -104,26 +124,26 @@ class LoadingState extends MusicBeatState
 		}
 	}
 
-	override function beatHit()
-	{
-		super.beatHit();
-
-		logo.animation.play('bump');
-		danceLeft = !danceLeft;
-
-		if (danceLeft)
-			gfDance.animation.play('danceRight');
-		else
-			gfDance.animation.play('danceLeft');
-	}
-
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		#if debug
-		if (FlxG.keys.justPressed.SPACE)
-			trace('fired: ' + callbacks.getFired() + " unfired:" + callbacks.getUnfired());
+		funkay.setGraphicSize(Std.int(.88 * FlxG.width + .9 * (funkay.width - .88 * FlxG.width)));
+		funkay.updateHitbox();
+		if (controls.ACCEPT)
+		{
+			funkay.setGraphicSize(Std.int(funkay.width + 60));
+			funkay.updateHitbox();
+		}
+		#if NO_PRELOAD_ALL
+		if (callbacks != null)
+			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+		#else
+		targetShit = FlxMath.remapToRange(fakeRemaining / 4, 1, 0, 0, 1);
+		FlxG.watch.addQuick('fake remaining', fakeRemaining);
 		#end
+		if (fakeRemaining == 0)
+			onLoad();
+		loadBar.scale.x += .5 * (targetShit - loadBar.scale.x);
 	}
 
 	function onLoad()
@@ -145,9 +165,7 @@ class LoadingState extends MusicBeatState
 	}
 
 	inline static public function loadAndSwitchState(target:Class<FlxState>, stopMusic = false)
-	{
-		CoolUtil.switchState(getNextState(target, stopMusic));
-	}
+		CoolUtil.switchState(getNextState(target, stopMusic), [target, stopMusic]);
 
 	static function getNextState(target:Class<FlxState>, stopMusic = false):Class<FlxState>
 	{
@@ -158,12 +176,11 @@ class LoadingState extends MusicBeatState
 			&& isLibraryLoaded("shared");
 
 		if (!loaded)
-			return new LoadingState(target, stopMusic);
 		#end
+		return LoadingState;
+
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
-
-		return target;
 	}
 
 	#if NO_PRELOAD_ALL

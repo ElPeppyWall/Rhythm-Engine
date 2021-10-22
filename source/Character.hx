@@ -37,6 +37,15 @@ class Character extends flixel.FlxSprite
 		if (!getPref('ultra-optimize'))
 			switch (curCharacter)
 			{
+				case 'dad':
+					frames = getCharacterFrames('DADDY_DEAREST');
+					addAnim('Dad idle dance', {name: 'idle'});
+
+					var singOffsets = [[-6, 10], [-3, -31], [-7, 51], [-5, 27]];
+					for (dir in 0...4)
+						addAnim('Dad Sing Note ${notesDir[dir]}', {name: 'sing${notesDir[dir]}', offsets: singOffsets[dir]});
+
+					playAnim('idle');
 				case 'bf':
 					frames = getCharacterFrames('BOYFRIEND_ASSETS/BOYFRIEND', 'shared');
 
@@ -110,6 +119,17 @@ class Character extends flixel.FlxSprite
 
 					playAnim('danceRight');
 
+					addAttrib(USE_DANCE_DIRS);
+				case 'speaker':
+					frames = getCharacterFrames('Speaker_Assets');
+					animation.addByIndices('danceLeft', 'SPEAKER Dancing Beat', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+					animation.addByIndices('danceRight', 'SPEAKER Dancing Beat', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+					addOffset('danceLeft', 0, -9);
+					addOffset('danceRight', 0, -9);
+					playAnim('danceRight');
+
+					addAttrib(USE_DANCE_DIRS);
+
 				case 'spooky':
 					frames = getCharacterFrames('spooky_kids_assets', 'week2');
 					animation.addByPrefix('singUP', 'spooky UP NOTE', 24, false);
@@ -128,19 +148,21 @@ class Character extends flixel.FlxSprite
 					addOffset("singDOWN", -50, -130);
 
 					playAnim('danceRight');
+
+					addAttrib(USE_DANCE_DIRS);
 				case 'monster':
 					frames = getCharacterFrames('Monster_Assets', 'week2');
 					animation.addByPrefix('idle', 'monster idle', 24, false);
 					animation.addByPrefix('singUP', 'monster up note', 24, false);
 					animation.addByPrefix('singDOWN', 'monster down', 24, false);
-					animation.addByPrefix('singLEFT', 'Monster left note', 24, false);
-					animation.addByPrefix('singRIGHT', 'Monster Right note', 24, false);
+					animation.addByPrefix('singLEFT', 'Monster Right note', 24, false);
+					animation.addByPrefix('singRIGHT', 'Monster left note', 24, false);
 
 					addOffset('idle');
-					addOffset("singUP", -20, 50);
-					addOffset("singRIGHT", -51);
-					addOffset("singLEFT", -30);
-					addOffset("singDOWN", -30, -40);
+					addOffset("singUP", -20, 94);
+					addOffset("singLEFT", -51, 30);
+					addOffset("singRIGHT", -30, 20);
+					addOffset("singDOWN", -30, -80);
 					playAnim('idle');
 
 				case 'pico':
@@ -198,6 +220,7 @@ class Character extends flixel.FlxSprite
 					addOffset('danceRight', 0);
 
 					playAnim('danceRight');
+					addAttrib(USE_DANCE_DIRS);
 				case 'mom-car':
 					frames = getCharacterFrames('momCar', 'week4');
 
@@ -292,6 +315,7 @@ class Character extends flixel.FlxSprite
 					addOffset('scared', -2, -17);
 
 					playAnim('danceRight');
+					addAttrib(USE_DANCE_DIRS);
 				case 'parents-christmas':
 					frames = getCharacterFrames('christmas/mom_dad_christmas_assets', 'week5');
 					animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
@@ -322,13 +346,13 @@ class Character extends flixel.FlxSprite
 					animation.addByPrefix('idle', 'monster idle', 24, false);
 					animation.addByPrefix('singUP', 'monster up note', 24, false);
 					animation.addByPrefix('singDOWN', 'monster down', 24, false);
-					animation.addByPrefix('singLEFT', 'Monster left note', 24, false);
-					animation.addByPrefix('singRIGHT', 'Monster Right note', 24, false);
+					animation.addByPrefix('singLEFT', 'Monster Right note', 24, false);
+					animation.addByPrefix('singRIGHT', 'Monster left note', 24, false);
 
 					addOffset('idle');
 					addOffset("singUP", -20, 50);
-					addOffset("singRIGHT", -51);
-					addOffset("singLEFT", -30);
+					addOffset("singLEFT", -51);
+					addOffset("singRIGHT", -30);
 					addOffset("singDOWN", -40, -94);
 					playAnim('idle');
 
@@ -396,6 +420,7 @@ class Character extends flixel.FlxSprite
 					setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 					updateHitbox();
 					antialiasing = false;
+					addAttrib(USE_DANCE_DIRS);
 				case 'senpai':
 					frames = getCharacterFrames('weeb/senpai', 'week6');
 					animation.addByPrefix('idle', 'Senpai Idle', 24, false);
@@ -459,17 +484,13 @@ class Character extends flixel.FlxSprite
 
 		if (frames == null)
 		{
-			if (curCharacter != 'dad' && !getPref('ultra-optimize'))
+			if (!['none'].contains(curCharacter) && !getPref('ultra-optimize'))
+			{
 				trace('failed to load \'$curCharacter\' character, loading \'dad\'');
-
-			curCharacter = 'dad';
-			frames = getCharacterFrames('DADDY_DEAREST');
-			addAnim('Dad idle dance', {name: 'idle'});
-
-			var singOffsets = [[-6, 10], [-3, -31], [-7, 51], [-5, 27]];
-			for (dir in 0...4)
-				addAnim('Dad Sing Note ${notesDir[dir]}', {name: 'sing${notesDir[dir]}', offsets: singOffsets[dir]});
-
+				curCharacter = 'none';
+			}
+			frames = getCharacterFrames('voidChar', 'shared');
+			addAnim('idle', {name: 'idle'});
 			playAnim('idle');
 		}
 		dance();
@@ -600,37 +621,50 @@ class Character extends flixel.FlxSprite
 					else
 						playAnim('danceLeft');
 				default:
-					playAnim('idle');
+					if (!characterAttribs.contains(USE_DANCE_DIRS))
+						playAnim('idle');
+					else
+					{
+						danced = !danced;
+
+						if (danced)
+							playAnim('danceRight');
+						else
+							playAnim('danceLeft');
+					}
 			}
 		}
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
-		animation.play(AnimName + altAnim, Force, Reversed, Frame);
-
-		var daOffset = animOffsets.get(AnimName);
-		if (animOffsets.exists(AnimName))
+		if (curCharacter != 'null' && !getPref('ultra-optimize'))
 		{
-			offset.set(daOffset[0], daOffset[1]);
-		}
-		else
-			offset.set(0, 0);
+			animation.play(AnimName + altAnim, Force, Reversed, Frame);
 
-		if (curCharacter == 'gf')
-		{
-			if (AnimName == 'singLEFT')
+			var daOffset = animOffsets.get(AnimName);
+			if (animOffsets.exists(AnimName))
 			{
-				danced = true;
+				offset.set(daOffset[0], daOffset[1]);
 			}
-			else if (AnimName == 'singRIGHT')
-			{
-				danced = false;
-			}
+			else
+				offset.set(0, 0);
 
-			if (AnimName == 'singUP' || AnimName == 'singDOWN')
+			if (curCharacter == 'gf')
 			{
-				danced = !danced;
+				if (AnimName == 'singLEFT')
+				{
+					danced = true;
+				}
+				else if (AnimName == 'singRIGHT')
+				{
+					danced = false;
+				}
+
+				if (AnimName == 'singUP' || AnimName == 'singDOWN')
+				{
+					danced = !danced;
+				}
 			}
 		}
 	}
@@ -650,6 +684,9 @@ class Character extends flixel.FlxSprite
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)
 		animOffsets[name] = [x, y];
+
+	inline function addAttrib(attrib:CharacterAttrib):Void
+		characterAttribs.push(attrib);
 
 	private static function joinFrames(spriteArray:Array<String>, ?library:String):FlxAtlasFrames
 	{

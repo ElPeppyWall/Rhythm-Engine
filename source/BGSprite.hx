@@ -64,11 +64,7 @@ class BGSprite extends flixel.FlxSprite
 	}
 
 	public inline function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
-	{
 		animation.play(AnimName, Force, Reversed, Frame);
-		if (anims[AnimName].offsets[0] != 0 && anims[AnimName].offsets[1] != 0)
-			offset.set(anims[AnimName].offsets[0], anims[AnimName].offsets[1]);
-	}
 
 	public inline function dance(force:Bool = false):Void
 		playAnim(firstAnim.name, force);

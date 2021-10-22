@@ -43,8 +43,8 @@ class CoolUtil
 		};
 	}
 
-	public static inline function getDiffByIndex(index:Int, isPath:Bool):String
-		return isPath ? 'JSON File' : difficultyArray[index];
+	public static inline function getDiffByIndex(index:Int, isAloneFunkin:Bool):String
+		return isAloneFunkin ? 'JSON File' : difficultyArray[index];
 
 	public static inline function diffForJSON(index:Int):String
 		return '-${getDiffByIndex(index, false).toLowerCase()}';
@@ -57,11 +57,8 @@ class CoolUtil
 		if (args == null)
 			args = [];
 		trace('switchState -> $state');
-		curState = Type.createInstance(state, args);
-		FlxG.switchState(curState);
+		FlxG.switchState(Type.createInstance(state, args));
 	}
-
-	public static var curState:flixel.FlxState;
 
 	public static function coolTextFile(path:String):Array<String>
 	{

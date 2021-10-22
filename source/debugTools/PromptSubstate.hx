@@ -72,7 +72,7 @@ class PromptSubstate extends MusicBeatSubstate
 					switch (argsArray[1])
 					{
 						case 'loadSong':
-							PlayState.loadSong(argsArray[2], 0, false);
+							PlayState.loadSong(argsArray[2], 0, flixel.util.FlxColor.WHITE, false);
 					}
 				case 'binds': // ! binds.note.setBind.up.K
 					var dir:Int = switch (argsArray[3])

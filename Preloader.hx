@@ -3,9 +3,6 @@ package;
 import flash.Lib;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
-import flash.display.BlendMode;
-import flash.display.Sprite;
-import flixel.FlxG;
 import flixel.system.FlxBasePreloader;
 import openfl.display.Sprite;
 

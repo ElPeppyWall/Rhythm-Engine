@@ -1,5 +1,7 @@
 package;
 
+import flixel.util.FlxColor;
+
 class HealthIconsData
 {
 	public static var healthIconsForCharacter:Map<String, String>;
@@ -27,10 +29,12 @@ class HealthIconsData
 		healthIconsColors['gf'] = 0xFFa5004d;
 		healthIconsColors['dad'] = 0xFFaf66ce;
 		healthIconsColors['spooky'] = 0xFFb4b4b4;
+		healthIconsColors['monster'] = 0xFFf3ff6e;
 		healthIconsColors['pico'] = 0xFFb7d855;
 		healthIconsColors['mom'] = 0xFFd8558e;
 		healthIconsColors['parents'] = 0xFFaf66ce;
 		healthIconsColors['face'] = 0xFFa1a1a1;
+		healthIconsColors['none'] = FlxColor.GRAY;
 	}
 
 	public static function getCharIcon(char:String):String

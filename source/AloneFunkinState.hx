@@ -31,7 +31,7 @@ class AloneFunkinState extends MusicBeatState
 		{
 			if (path.endsWith('.json'))
 			{
-				PlayState.loadSong(path, 0, false, false, true);
+				PlayState.loadSong(path, 0, flixel.util.FlxColor.WHITE, false, false, true);
 				FlxG.fullscreen = fullScreen;
 				lime.app.Application.current.window.onDropFile.removeAll();
 			}
