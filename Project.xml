@@ -37,7 +37,8 @@
 
 	<!-- _____________________________ DEFINES ____________________________ -->
 	<define name="assetsLogger" if="debug" unless="web" />
-	<define name="mobileC" if='mobile windows' />
+	<define name="mobileC" if='mobile' />
+	<define name="ALLOW_ALONE_FUNKIN" if='windows' />
 	<!-- _____________________________ DEFINES ____________________________ -->
 
 

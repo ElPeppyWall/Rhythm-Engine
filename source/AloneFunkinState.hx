@@ -1,3 +1,4 @@
+#if ALLOW_ALONE_FUNKIN
 package;
 
 import flixel.FlxG;
@@ -47,3 +48,4 @@ class AloneFunkinState extends MusicBeatState
 		super.update(elapsed);
 	}
 }
+#end

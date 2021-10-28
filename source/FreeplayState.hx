@@ -55,7 +55,7 @@ class FreeplayState extends MusicBeatState
 		addWeek(['Satin-Panties', 'High', 'M.I.L.F'], 4, ['mom']);
 		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
 		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
-		#if windows
+		#if ALLOW_ALONE_FUNKIN
 		addWeek(['Alone-Funkin\''], 0, ['']);
 		#end
 
@@ -211,8 +211,10 @@ class FreeplayState extends MusicBeatState
 		FlxTween.cancelTweensOf(bg);
 		switch (songs[curSelected].songName.toLowerCase())
 		{
+			#if ALLOW_ALONE_FUNKIN
 			case 'alone-funkin\'':
 				switchState(AloneFunkinState);
+			#end
 			default:
 				PlayState.loadSong(CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty), songs[curSelected].week,
 					coolColors[songs[curSelected].week], false);

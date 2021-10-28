@@ -2178,7 +2178,7 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			#if windows
+			#if ALLOW_ALONE_FUNKIN
 			songPath = song;
 			SONG = Song.loadFromJsonFILE(song);
 			storyDifficulty = 1;
