@@ -8,7 +8,7 @@ using StringTools;
 
 class CoolUtil
 {
-	static var difficultyArray:Array<String> = ['EASY', 'NORMAL', 'HARD'];
+	static var difficultyArray:Array<Array<String>> = [['EASY', '-easy'], ['NORMAL', '-normal'], ['HARD', '-hard']];
 	public static var difficultyColorArray:Array<Int> = [FlxColor.LIME, FlxColor.YELLOW, FlxColor.RED];
 
 	public static function _trace():Void
@@ -16,41 +16,20 @@ class CoolUtil
 		trace('a');
 	}
 
-	public static function getVarType(f:Dynamic):Dynamic
-	{
-		return switch (Reflect.getType(f))
-		{
-			default:
-				Dynamic;
-			case 0xff:
-				Int;
-			case null:
-				null;
-			case 1:
-				Float;
-			case 2:
-				Bool;
-			case 3:
-				String;
-			case 5:
-				Array;
-			case 6:
-				'Function';
-			case 7:
-				Enum;
-			case 8:
-				Class;
-		};
-	}
-
 	public static inline function getDiffByIndex(index:Int, isAloneFunkin:Bool):String
-		return isAloneFunkin ? 'JSON File' : difficultyArray[index];
+		return isAloneFunkin ? 'JSON File' : difficultyArray[index][0];
 
-	public static inline function diffForJSON(index:Int):String
-		return '-${getDiffByIndex(index, false).toLowerCase()}';
+	public static inline function getDiffName(index:Int, isAloneFunkin:Bool):String
+		return isAloneFunkin ? langString('jsonFile') : langString('diffies')[index];
+
+	public static function getDiffPause(index:Int):String
+		return langString('pauseDiffies')[index];
+
+	public static inline function getDiffForJSON(index:Int):String
+		return difficultyArray[index][1];
 
 	public static inline function formatSong(song:String, diff:Int):String
-		return '${song.toLowerCase()}${CoolUtil.diffForJSON(diff)}';
+		return '${song.toLowerCase()}${CoolUtil.getDiffForJSON(diff)}';
 
 	public static function switchState(state:Class<flixel.FlxState>, ?args:Array<Dynamic>)
 	{

@@ -2,6 +2,7 @@ package;
 
 import PlayState.notesDir;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.ui.FlxVirtualPad;
 
 using StringTools;
 
@@ -166,21 +167,38 @@ class Character extends flixel.FlxSprite
 					playAnim('idle');
 
 				case 'pico':
-					frames = getCharacterFrames('Pico_FNF_assetss', 'week3');
-
-					addAnim('Pico Idle Dance', {
-						name: 'idle',
-					});
-
-					var singOffsets = [[57, 0], [192, -83], [-36, 20], [-86, -11]];
-					for (dir in 0...4)
-						addAnim('Pico Note ${notesDir[dir]}0', {
-							name: 'sing${notesDir[dir]}',
-							offsets: singOffsets[dir],
-						});
+					frames = Paths.getSparrowAtlas('Pico_FNF_assetss', 'week3');
+					animation.addByPrefix('idle', "Pico Idle Dance", 24);
+					animation.addByPrefix('singUP', 'pico Up note0', 24, false);
+					animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
+					if (isPlayer)
+					{
+						animation.addByPrefix('singLEFT', 'Pico NOTE LEFT0', 24, false);
+						animation.addByPrefix('singRIGHT', 'Pico Note Right0', 24, false);
+						animation.addByPrefix('singRIGHTmiss', 'Pico Note Right Miss', 24, false);
+						animation.addByPrefix('singLEFTmiss', 'Pico NOTE LEFT miss', 24, false);
+					}
+					else
+					{
+						// Need to be flipped! REDO THIS LATER!
+						animation.addByPrefix('singLEFT', 'Pico Note Right0', 24, false);
+						animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
+						animation.addByPrefix('singRIGHTmiss', 'Pico NOTE LEFT miss', 24, false);
+						animation.addByPrefix('singLEFTmiss', 'Pico Note Right Miss', 24, false);
+					}
+					animation.addByPrefix('singUPmiss', 'pico Up note miss', 24);
+					animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24);
+					addOffset('idle');
+					addOffset("singUP", -29, 27);
+					addOffset("singRIGHT", -68, -7);
+					addOffset("singLEFT", 65, 9);
+					addOffset("singDOWN", 200, -70);
+					addOffset("singUPmiss", -19, 67);
+					addOffset("singRIGHTmiss", -60, 41);
+					addOffset("singLEFTmiss", 62, 64);
+					addOffset("singDOWNmiss", 210, -28);
 
 					playAnim('idle');
-
 					flipX = true;
 
 				case 'bf-car':
@@ -484,14 +502,16 @@ class Character extends flixel.FlxSprite
 
 		if (frames == null)
 		{
-			if (!['none'].contains(curCharacter) && !getPref('ultra-optimize'))
+			if (!['none'].contains(curCharacter))
 			{
-				trace('failed to load \'$curCharacter\' character, loading \'dad\'');
+				if (!getPref('ultra-optimize'))
+					trace('failed to load \'$curCharacter\' character, loading \'none\'');
 				curCharacter = 'none';
 			}
 			frames = getCharacterFrames('voidChar', 'shared');
 			addAnim('idle', {name: 'idle'});
 			playAnim('idle');
+			animation.play('idle', true);
 		}
 		dance();
 
@@ -500,7 +520,7 @@ class Character extends flixel.FlxSprite
 			flipX = !flipX;
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf'))
+			if (!curCharacter.startsWith('bf') && curCharacter != 'none')
 			{
 				// var animArray
 				var oldRight = animation.getByName('singRIGHT').frames;

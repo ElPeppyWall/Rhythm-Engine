@@ -15,24 +15,17 @@ class GameOverSubstate extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		var daStage = PlayState.curStage;
-		var daBf:String = '';
 		switch (daStage)
 		{
-			case 'school':
+			case 'school', 'schoolEvil':
 				stageSuffix = '-pixel';
-				daBf = 'bf-pixel-dead';
-			case 'schoolEvil':
-				stageSuffix = '-pixel';
-				daBf = 'bf-pixel-dead';
-			default:
-				daBf = 'bf';
 		}
 
 		super();
 
 		Conductor.songPosition = 0;
 
-		bf = new Boyfriend(x, y, daBf, ['DEAD']);
+		bf = new Boyfriend(x, y, PlayState.boyfriend.curCharacter, ['DEAD']);
 		add(bf);
 
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
@@ -41,8 +34,6 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.sound.play(Paths.sound('fnf_loss_sfx' + stageSuffix));
 		Conductor.changeBPM(100);
 
-		// FlxG.camera.followLerp = 1;
-		// FlxG.camera.focusOn(FlxPoint.get(FlxG.width / 2, FlxG.height / 2));
 		FlxG.camera.scroll.set();
 		FlxG.camera.target = null;
 
@@ -59,11 +50,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		if (controls.BACK && !isEnding)
 		{
 			FlxG.sound.music.stop();
-
-			if (PlayState.isStoryMode)
-				CoolUtil.switchState(StoryMenuState);
-			else
-				CoolUtil.switchState(FreeplayState);
+			PlayState.exit();
 		}
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)

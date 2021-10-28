@@ -1,0 +1,69 @@
+{
+	"lang": "es",
+	"personalBest": "RÉCORD PERSONAL",
+	"diffies": ["FÁCIL", "NORMAL", "DIFÍCIL"],
+	"pauseDiffies": ["FACIL", "NORMAL", "DIFICIL"],
+	"jsonFile": "Archivo JSON",
+	"controls": ["Controles", "Cambia tus controles."],
+	"downscroll": ["Downscroll", "Posiciona las teclas grises abajo."],
+	"midscroll": ["Scroll Central", "Centra las notas grises."],
+	"ghostTapping": [
+		"Ghost Tapping",
+		"Si pulsas una tecla y no hay notas que presionar, fallas."
+	],
+	"fpsCap": ["FPS Cap", "Cambia el límite de FPS de tu juego."],
+	"hitsound": [
+		"HitSound",
+		"Cuando presionas una nota, suena un sonido satisfactorio."
+	],
+	"ultra-optimize": [
+		"Ultra Optimizacion",
+		"Elimina los personajes y el fondo para mejor rendimiento."
+	],
+	"note-splashes": [
+		"Note Splashes",
+		"Apacere una bonita salpicadura cuando obtienes un 'Sick'."
+	],
+	"background-opacity": [
+		"Opacidad del fondo",
+		"Añade una pantalla negra detras de las notas para ocultar el fondo y verlas mejor."
+	],
+	"language": ["Idioma", "Cambia el idioma de tu juego."],
+	"flashing-menu": [
+		"Luces parpadeantes",
+		"Alterna las luces parpadeantes para la gente fotosensible."
+	],
+	"antialiasing": ["Antialiasing", "Sin antialiasing, hay mejor rendimiento."],
+	"camera-zoom": [
+		"Beats de camara",
+		"Alterna los zooms de la camara en un beat de la cancion."
+	],
+	"fps-counter": [
+		"Contador de FPS",
+		"Alterna la visibilidad del contador de FPS."
+	],
+	"auto-pause": [
+		"Auto Pausa",
+		"Pausa el juego cuando no estas enfocado en él."
+	],
+	"allowReset": [
+		"Permitir Reseteo",
+		"Permite morir cuando presionas la tecla R."
+	],
+
+	"score": "Puntuación",
+	"misses": "Fallos",
+
+	"pauseOG": [
+		"Continuar",
+		"Reiniciar Cancion",
+		"Saltar Cancion",
+		"Cambiar Dificultad",
+		"Alternar modo pausa",
+		"Opciones",
+		"Salir al menu"
+	],
+
+	"back": "ATRAS",
+	"practiceMode": "MODO PRACTICA"
+}

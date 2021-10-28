@@ -36,6 +36,7 @@ class Song
 		return parseJSONshit(rawJson);
 	}
 
+	#if windows
 	public static function loadFromJsonFILE(jsonPath:String):SwagSong
 	{
 		var rawJson = sys.io.File.getContent(jsonPath).trim();
@@ -45,6 +46,7 @@ class Song
 
 		return parseJSONshit(rawJson);
 	}
+	#end
 
 	public static function parseJSONshit(rawJson:String):SwagSong
 	{

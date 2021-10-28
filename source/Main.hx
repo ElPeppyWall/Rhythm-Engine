@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Lib;
+import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
 
@@ -17,7 +18,8 @@ class Main extends Sprite
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
-	public static var fpsCounter:openfl.display.FPS;
+	static var fpsCounter:FPSCounter;
+	static var fpsBitMap:openfl.display.Bitmap;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -63,20 +65,15 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		fpsCounter = new openfl.display.FPS(10, 3, 16777215);
+		fpsCounter = new FPSCounter(10, 3, 0);
+		fpsBitMap = ImageWithOutline.renderImage(fpsCounter, 1, 0x000000, true);
+		fpsBitMap.smoothing = true;
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
-
 		addChild(fpsCounter);
 	}
 
-	@:noCompletion private override function __update(transformOnly:Bool, updateChildren:Bool):Void
-	{
-		if (checkKey('F11'))
-			FlxG.fullscreen = !FlxG.fullscreen;
-
-		PreferencesMenu.checkPrefValue('fpsCap');
-		super.__update(transformOnly, updateChildren);
-	}
+	public static inline function fpsCounterVisible(visible:Bool):Void
+		fpsCounter.visible = visible;
 
 	public function getFPS():Float
 		return fpsCounter.currentFPS;

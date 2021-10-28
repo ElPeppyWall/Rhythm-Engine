@@ -2,31 +2,32 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.system.debug.console.ConsoleUtil;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 
-class PromptSubstate extends MusicBeatSubstate
+class ConsoleSubstate extends MusicBeatSubstate
 {
 	static var commandsEntered:Array<String> = [];
 
 	var curSelected = 0;
+	var consoleInput:Console;
+	var __closeCallback:Bool->Bool->Void;
 
-	var promptInput:Prompt;
-
-	public function new(?_closeCallback:Void->Void)
+	public function new(?_closeCallback:Bool->Bool->Void)
 	{
 		super();
 		if (_closeCallback != null)
-			closeCallback = _closeCallback;
+			__closeCallback = _closeCallback;
 		var bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0;
 		bg.scrollFactor.set();
 		add(bg);
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 
-		promptInput = new Prompt();
-		add(promptInput);
+		consoleInput = new Console();
+		add(consoleInput);
 
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
@@ -39,21 +40,21 @@ class PromptSubstate extends MusicBeatSubstate
 		{
 			if (KeyBinds.checkKey('UP'))
 			{
-				promptInput.text = commandsEntered[curSelected];
-				promptInput.caretIndex = promptInput.text.length;
+				consoleInput.text = commandsEntered[curSelected];
+				consoleInput.caretIndex = consoleInput.text.length;
 				curSelected++;
 			}
 			if (KeyBinds.checkKey('UP'))
 			{
-				promptInput.text = commandsEntered[curSelected];
-				promptInput.caretIndex = promptInput.text.length;
+				consoleInput.text = commandsEntered[curSelected];
+				consoleInput.caretIndex = consoleInput.text.length;
 				curSelected--;
 			}
 		}
 		if (KeyBinds.checkKey('ENTER'))
 		{
-			commandsEntered.unshift(promptInput.text);
-			var argsArray:Array<Dynamic> = promptInput.text.split('.');
+			commandsEntered.unshift(consoleInput.text);
+			var argsArray:Array<Dynamic> = consoleInput.text.split('.');
 			trace(argsArray);
 
 			switch (argsArray[0])
@@ -64,7 +65,7 @@ class PromptSubstate extends MusicBeatSubstate
 						case 'setPref':
 							PreferencesMenu.setPref(argsArray[2], argsArray[3]);
 						case 'getPref':
-							trace('\u001b[96mpref ${argsArray[2]} = ${PreferencesMenu.getPref(argsArray[2])} (${CoolUtil.getVarType(PreferencesMenu.getPref(argsArray[2]))})\u001b[0m');
+							trace('\u001b[96mpref ${argsArray[2]} = ${PreferencesMenu.getPref(argsArray[2])}\u001b[0m');
 						case 'reset':
 							PreferencesMenu.resetPrefs();
 					}
@@ -115,7 +116,8 @@ class PromptSubstate extends MusicBeatSubstate
 
 	override public function close():Void
 	{
-		closeSubState();
 		super.close();
+		if (__closeCallback != null)
+			__closeCallback(false, false);
 	}
 }

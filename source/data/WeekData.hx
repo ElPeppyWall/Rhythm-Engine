@@ -32,7 +32,7 @@ class Weeks
 		['Senpai', 'Roses', 'Thorns']
 	];
 	public static var weeksFiles = ['tutorial', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6'];
-	public static var weeksCharacters = ['gf', 'dad', 'spooky', 'pico', 'mom', 'parents-christmas', 'senpai'];
+	public static var weeksCharacters = ['dad', 'dad', 'spooky', 'pico', 'mom', 'parents-christmas', 'senpai'];
 	public static var weeksColors = [-7179779, -7179779, -14535868, -7072173, -223529, -6237697, -34625, -608764];
 	public static var lockedWeeks = [-1];
 }

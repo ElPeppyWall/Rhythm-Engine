@@ -33,6 +33,9 @@ class HealthIconsData
 		healthIconsColors['pico'] = 0xFFb7d855;
 		healthIconsColors['mom'] = 0xFFd8558e;
 		healthIconsColors['parents'] = 0xFFaf66ce;
+		healthIconsColors['bf-pixel'] = 0xFF7bd6f6;
+		healthIconsColors['senpai'] = 0xFFaf66ce;
+		healthIconsColors['spirit'] = 0xFFff3c6e;
 		healthIconsColors['face'] = 0xFFa1a1a1;
 		healthIconsColors['none'] = FlxColor.GRAY;
 	}

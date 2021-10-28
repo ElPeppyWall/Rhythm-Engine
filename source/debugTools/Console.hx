@@ -5,7 +5,7 @@ import flixel.FlxState;
 import flixel.text.FlxText.FlxTextBorderStyle;
 import flixel.util.FlxColor;
 
-class Prompt extends flixel.addons.ui.FlxUIInputText
+class Console extends flixel.addons.ui.FlxUIInputText
 {
 	public function new()
 	{
@@ -19,11 +19,11 @@ class Prompt extends flixel.addons.ui.FlxUIInputText
 		hasFocus = true;
 	}
 
-	public static function open(?callback:Void->Void)
+	public static function open(?callback:Bool->Bool->Void)
 	{
 		var state = FlxG.state;
 		state.persistentUpdate = false;
 		state.persistentDraw = true;
-		state.openSubState(new PromptSubstate(callback));
+		state.openSubState(new ConsoleSubstate(callback));
 	}
 }

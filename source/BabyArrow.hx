@@ -2,8 +2,11 @@ package;
 
 import PlayState.notesColor;
 import PlayState.notesDir;
+import flixel.FlxSprite;
 
-class BabyArrow extends flixel.FlxSprite
+using StringTools;
+
+class BabyArrow extends FlxSprite
 {
 	public var noteStyle:String = '';
 	public var noteData:Int;
@@ -47,15 +50,33 @@ class BabyArrow extends flixel.FlxSprite
 		scrollFactor.set();
 		if (fadeIn)
 		{
+			final oldY = y;
 			y -= 10;
 			alpha = 0;
-			flixel.tweens.FlxTween.tween(this, {y: this.y + 10, alpha: 1}, 1, {ease: flixel.tweens.FlxEase.circOut, startDelay: 0.5 + (0.2 * noteData)});
+			flixel.tweens.FlxTween.tween(this, {y: oldY + 10, alpha: 1}, 1, {ease: flixel.tweens.FlxEase.circOut, startDelay: 0.5 + (0.2 * noteData)});
 		}
 		ID = noteData;
 		animation.play('static');
 		x += 50;
 		x += ((flixel.FlxG.width / 2) * playerID);
 	}
+
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
+
+		if (staticTime > 0)
+		{
+			staticTime -= elapsed;
+			if (staticTime <= 0)
+			{
+				playAnim('static');
+				staticTime = 0;
+			}
+		}
+	}
+
+	var staticTime:Float;
 
 	public function playAnim(AnimName:String, ?Force:Bool = false)
 	{
@@ -70,5 +91,11 @@ class BabyArrow extends flixel.FlxSprite
 		centerOffsets();
 		offset.x -= 13;
 		offset.y -= 13;
+	}
+
+	public inline function playConfirm(note:Note)
+	{
+		playAnim('confirm', true);
+		staticTime = note.isSustainNote && !note.animation.curAnim.name.endsWith('end') ? .30 : .15;
 	}
 }

@@ -86,7 +86,7 @@ class StoryMenuState extends MusicBeatState
 		if (FlxG.sound.music != null)
 		{
 			if (!FlxG.sound.music.playing)
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				MusicManager.playMainMusic();
 		}
 
 		persistentUpdate = persistentDraw = true;
@@ -118,8 +118,6 @@ class StoryMenuState extends MusicBeatState
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 		add(grpLocks);
 
-		trace("Line 70");
-
 		#if (windows && !hl)
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -149,11 +147,17 @@ class StoryMenuState extends MusicBeatState
 			}
 		}
 
-		trace("Line 96");
-
 		for (char in 0...3)
 		{
-			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, weeks[curWeek].weekCharacter);
+			var weekCharacterThing = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, switch (char)
+			{
+				case 1:
+					'bf';
+				case 2:
+					'gf';
+				default:
+					weeks[curWeek].weekCharacter;
+			});
 			weekCharacterThing.y += 70;
 			weekCharacterThing.antialiasing = getPref('antialiasing');
 			switch (weekCharacterThing.character)
@@ -169,8 +173,6 @@ class StoryMenuState extends MusicBeatState
 				case 'gf':
 					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 0.5));
 					weekCharacterThing.updateHitbox();
-				case 'pico':
-					weekCharacterThing.flipX = true;
 				case 'parents-christmas':
 					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 0.9));
 					weekCharacterThing.updateHitbox();
@@ -181,8 +183,6 @@ class StoryMenuState extends MusicBeatState
 
 		difficultySelectors = new FlxGroup();
 		add(difficultySelectors);
-
-		trace("Line 124");
 
 		leftArrow = new FlxSprite(grpWeekText.members[0].x + grpWeekText.members[0].width + 10, grpWeekText.members[0].y + 10);
 		leftArrow.frames = ui_tex;
@@ -207,8 +207,6 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 		rightArrow.animation.play('idle');
 		difficultySelectors.add(rightArrow);
-
-		trace("Line 150");
 
 		add(yellowBG);
 		add(grpWeekCharacters);
@@ -393,15 +391,13 @@ class StoryMenuState extends MusicBeatState
 	function updateText()
 	{
 		grpWeekCharacters.members[0].animation.play(weeks[curWeek].weekCharacter);
-		grpWeekCharacters.members[1].animation.play('bf');
-		grpWeekCharacters.members[2].animation.play('gf');
 		txtTracklist.text = "Tracks\n";
 
 		switch (grpWeekCharacters.members[0].animation.curAnim.name)
 		{
 			case 'parents-christmas':
 				grpWeekCharacters.members[0].offset.set(200, 200);
-				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 0.99));
+				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
 
 			case 'senpai':
 				grpWeekCharacters.members[0].offset.set(130, 0);

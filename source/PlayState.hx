@@ -7,8 +7,8 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.FlxState;
 import flixel.FlxSubState;
-import flixel.addons.display.FlxPieDial.FlxPieDialShape;
 import flixel.addons.display.FlxPieDial;
 import flixel.addons.effects.FlxTrail;
 import flixel.addons.transition.FlxTransitionableState;
@@ -16,6 +16,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
+import flixel.system.FlxAssets.FlxShader;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
@@ -37,7 +38,7 @@ class PlayState extends MusicBeatState
 	public static var instance:PlayState;
 	public static var SONG:SwagSong;
 	public static var weekColor:FlxColor;
-
+	public static var stateToBack:Class<FlxState> = MainMenuState;
 	public static var curStage:String = '';
 
 	public static var notesColor = ['purple', 'blue', 'green', 'red'];
@@ -164,7 +165,31 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(camPAUSE);
 		FlxCamera.defaultCameras = [camGame];
 
-		addBlackScreen();
+		blackscreenMidScroll = new FlxSprite(500, 0).makeGraphic(500, 1000, FlxColor.BLACK);
+		blackscreenMidScroll.cameras = [camBACKGROUND_OPACITY];
+		blackscreenMidScroll.alpha = getPref("background-opacity");
+		blackscreenMidScroll.scrollFactor.set();
+		blackscreenMidScroll.screenCenter();
+		add(blackscreenMidScroll);
+		blackscreen1 = new FlxSprite(25, 0).makeGraphic(500, 1000, FlxColor.BLACK);
+		blackscreen1.cameras = [camBACKGROUND_OPACITY];
+		blackscreen1.alpha = getPref("background-opacity");
+		blackscreen1.scrollFactor.set();
+		blackscreen1.screenCenter(Y);
+		add(blackscreen1);
+		blackscreen2 = new FlxSprite(660, 0).makeGraphic(500, 1000, FlxColor.BLACK);
+		blackscreen2.cameras = [camBACKGROUND_OPACITY];
+		blackscreen2.alpha = getPref("background-opacity");
+		blackscreen2.scrollFactor.set();
+		blackscreen2.screenCenter(Y);
+		add(blackscreen2);
+
+		blackscreenMidScroll.visible = getPref('midscroll');
+		blackscreenMidScroll.alpha = getPref("background-opacity");
+		blackscreen1.alpha = getPref("background-opacity");
+		blackscreen1.visible = !getPref('midscroll');
+		blackscreen2.alpha = getPref("background-opacity");
+		blackscreen2.visible = !getPref('midscroll');
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -176,11 +201,12 @@ class PlayState extends MusicBeatState
 		var noteSplash = new NoteSplash(100, 100, 0);
 		noteSplash.alpha = 0;
 		grpNoteSplashes.add(noteSplash);
-		new FlxTimer().start(1.5, function(tmr:FlxTimer) // before this code exists, a random splash spawned in the air
+		new FlxTimer().start(1.5, function(tmr:FlxTimer)
 		{
 			noteSplash.alpha = .6;
 		});
 
+		// before this code exists, a random splash spawned in the air
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
@@ -270,6 +296,7 @@ class PlayState extends MusicBeatState
 		{
 			gfVersion = 'speaker';
 			dadVersion = 'none';
+			bfVersion = 'bf';
 		}
 
 		gf = new Character(400, 130, gfVersion, gfArgs, false);
@@ -418,7 +445,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.borderSize = 1.25;
 
 		songNameTxt = new FlxText(4, FlxG.width,
-			'${Song.prettySong()} - ${CoolUtil.getDiffByIndex(storyDifficulty, isAloneFunkin)} // Better Funkin\' v${GameVars.engineVer}', 20);
+			'${Song.prettySong()} - ${CoolUtil.getDiffName(storyDifficulty, isAloneFunkin)} // Rhythm Engine v${GameVars.engineVer}', 20);
 		songNameTxt.setFormat(curStage.startsWith('school') ? "Pixel Arial 11 Bold" : Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER,
 			FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		songNameTxt.scrollFactor.set();
@@ -451,7 +478,7 @@ class PlayState extends MusicBeatState
 		songNameTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
-		checkSettingsInGame();
+		checkSettingsInGame(true, false);
 		#if debug
 		debugTxt = new FlxText(0, 0, FlxG.width, "DEBUG TOOLS:
 		Q/E: ZOOM IN/OUT
@@ -524,7 +551,7 @@ class PlayState extends MusicBeatState
 		songTimer = new FlxPieDial(100, 100, 50, weekColor, 1024, FlxPieDialShape.CIRCLE, false, 50);
 		songTimer.cameras = [camHUD];
 		songTimer.antialiasing = getPref('antialiasing');
-		add(songTimer);
+		// add(songTimer); FlxPieDial sucks
 
 		super.create();
 	}
@@ -618,14 +645,23 @@ class PlayState extends MusicBeatState
 	{
 		inCutscene = false;
 
-		generateStaticArrows(0);
-		generateStaticArrows(1);
+		checkSettingsInGame(false, true);
 
 		startedCountdown = true;
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
 
 		var swagCounter:Int = 0;
+
+		skipSpr = new FlxSprite().loadGraphic(Paths.image('skip'));
+		skipSpr.antialiasing = getPref('antialiasing');
+		skipSpr.setGraphicSize(Std.int(skipSpr.width * 0.6));
+		skipSpr.updateHitbox();
+		skipSpr.screenCenter();
+		skipSpr.y = FlxG.height - 300;
+		skipSpr.alpha = 0;
+		skipSpr.cameras = [camHUD];
+		add(skipSpr);
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
@@ -731,7 +767,10 @@ class PlayState extends MusicBeatState
 			}
 
 			swagCounter += 1;
-		}, 4);
+		}, 5);
+
+		if (!skippedIntro)
+			FlxTween.tween(skipSpr, {alpha: 1}, 1.5);
 	}
 
 	var previousFrameTime:Int = 0;
@@ -753,6 +792,7 @@ class PlayState extends MusicBeatState
 		{
 			endSong();
 			vocals.volume = 0;
+			vocals.stop();
 		};
 		vocals.play();
 
@@ -793,6 +833,8 @@ class PlayState extends MusicBeatState
 				if (i == 0)
 				{
 					firstNoteTime = songNotes[0];
+					if (firstNoteTime - 1500 < 0)
+						skippedIntro = true;
 					i++;
 				}
 				var daNoteData:Int = Std.int(songNotes[1]);
@@ -850,13 +892,15 @@ class PlayState extends MusicBeatState
 	function sortByShit(Obj1:Note, Obj2:Note):Int
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
 
-	private function generateStaticArrows(player:Int, ?style:String, ?fadeInAnim:Bool):Void
+	private function generateStaticArrows(player:Int, ?style:String, ?fadeInAnim:Dynamic):Void
 	{
 		if (style == null)
 			style = Note.getNoteStyle();
+		if (fadeInAnim == null)
+			fadeInAnim = true;
 		for (i in 0...4)
 		{
-			var babyArrow = new BabyArrow(strumLine.y, i, style, player, !isStoryMode);
+			var babyArrow = new BabyArrow(strumLine.y, i, style, player, fadeInAnim && !isStoryMode);
 
 			if (getPref('midscroll'))
 				babyArrow.x -= 275;
@@ -967,6 +1011,7 @@ class PlayState extends MusicBeatState
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 	var skippedIntro:Bool = false;
+	var skipSpr:FlxSprite;
 
 	override public function update(elapsed:Float)
 	{
@@ -987,7 +1032,10 @@ class PlayState extends MusicBeatState
 				resyncVocals();
 			}
 			if (FlxG.sound.music.time >= firstNoteTime - 1500)
+			{
+				FlxTween.tween(skipSpr, {alpha: 0}, 1.5);
 				skippedIntro = true;
+			}
 		}
 
 		if (startedSong)
@@ -997,7 +1045,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = 'Score: $songScore | Combo Breaks: $misses';
+		scoreTxt.text = '${langString('score')}: $songScore | ${langString('misses')}: $misses';
 		scoreTxt.screenCenter(X);
 
 		if (controls.PAUSE && startedCountdown && canPause)
@@ -1220,14 +1268,7 @@ class PlayState extends MusicBeatState
 					opponentStrums.forEach(function(spr:BabyArrow)
 					{
 						if (spr.noteData == daNote.noteData)
-						{
-							spr.playAnim('confirm');
-							spr.animation.finishCallback = function(anim:String)
-							{
-								if (anim == 'confirm' && !daNote.isSustainNote)
-									spr.playAnim('static');
-							}
-						}
+							spr.playConfirm(daNote);
 					});
 
 					daNote.kill();
@@ -1264,6 +1305,7 @@ class PlayState extends MusicBeatState
 	public function endSong():Void
 	{
 		canPause = false;
+		FlxG.sound.music.stop();
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
 		Highscore.saveScore(SONG.song, songScore, storyDifficulty);
@@ -1276,15 +1318,12 @@ class PlayState extends MusicBeatState
 
 			if (storyPlaylist.length <= 0)
 			{
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				MusicManager.playMainMusic();
 
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
 
-				switchState(StoryMenuState);
-
-				// if ()
-
+				PlayState.exit();
 				Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 			}
 			else
@@ -1311,7 +1350,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 		else
-			switchState(FreeplayState);
+			PlayState.exit();
 	}
 
 	var endingSong:Bool = false;
@@ -1558,7 +1597,7 @@ class PlayState extends MusicBeatState
 	{
 		if (!note.wasGoodHit)
 		{
-			if (true)
+			if (!note.isSustainNote)
 			{
 				popUpScore(note);
 				combo += 1;
@@ -2125,14 +2164,26 @@ class PlayState extends MusicBeatState
 				SONG = Song.loadFromJson(songJSON.replace('-normal', ''), songFOLDER);
 
 			@:privateAccess
-			storyDifficulty = CoolUtil.difficultyArray.indexOf(diff.toUpperCase());
+			for (i in CoolUtil.difficultyArray)
+			{
+				if (i[0] == diff.toUpperCase())
+					storyDifficulty = CoolUtil.difficultyArray.indexOf(i);
+			}
 			songPath = '';
+
+			if (isStory)
+				PlayState.stateToBack = StoryMenuState;
+			else
+				PlayState.stateToBack = FreeplayState;
 		}
 		else
 		{
+			#if windows
 			songPath = song;
 			SONG = Song.loadFromJsonFILE(song);
 			storyDifficulty = 1;
+			PlayState.stateToBack = AloneFunkinState;
+			#end
 		}
 
 		weekColor = wColor;
@@ -2179,7 +2230,7 @@ class PlayState extends MusicBeatState
 			debugTxt.visible = !debugTxt.visible;
 
 		if (checkKey('F7'))
-			Prompt.open(checkSettingsInGame);
+			Console.open(checkSettingsInGame);
 
 		if (FlxG.mouse.justPressedMiddle)
 		{
@@ -2208,7 +2259,7 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	public function checkSettingsInGame():Void
+	public function checkSettingsInGame(firstTime:Bool, fadeInStrums:Bool):Void
 	{
 		camNOTES.flashSprite.scaleY = getPref('downscroll') ? -1 : 1;
 
@@ -2223,65 +2274,33 @@ class PlayState extends MusicBeatState
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 
-		removeBlackScreen();
-		addBlackScreen();
+		blackscreenMidScroll.visible = getPref('midscroll');
+		blackscreenMidScroll.alpha = getPref("background-opacity");
+		blackscreen1.alpha = getPref("background-opacity");
+		blackscreen1.visible = !getPref('midscroll');
+		blackscreen2.alpha = getPref("background-opacity");
+		blackscreen2.visible = !getPref('midscroll');
 
 		playerStrums.forEach(function(spr:BabyArrow) playerStrums.remove(spr));
 		opponentStrums.forEach(function(spr:BabyArrow) opponentStrums.remove(spr));
 		strumLineNotes.forEach(function(spr:BabyArrow) strumLineNotes.remove(spr));
-		notes.forEach(function(daNote:Note) daNote.loadNote());
+		// notes.forEach(function(daNote:Note) daNote.loadNote());
 
-		generateStaticArrows(0, null, false);
-		generateStaticArrows(1, null, false);
+		if (!firstTime)
+		{
+			generateStaticArrows(0, null, fadeInStrums);
+			generateStaticArrows(1, null, fadeInStrums);
+		}
 
 		// notes.forEachAlive(function(note:Note) note.loadFrames());
 	}
 
-	var removeBlackScreen = function()
-	{
-	}
+	public static inline function exit():Void
+		switchState(stateToBack);
 
-	function addBlackScreen()
-	{
-		if (getPref("background-opacity") > 0)
-		{
-			if (getPref('midscroll'))
-			{
-				var backgroundShit = new FlxSprite(500, 0).makeGraphic(500, 1000, FlxColor.BLACK);
-				backgroundShit.cameras = [camBACKGROUND_OPACITY];
-				backgroundShit.alpha = getPref("background-opacity");
-				backgroundShit.scrollFactor.set();
-				backgroundShit.screenCenter();
-				add(backgroundShit);
-				removeBlackScreen =
-					{
-						remove(backgroundShit);
-						return;
-					}
-			}
-			else
-			{
-				var backgroundShit1 = new FlxSprite(25, 0).makeGraphic(500, 1000, FlxColor.BLACK);
-				backgroundShit1.cameras = [camBACKGROUND_OPACITY];
-				backgroundShit1.alpha = getPref("background-opacity");
-				backgroundShit1.scrollFactor.set();
-				backgroundShit1.screenCenter(Y);
-				add(backgroundShit1);
-
-				var backgroundShit2 = new FlxSprite(660, 0).makeGraphic(500, 1000, FlxColor.BLACK);
-				backgroundShit2.cameras = [camBACKGROUND_OPACITY];
-				backgroundShit2.alpha = getPref("background-opacity");
-				backgroundShit2.scrollFactor.set();
-				backgroundShit2.screenCenter(Y);
-				add(backgroundShit2);
-				removeBlackScreen =
-					{
-						remove(backgroundShit1);
-						remove(backgroundShit2);
-						return;
-					}
-			}
-		}
-	}
+	var blackscreenMidScroll:FlxSprite;
+	var blackscreen1:FlxSprite;
+	var blackscreen2:FlxSprite;
 }
 // ! matriculaso es el pepe
+// ! peppy es un pro

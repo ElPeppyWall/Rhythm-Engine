@@ -1,12 +1,18 @@
-package; #if (windows && !hl) import Discord.DiscordClient; #end import flixel.FlxG;
+package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import openfl.display.Shader;
 
 using StringTools;
+
+#if (windows && cpp)
+import Discord.DiscordClient;
+#end
 
 class FreeplayState extends MusicBeatState
 {
@@ -23,15 +29,22 @@ class FreeplayState extends MusicBeatState
 	var intendedScore:Int = 0;
 	var coolColors = [-7179779, -7179779, -14535868, -7072173, -223529, -6237697, -34625, -608764];
 	var bg = new MenuBG(DESAT);
+	var fromPlayState:Bool = false;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
 
 	private var iconArray:Array<HealthIcon> = [];
 
+	public function new(?fromPlayState:Bool = false)
+	{
+		this.fromPlayState = fromPlayState;
+		super();
+	}
+
 	override function create()
 	{
-		#if (windows && !hl)
+		#if (windows && cpp)
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
@@ -56,18 +69,15 @@ class FreeplayState extends MusicBeatState
 		{
 			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
 			songText.targetY = i;
+			songText.ID = i;
 			grpSongs.add(songText);
 
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
 			icon.sprTracker = songText;
 
-			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
 			if (songs[i].songCharacter != '')
 				add(icon);
-
-			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-			// songText.screenCenter(X);
 		}
 
 		scoreText = new FlxText(0.7 * FlxG.width, 5, 0, "", 32);
@@ -89,6 +99,8 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 
+		if (!FlxG.sound.music.playing || fromPlayState)
+			MusicManager.playMainMusic();
 		super.create();
 	}
 
@@ -110,14 +122,38 @@ class FreeplayState extends MusicBeatState
 		}
 	}
 
-	function positionHighscore():Void
+	inline function positionHighscore():Void
 	{
 		scoreText.x = (FlxG.width - scoreText.width - 6);
 		scoreBG.scale.x = (FlxG.width - scoreText.x + 6);
 		scoreBG.x = (FlxG.width - scoreBG.scale.x / 2);
 		diffText.x = (Std.int(scoreBG.x + scoreBG.width / 2));
-		var a = diffText;
-		a.x = (a.x - diffText.width / 2);
+		diffText.x = (diffText.x - diffText.width / 2);
+	}
+
+	var testInt:Int = 0;
+
+	inline function checkTest():Void
+	{
+		if (checkKey('T'))
+			if (testInt == 0)
+				testInt = 1;
+			else if (testInt == 3)
+				PlayState.loadSong('test-normal', 0, FlxColor.WHITE, false);
+			else
+				testInt = 0;
+
+		if (checkKey('E'))
+			if (testInt == 1)
+				testInt = 2;
+			else
+				testInt = 0;
+
+		if (checkKey('S'))
+			if (testInt == 2)
+				testInt = 3;
+			else
+				testInt = 0;
 	}
 
 	override function update(elapsed:Float)
@@ -139,15 +175,20 @@ class FreeplayState extends MusicBeatState
 		// if (bg.color != color2)
 		// 	bg.color = FlxColor.interpolate(bg.color, color2, CoolUtil.camLerpShit(.045));
 
-		scoreText.text = "PERSONAL BEST:" + lerpScore;
+		scoreText.text = '${langString('personalBest')}:' + lerpScore;
 		positionHighscore();
-		var upP = controls.UI_UP_P;
-		var downP = controls.UI_DOWN_P;
-		var accepted = controls.ACCEPT;
+		if (FlxG.mouse.wheel != 0)
+			changeSelection(FlxG.mouse.wheel == 1 ? -1 : 1);
 
-		if (upP)
+		for (item in grpSongs)
+		{
+			if (FlxG.mouse.overlaps(item) && item.ID == curSelected && FlxG.mouse.justPressed)
+				enterSong();
+		}
+
+		if (controls.UI_UP_P)
 			changeSelection(-1);
-		if (downP)
+		if (controls.UI_DOWN_P)
 			changeSelection(1);
 
 		if (controls.UI_LEFT_P)
@@ -161,17 +202,20 @@ class FreeplayState extends MusicBeatState
 			switchState(MainMenuState);
 		}
 
-		if (accepted)
+		if (controls.ACCEPT)
+			enterSong();
+	}
+
+	function enterSong():Void
+	{
+		FlxTween.cancelTweensOf(bg);
+		switch (songs[curSelected].songName.toLowerCase())
 		{
-			FlxTween.cancelTweensOf(bg);
-			switch (songs[curSelected].songName.toLowerCase())
-			{
-				case 'alone-funkin\'':
-					switchState(AloneFunkinState);
-				default:
-					PlayState.loadSong(CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty), songs[curSelected].week,
-						coolColors[songs[curSelected].week], false);
-			}
+			case 'alone-funkin\'':
+				switchState(AloneFunkinState);
+			default:
+				PlayState.loadSong(CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty), songs[curSelected].week,
+					coolColors[songs[curSelected].week], false);
 		}
 	}
 
@@ -188,21 +232,23 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		#end
 
-		diffText.text = '< ${CoolUtil.getDiffByIndex(curDifficulty, false)} >';
+		diffText.text = '< ${CoolUtil.getDiffName(curDifficulty, false)} >';
 		FlxTween.color(diffText, CoolUtil.camLerpShit(.45), diffText.color, CoolUtil.difficultyColorArray[curDifficulty]);
 		positionHighscore();
 	}
 
-	function changeSelection(change:Int = 0)
+	function changeSelection(change:Int = 0, force:Bool = false)
 	{
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-
 		curSelected += change;
 
 		if (curSelected < 0)
 			curSelected = songs.length - 1;
 		if (curSelected >= songs.length)
 			curSelected = 0;
+
+		if (force)
+			change = curSelected;
 
 		// selector.y = (70 * curSelected) + 30;
 
@@ -218,9 +264,7 @@ class FreeplayState extends MusicBeatState
 		var bullShit:Int = 0;
 
 		for (i in 0...iconArray.length)
-		{
 			iconArray[i].alpha = 0.6;
-		}
 
 		iconArray[curSelected].alpha = 1;
 
@@ -230,13 +274,9 @@ class FreeplayState extends MusicBeatState
 			bullShit++;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)
-			{
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
-			}
 		}
 	}
 }

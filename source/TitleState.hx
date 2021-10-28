@@ -126,12 +126,11 @@ class TitleState extends MusicBeatState
 	{
 		if (!initialized)
 		{
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-
+			MusicManager.playMainMusic(0);
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
 		}
 
-		Conductor.changeBPM(102);
+		Conductor.changeBPM(BPMList.mainMenuStateBPM);
 		persistentUpdate = true;
 
 		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
@@ -161,9 +160,7 @@ class TitleState extends MusicBeatState
 
 		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
-		#if !debug
-		FlxG.mouse.visible = false;
-		#end
+		FlxG.mouse.useSystemCursor = true;
 
 		if (initialized)
 			skipIntro();

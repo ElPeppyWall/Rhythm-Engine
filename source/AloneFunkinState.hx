@@ -13,18 +13,18 @@ class AloneFunkinState extends MusicBeatState
 	{
 		add(new MenuBG(DESAT_BORDER));
 
-		var fullScreen = FlxG.fullscreen;
+		final fullScreen = FlxG.fullscreen;
 		FlxG.fullscreen = false;
-		var textUI = new FlxText(4, FlxG.width - 125,
-			'Drag and drop the chart of you want to play. The folder where the chart is located has to be like this:', 20);
-		textUI.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		textUI.autoSize = true;
+		var textUI = new FlxText(125, 153, 'Drag and drop the chart of you want to play. The folder where the chart is located has to be like this:', 20);
+		textUI.fieldWidth = 700;
+		textUI.setFormat(Paths.font("vcr.ttf"), 52, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		textUI.scrollFactor.set();
 		textUI.borderSize = 1.25;
-		textUI.screenCenter();
 		add(textUI);
 
 		var screenshot = new FlxSprite(textUI.x, textUI.y + 250, Paths.image('chartExample'));
+		screenshot.setGraphicSize(Std.int(screenshot.width * 1.6));
+		screenshot.updateHitbox();
 		add(screenshot);
 
 		lime.app.Application.current.window.onDropFile.add(function(path:String)

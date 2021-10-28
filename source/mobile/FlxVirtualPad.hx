@@ -1,15 +1,15 @@
-package ui;
+package;
 
+import flash.display.BitmapData;
 import flixel.FlxG;
+import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.frames.FlxTileFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets;
-import flixel.util.FlxDestroyUtil;
 import flixel.ui.FlxButton;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flash.display.BitmapData;
-import flixel.graphics.FlxGraphic;
+import flixel.util.FlxDestroyUtil;
 import openfl.utils.ByteArray;
 
 /**
@@ -18,12 +18,12 @@ import openfl.utils.ByteArray;
  *
  * @author Ka Wing Chin
  */
-@:keep @:bitmap("assets/preload/images/virtual-input.png")
+@:keep @:bitmap("assets/preload/images/mobile/virtual-input.png")
 class GraphicVirtualInput extends BitmapData
 {
 }
 
-@:file("assets/preload/images/virtual-input.txt")
+@:file("assets/preload/images/mobile/virtual-input.txt")
 class VirtualInputData extends #if (lime_legacy || nme) ByteArray #else ByteArrayData #end
 {
 }
@@ -203,6 +203,7 @@ enum FlxActionMode
 {
 	NONE;
 	A;
+	B;
 	A_B;
 	A_B_C;
 	A_B_X_Y;

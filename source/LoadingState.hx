@@ -37,6 +37,8 @@ class LoadingState extends MusicBeatState
 	override function create()
 	{
 		#if PRELOAD_ALL
+		Assets.cache.clear("songs");
+
 		FlxG.bitmap.clearCache();
 		FlxG.bitmap.clearUnused();
 		FlxG.bitmap.dumpCache();
@@ -139,10 +141,10 @@ class LoadingState extends MusicBeatState
 			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
 		#else
 		targetShit = FlxMath.remapToRange(fakeRemaining / 4, 1, 0, 0, 1);
-		FlxG.watch.addQuick('fake remaining', fakeRemaining);
-		#end
 		if (fakeRemaining == 0)
 			onLoad();
+		#end
+
 		loadBar.scale.x += .5 * (targetShit - loadBar.scale.x);
 	}
 
@@ -181,6 +183,8 @@ class LoadingState extends MusicBeatState
 
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
+
+		return PlayState;
 	}
 
 	#if NO_PRELOAD_ALL

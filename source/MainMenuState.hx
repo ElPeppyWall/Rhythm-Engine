@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -34,8 +35,18 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
+	var defCam = new FlxCamera();
+	var camBG = new FlxCamera();
+
 	override function create()
 	{
+		FlxG.cameras.reset();
+		FlxG.cameras.add(camBG);
+		FlxG.cameras.add(defCam);
+		camBG.bgColor.alpha = 0;
+		defCam.bgColor.alpha = 0;
+
+		FlxCamera.defaultCameras = [defCam];
 		#if (windows && !hl)
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -44,7 +55,7 @@ class MainMenuState extends MusicBeatState
 		transOut = FlxTransitionableState.defaultTransOut;
 
 		if (!FlxG.sound.music.playing)
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			MusicManager.playMainMusic();
 
 		persistentUpdate = persistentDraw = true;
 
@@ -54,6 +65,7 @@ class MainMenuState extends MusicBeatState
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = getPref('antialiasing');
+		bg.cameras = [camBG];
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -67,6 +79,7 @@ class MainMenuState extends MusicBeatState
 		magenta.visible = false;
 		magenta.antialiasing = getPref('antialiasing');
 		magenta.color = 0xFFfd719b;
+		magenta.cameras = [camBG];
 		if (getPref('flashing-menu'))
 			add(magenta);
 
@@ -89,9 +102,9 @@ class MainMenuState extends MusicBeatState
 			menuItem.antialiasing = getPref('antialiasing');
 		}
 
-		FlxG.camera.follow(camFollow, null, 0.06);
+		camBG.follow(camFollow, null, 0.06);
 
-		var versionShit = new FlxText(5, FlxG.height - 50, 0, 'Better Funkin\' v${GameVars.engineVer}', 12);
+		var versionShit = new FlxText(5, FlxG.height - 50, 0, 'Rhythm Engine v${GameVars.engineVer}', 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		versionShit.borderSize = 1.25;
@@ -99,73 +112,42 @@ class MainMenuState extends MusicBeatState
 		add(versionShit);
 
 		if (getPref("first-time"))
-		{
-			FlxG.fullscreen = false;
-			Application.current.window.alert('This game contains flashing lights! Make sure check your options before play!', 'Alert!!');
-		}
+			null; // anashei;
 
 		changeItem();
-		promptInput = new flixel.addons.ui.FlxUIInputText(10, 10, FlxG.width, '', 32, FlxColor.BLACK, 0x64FFFFFF);
-		promptInput.setFormat(Paths.font("CascadiaCode.ttf"), 42, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		promptInput.borderSize = 1.25;
-		promptInput.scrollFactor.set();
-		promptInput.screenCenter();
-		promptInput.y = FlxG.height - 60;
-		promptInput.antialiasing = getPref('antialiasing');
-
 		super.create();
 	}
 
-	var promptInput:flixel.addons.ui.FlxUIInputText;
-	var lastPrompt = '';
-	var writing = false;
 	var selectedSomethin:Bool = false;
 
 	override function update(elapsed:Float)
 	{
 		if (FlxG.keys.justPressed.F7)
+			Console.open();
+		if (!selectedSomethin)
 		{
-			promptInput.caretIndex = 0;
-			if (writing)
+			if (FlxG.mouse.justMoved)
+				for (opItem in menuItems)
+				{
+					if (FlxG.mouse.overlaps(opItem) && !selectedSomethin)
+					{
+						if (curSelected != opItem.ID)
+						{
+							FlxG.sound.play(Paths.sound('scrollMenu'));
+							changeItem(opItem.ID, true);
+						}
+
+						if (FlxG.mouse.justPressed)
+							selectItem();
+					}
+				}
+
+			if (FlxG.mouse.wheel != 0)
 			{
-				readPrompt();
-				writing = false;
-				remove(promptInput);
-			}
-			else
-			{
-				add(promptInput);
-				promptInput.hasFocus = true;
-				writing = true;
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+				changeItem(FlxG.mouse.wheel == 1 ? -1 : 1);
 			}
 
-			if (writing)
-			{
-				FlxG.sound.muteKeys = [];
-				FlxG.sound.volumeUpKeys = [];
-				FlxG.sound.volumeDownKeys = [];
-			}
-			else
-			{
-				FlxG.sound.muteKeys = [ZERO];
-				FlxG.sound.volumeUpKeys = [PLUS, NUMPADPLUS];
-				FlxG.sound.volumeDownKeys = [MINUS, NUMPADMINUS];
-			}
-		}
-
-		if (FlxG.keys.justPressed.UP && writing)
-		{
-			promptInput.text = lastPrompt;
-			promptInput.caretIndex = promptInput.text.length;
-		}
-		FlxG.camera.followLerp = CoolUtil.camLerpShit(0.06);
-		if (FlxG.sound.music.volume < 0.8)
-		{
-			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		}
-
-		if (!selectedSomethin && !writing)
-		{
 			if (controls.UI_UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -179,68 +161,10 @@ class MainMenuState extends MusicBeatState
 			}
 
 			if (controls.BACK)
-			{
 				switchState(TitleState);
-			}
-
-			if (checkKey('I'))
-				Prompt.open();
 
 			if (controls.ACCEPT)
-			{
-				if (optionShit[curSelected] == 'donate')
-				{
-					#if linux
-					Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
-					#else
-					FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
-					#end
-				}
-				else
-				{
-					selectedSomethin = true;
-					FlxG.sound.play(Paths.sound('confirmMenu'));
-
-					FlxFlicker.flicker(magenta, 1.1, 0.15, false);
-
-					menuItems.forEach(function(spr:FlxSprite)
-					{
-						if (curSelected != spr.ID)
-						{
-							FlxTween.tween(spr, {alpha: 0}, 0.4, {
-								ease: FlxEase.quadOut,
-								onComplete: function(twn:FlxTween)
-								{
-									spr.kill();
-								}
-							});
-						}
-						else
-						{
-							var finishFunc = function(flick:Dynamic)
-							{
-								var daChoice:String = optionShit[curSelected];
-
-								switch (daChoice)
-								{
-									case 'story mode':
-										switchState(StoryMenuState);
-									case 'freeplay':
-										switchState(FreeplayState);
-									case 'options':
-										FlxTransitionableState.skipNextTransIn = true;
-										FlxTransitionableState.skipNextTransOut = true;
-										switchState(OptionsMenu);
-								}
-							};
-							if (getPref('flashing-menu'))
-								FlxFlicker.flicker(spr, 1, 0.06, false, false, finishFunc);
-							else
-								new FlxTimer().start(1, finishFunc);
-						}
-					});
-				}
-			}
+				selectItem();
 		}
 
 		super.update(elapsed);
@@ -251,14 +175,75 @@ class MainMenuState extends MusicBeatState
 		});
 	}
 
-	function changeItem(huh:Int = 0)
+	function selectItem():Void
+	{
+		if (optionShit[curSelected] == 'donate')
+		{
+			#if linux
+			Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
+			#else
+			FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
+			#end
+		}
+		else
+		{
+			selectedSomethin = true;
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+
+			FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+
+			menuItems.forEach(function(spr:FlxSprite)
+			{
+				if (curSelected != spr.ID)
+				{
+					FlxTween.tween(spr, {alpha: 0}, 0.4, {
+						ease: FlxEase.quadOut,
+						onComplete: function(twn:FlxTween)
+						{
+							spr.kill();
+						}
+					});
+				}
+				else
+				{
+					var finishFunc = function(flick:Dynamic)
+					{
+						var daChoice:String = optionShit[curSelected];
+
+						switch (daChoice)
+						{
+							case 'story mode':
+								switchState(StoryMenuState);
+							case 'freeplay':
+								switchState(FreeplayState);
+							case 'options':
+								FlxTransitionableState.skipNextTransIn = true;
+								FlxTransitionableState.skipNextTransOut = true;
+								switchState(OptionsMenu);
+						}
+					};
+					if (getPref('flashing-menu'))
+						FlxFlicker.flicker(spr, 1, 0.06, false, false, finishFunc);
+					else
+						new FlxTimer().start(1, finishFunc);
+				}
+			});
+		}
+	}
+
+	function changeItem(huh:Int = 0, force:Bool = false)
 	{
 		curSelected += huh;
 
-		if (curSelected >= menuItems.length)
-			curSelected = 0;
-		if (curSelected < 0)
-			curSelected = menuItems.length - 1;
+		if (!force)
+		{
+			if (curSelected >= menuItems.length)
+				curSelected = 0;
+			if (curSelected < 0)
+				curSelected = menuItems.length - 1;
+		}
+		else
+			curSelected = huh;
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
@@ -272,69 +257,6 @@ class MainMenuState extends MusicBeatState
 
 			spr.updateHitbox();
 		});
-	}
-
-	function readPrompt():Void
-	{
-		var argsArray:Array<Dynamic> = promptInput.text.split('.');
-		trace(argsArray);
-
-		switch (argsArray[0])
-		{
-			case 'options':
-				switch (argsArray[1])
-				{
-					case 'setPref':
-						setPref(argsArray[2], argsArray[3]);
-					case 'getPref':
-						trace('\u001b[96m' + 'pref ${argsArray[2]} = ${getPref(argsArray[2])} (${CoolUtil.getVarType(getPref(argsArray[2]))})\u001b[0m');
-					case 'reset':
-						PreferencesMenu.resetPrefs();
-				}
-			case 'PlayState':
-				switch (argsArray[1])
-				{
-					case 'loadSong':
-						PlayState.loadSong(argsArray[2], 0, flixel.util.FlxColor.WHITE, false);
-				}
-			case 'binds': // ! "binds.note.setBind.up.K"
-				var dir:Int = switch (argsArray[3])
-				{
-					default:
-						0;
-					case 'down':
-						1;
-					case 'up':
-						2;
-					case 'right':
-						3;
-				}
-				switch (argsArray[1])
-				{
-					case 'note':
-						switch (argsArray[2])
-						{
-							case 'setBind':
-								KeyBinds.setBind(dir, argsArray[4].toUpperCase(), false);
-							case 'getBind':
-								trace('\u001b[96m'
-									+ 'bind ${argsArray[1].toUpperCase()}_${argsArray[3].toUpperCase()} = ${FlxG.save.data.noteBinds[dir]}\u001b[0m');
-						}
-					case 'ui':
-						switch (argsArray[2])
-						{
-							case 'setBind':
-								KeyBinds.setBind(dir, argsArray[4].toUpperCase(), true);
-							case 'getBind':
-								trace('\u001b[96m' + 'bind ${argsArray[1]}_${argsArray[2]} = ${FlxG.save.data.uiBinds[dir]}\u001b[0m');
-						}
-				}
-
-			default:
-				trace('unknown command! ${argsArray[0]}');
-		}
-		lastPrompt = promptInput.text;
-		promptInput.text = '';
 	}
 }
 // class MainMenuList extends MenuTypedList
