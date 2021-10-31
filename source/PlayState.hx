@@ -1595,36 +1595,36 @@ class PlayState extends MusicBeatState
 
 	function goodNoteHit(note:Note):Void
 	{
-		if (!note.wasGoodHit)
+		if (note.wasGoodHit)
+			return;
+
+		if (!note.isSustainNote)
 		{
-			if (!note.isSustainNote)
-			{
-				popUpScore(note);
-				combo += 1;
-			}
+			combo += 1;
+			popUpScore(note);
+		}
 
-			if (note.noteData >= 0)
-				health += 0.023;
-			else
-				health += 0.004;
+		if (note.noteData >= 0)
+			health += 0.023;
+		else
+			health += 0.004;
 
-			boyfriend.sing(note);
+		boyfriend.sing(note);
 
-			playerStrums.forEach(function(spr:BabyArrow)
-			{
-				if (spr.noteData == note.noteData)
-					spr.playAnim('confirm', true);
-			});
+		playerStrums.forEach(function(spr:BabyArrow)
+		{
+			if (spr.noteData == note.noteData)
+				spr.playAnim('confirm', true);
+		});
 
-			note.wasGoodHit = true;
-			vocals.volume = 1;
+		note.wasGoodHit = true;
+		vocals.volume = 1;
 
-			if (!note.isSustainNote)
-			{
-				note.kill();
-				notes.remove(note, true);
-				note.destroy();
-			}
+		if (!note.isSustainNote)
+		{
+			note.kill();
+			notes.remove(note, true);
+			note.destroy();
 		}
 	}
 
