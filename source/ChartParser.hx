@@ -38,9 +38,7 @@ class ChartParser
 				continue;
 			}
 			if (widthInTiles == 0)
-			{
 				widthInTiles = columns.length;
-			}
 
 			var column = 0;
 			var pushedInColumn:Bool = false;

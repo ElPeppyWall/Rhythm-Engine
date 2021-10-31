@@ -3,12 +3,9 @@ package;
 class NoteJudements
 {
 	static var judementArray = [
-		166 // shit
-		,
-		135 // bad
-		,
-		90 // good
-		,
+		166, // shit
+		135, // bad
+		90, // good
 		45 // sick
 	];
 

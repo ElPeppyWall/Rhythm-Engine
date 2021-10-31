@@ -77,27 +77,3 @@ class FPSCounter extends TextField
 		cacheCount = currentCount;
 	}
 }
-// class BorderShader extends FlxShader
-// {
-// 	@:glFragmentSource('
-// 		#pragma header
-// 		void main() {
-// 		vec4 color=flixel_texture2D(bitmap,openfl_TextureCoordv);
-// 		float borderWidth=.002;
-// 		if(color.a==0.) {
-// 			if(flixel_texture2D(bitmap,vec2(openfl_TextureCoordv.x+borderWidth,openfl_TextureCoordv.y))==0.
-// 			|| flixel_texture2D(bitmap,vec2(openfl_TextureCoordv.x-borderWidth,openfl_TextureCoordv.y))==0.
-// 			|| flixel_texture2D(bitmap,vec2(openfl_TextureCoordv.x,openfl_TextureCoordv.y+borderWidth))==0.
-// 			|| flixel_texture2D(bitmap,vec2(openfl_TextureCoordv.x,openfl_TextureCoordv.y-borderWidth))==0.){
-// 				gl_FragColor=vec4(.7,.1,.5,1.);
-// 			} else {
-// 				gl_FragColor=color;
-// 		}
-// 	}else{
-// 		gl_FragColor=color;
-// 	}
-// }
-// 	')
-// 	public function new()
-// 		super();
-// }

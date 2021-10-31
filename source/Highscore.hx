@@ -1,6 +1,5 @@
 package;
 
-import flixel.FlxG;
 import flixel.util.FlxSave;
 
 class Highscore

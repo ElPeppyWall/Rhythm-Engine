@@ -24,14 +24,10 @@ class Main extends Sprite
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
-	{
 		Lib.current.addChild(new Main());
-	}
 
 	public function setFPSCap(cap:Int)
-	{
 		openfl.Lib.current.stage.frameRate = cap;
-	}
 
 	public function new()
 	{

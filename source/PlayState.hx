@@ -29,7 +29,7 @@ import shaderslmfao.BuildingShaders;
 
 using StringTools;
 
-#if (windows && !hl)
+#if (windows && cpp)
 import Discord.DiscordClient;
 #end
 
@@ -130,7 +130,7 @@ class PlayState extends MusicBeatState
 
 	var inCutscene:Bool = false;
 
-	#if (windows && !hl)
+	#if (windows && cpp)
 	// Discord RPC variables
 	var storyDifficultyText:String = "";
 	var iconRPC:String = "";
@@ -237,7 +237,7 @@ class PlayState extends MusicBeatState
 				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
 		}
 
-		#if (windows && !hl)
+		#if (windows && cpp)
 		// Making difficulty text for Discord Rich Presence.
 		switch (storyDifficulty)
 		{
@@ -264,13 +264,9 @@ class PlayState extends MusicBeatState
 
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		if (isStoryMode)
-		{
 			detailsText = "Story Mode: Week " + storyWeek;
-		}
 		else
-		{
 			detailsText = "Freeplay";
-		}
 
 		// String for when the game is paused
 		detailsPausedText = "Paused - " + detailsText;
@@ -796,7 +792,7 @@ class PlayState extends MusicBeatState
 		};
 		vocals.play();
 
-		#if (windows && !hl)
+		#if (windows && cpp)
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
 
@@ -951,7 +947,7 @@ class PlayState extends MusicBeatState
 				startTimer.active = true;
 			paused = false;
 
-			#if (windows && !hl)
+			#if (windows && cpp)
 			if (startTimer.finished)
 			{
 				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
@@ -968,7 +964,7 @@ class PlayState extends MusicBeatState
 
 	override public function onFocus():Void
 	{
-		#if (windows && !hl)
+		#if (windows && cpp)
 		if (health > 0 && !paused)
 		{
 			if (Conductor.songPosition > 0.0)
@@ -987,7 +983,7 @@ class PlayState extends MusicBeatState
 
 	override public function onFocusLost():Void
 	{
-		#if (windows && !hl)
+		#if (windows && cpp)
 		if (health > 0 && !paused)
 		{
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
@@ -1060,7 +1056,7 @@ class PlayState extends MusicBeatState
 			else
 				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-			#if (windows && !hl)
+			#if (windows && cpp)
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 			#end
 		}
@@ -1657,9 +1653,7 @@ class PlayState extends MusicBeatState
 		stageBeat();
 
 		if (generatedMusic)
-		{
 			notes.sort(FlxSort.byY, FlxSort.DESCENDING);
-		}
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
 		{
@@ -1701,17 +1695,13 @@ class PlayState extends MusicBeatState
 		iconP2.updateHitbox();
 
 		if (curBeat % gfSpeed == 0)
-		{
 			gf.dance();
-		}
 
 		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
 			boyfriend.dance();
 
 		if (curBeat % 8 == 7 && curSong() == 'bopeebo')
-		{
 			boyfriend.playAnim('hey', true);
-		}
 
 		if (curBeat % 16 == 15 && curSong() == 'tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48)
 		{
@@ -1723,9 +1713,7 @@ class PlayState extends MusicBeatState
 	var cameraRightSide = false;
 
 	function characterSing(char:Character, daNote:Note, altString:String):Void
-	{
 		char.playAnim('sing${notesDir[daNote.noteData]}');
-	}
 
 	function cameraMovement():Void
 	{
@@ -2254,7 +2242,7 @@ class PlayState extends MusicBeatState
 
 		openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-		#if (windows && !hl)
+		#if (windows && cpp)
 		DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 	}

@@ -1,6 +1,6 @@
 package;
 
-#if (windows && !hl)
+#if (windows && cpp)
 import Discord.DiscordClient;
 import sys.thread.Thread;
 #end
@@ -178,9 +178,7 @@ class TitleState extends MusicBeatState
 		var swagGoodArray:Array<Array<String>> = [];
 
 		for (i in firstArray)
-		{
 			swagGoodArray.push(i.split('--'));
-		}
 
 		return swagGoodArray;
 	}

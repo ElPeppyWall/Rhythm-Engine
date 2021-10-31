@@ -22,6 +22,11 @@ class Character extends flixel.FlxSprite
 
 	public var holdTimer:Float = 0;
 
+	public var isDead(get, never):Bool;
+
+	function get_isDead():Bool
+		return characterArgs.contains('DEAD');
+
 	public function new(x:Float, y:Float, character:String, _characterArgs:Array<String>, _isPlayer:Bool = false)
 	{
 		super(x, y);
@@ -543,9 +548,7 @@ class Character extends flixel.FlxSprite
 		if (!curCharacter.startsWith('bf'))
 		{
 			if (animation.curAnim.name.startsWith('sing'))
-			{
 				holdTimer += elapsed;
-			}
 
 			var dadVar:Float = 4;
 
@@ -664,27 +667,19 @@ class Character extends flixel.FlxSprite
 
 			var daOffset = animOffsets.get(AnimName);
 			if (animOffsets.exists(AnimName))
-			{
 				offset.set(daOffset[0], daOffset[1]);
-			}
 			else
 				offset.set(0, 0);
 
 			if (curCharacter == 'gf')
 			{
 				if (AnimName == 'singLEFT')
-				{
 					danced = true;
-				}
 				else if (AnimName == 'singRIGHT')
-				{
 					danced = false;
-				}
 
 				if (AnimName == 'singUP' || AnimName == 'singDOWN')
-				{
 					danced = !danced;
-				}
 			}
 		}
 	}

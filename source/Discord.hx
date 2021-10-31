@@ -1,4 +1,4 @@
-#if (windows && !hl)
+#if (windows && cpp)
 package;
 
 import Sys.sleep;

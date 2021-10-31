@@ -1,6 +1,6 @@
 package;
 
-#if (windows && !hl)
+#if (windows && cpp)
 import Discord.DiscordClient;
 #end
 import flixel.FlxG;
@@ -118,7 +118,7 @@ class StoryMenuState extends MusicBeatState
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 		add(grpLocks);
 
-		#if (windows && !hl)
+		#if (windows && cpp)
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end

@@ -16,7 +16,7 @@ import lime.app.Application;
 
 using StringTools;
 
-#if (windows && !hl)
+#if (windows && cpp)
 import Discord.DiscordClient;
 #end
 
@@ -47,7 +47,7 @@ class MainMenuState extends MusicBeatState
 		defCam.bgColor.alpha = 0;
 
 		FlxCamera.defaultCameras = [defCam];
-		#if (windows && !hl)
+		#if (windows && cpp)
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 

@@ -103,7 +103,6 @@ class ChartingState extends MusicBeatState
 		if (PlayState.SONG != null)
 			_song = PlayState.SONG;
 		else
-		{
 			_song = {
 				song: 'Test',
 				notes: [],
@@ -113,7 +112,6 @@ class ChartingState extends MusicBeatState
 				player2: 'dad',
 				speed: 1,
 			};
-		}
 
 		FlxG.mouse.visible = true;
 
@@ -334,10 +332,7 @@ class ChartingState extends MusicBeatState
 	function loadSong(daSong:String):Void
 	{
 		if (FlxG.sound.music != null)
-		{
 			FlxG.sound.music.stop();
-			// vocals.stop();
-		}
 
 		FlxG.sound.playMusic(Paths.inst(daSong), 0.6);
 
