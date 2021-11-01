@@ -47,7 +47,6 @@
 	<set name="BUILD_DIR" value="export/32bit" if="32bit" />
 
 	<classpath name="source" />
-	<classpath name="source/ui" />
 	<classpath name="source/debugStates" />
 	<classpath name="source/data" />
 	<classpath name="source/debugTools" />
