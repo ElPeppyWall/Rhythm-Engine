@@ -20,46 +20,26 @@ class PreferencesMenu extends MusicBeatSubstate
 	var prefBG:FlxSprite;
 	var descriptionTxt:FlxTypeText;
 	var prefTxt:FlxText;
-	var checkboxes:Array<FlxSprite>;
 	var menuCamera:FlxCamera;
 	var sprOpt:AlphabetList;
 
 	static final options:Array<Array<Dynamic>> = [
-		['Controls', 'controls'], //
-		['Downscroll', 'downscroll', Bool], //
-		['Midscroll', 'midscroll', Bool], //
-		['Ghost Tapping', 'ghostTapping', Bool],
-		['FPS Cap', 'fpsCap', Int], //
-		['HitSound', 'hitsound', Bool], //
-		['Ultra Optimize', 'ultra-optimize', Bool], //
-		['Note Splashes', 'note-splashes', Bool],
-		['Background Opacity', 'background-opacity', Float], //
-		['Language', 'language', String], //
-		['Flashing Lights', 'flashing-menu', Bool], //
-		['Antialiasing', 'antialiasing', Bool],
-		['Camera Beats', 'camera-zoom', Bool], //
-		['FPS Counter', 'fps-counter', Bool], //
-		['Auto Pause', 'auto-pause', Bool], //
-		['Allow Reset', 'allowReset', Bool] //
-	];
-
-	static final descriptions = [
-		'Change your controls.', // controls
-		'Places gray notes at bottom of the screen.', // downscroll
-		'Centers gray notes.', // midscroll
-		"If you press a key and there aren't notes to press, you miss.", // ghost tapping
-		'Change the game framerate limit.', // fps cap
-		'When you press a note, a satisfying sound plays.', // hitsound
-		'Deletes the characters and the background for better performance.', // ultra optimize
-		"Spawns a a fancy splash when you hit a 'Sick'.", // note splahes
-		'Adds a black screen behind your notes to hide the background to see them better.', // background opacity
-		'Changes your game language.', // background opacity
-		'Toggle the flashing lights for photosensitive people.', // flashing lights
-		'Toggle the antialiasing for better performance.', // antialiasing
-		'Toggle the camera zooms on a song beat.', // camera beats
-		'Toggle the visiblity of the FPS counter.', // fps counter
-		"Auto pauses the game when it doesn't have focus.", // auto pause
-		'Allow die on game with the R key.' // allow reset
+		['', 'controls'], //
+		['', 'downscroll', Bool], //
+		['', 'midscroll', Bool], //
+		['', 'ghostTapping', Bool],
+		['', 'fpsCap', Int], //
+		['', 'hitsound', Bool], //
+		['', 'ultra-optimize', Bool], //
+		['', 'note-splashes', Bool],
+		['', 'background-opacity', Float], //
+		['', 'language', String], //
+		['', 'flashing-menu', Bool], //
+		['', 'antialiasing', Bool],
+		['', 'camera-zoom', Bool], //
+		['', 'fps-counter', Bool], //
+		['', 'auto-pause', Bool], //
+		['', 'allowReset', Bool] //
 	];
 
 	var isPause:Bool;

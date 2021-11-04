@@ -1,7 +1,7 @@
 package;
 
-import flixel.FlxG;
 import flixel.system.FlxSound;
+import openfl.media.Sound;
 
 class PlayStateUtils
 {
@@ -13,11 +13,11 @@ class PlayStateUtils
 		{
 			var x = PlayState.songPath.split('\\');
 			x.remove(x[x.length - 1]);
-			return openfl.media.Sound.fromFile(x.join('\\') + '\\Inst.ogg');
+			return Sound.fromFile(x.join('\\') + '\\Inst.ogg');
 		}
 	}
 
-	public static function getVocals():FlxSound
+	public static inline function getVocals():FlxSound
 	{
 		if (PlayState.SONG.needsVoices)
 		{
@@ -27,7 +27,7 @@ class PlayStateUtils
 			{
 				var x = PlayState.songPath.split('\\');
 				x.remove(x[x.length - 1]);
-				return new FlxSound().loadEmbedded(openfl.media.Sound.fromFile(x.join('\\') + '\\Voices.ogg'));
+				return new FlxSound().loadEmbedded(Sound.fromFile(x.join('\\') + '\\Voices.ogg'));
 			}
 		}
 		else

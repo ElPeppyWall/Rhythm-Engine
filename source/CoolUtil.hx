@@ -11,11 +11,6 @@ class CoolUtil
 	static var difficultyArray:Array<Array<String>> = [['EASY', '-easy'], ['NORMAL', '-normal'], ['HARD', '-hard']];
 	public static var difficultyColorArray:Array<Int> = [FlxColor.LIME, FlxColor.YELLOW, FlxColor.RED];
 
-	public static function _trace():Void
-	{
-		trace('a');
-	}
-
 	public static inline function getDiffByIndex(index:Int, isAloneFunkin:Bool):String
 		return isAloneFunkin ? 'JSON File' : difficultyArray[index][0];
 
@@ -64,37 +59,6 @@ class CoolUtil
 
 	public static inline function coolLerp(a:Dynamic, b:Dynamic, ratio:Dynamic):Dynamic
 		return a + CoolUtil.camLerpShit(ratio) * (b - a);
-
-	// !capitalize shit
-	public static var splited:Array<String> = [];
-
-	public static var shitOutput:Array<String> = [];
-	public static var tempI:String;
-	public static final capitalizeBlackList:Array<String> = ['M.I.L.F']; // these words must be upper case
-
-	public static function capitalize(input:String, spliter:String = ' '):String
-	{
-		if (!capitalizeBlackList.contains(input.toUpperCase()))
-		{ // !RESET SHIT
-			splited = [];
-			shitOutput = [];
-			tempI = '';
-			CoolUtil.splited = input.split(spliter);
-			for (i in splited)
-			{
-				// convert each letter into lower case
-				CoolUtil.tempI = i.toLowerCase();
-				// Convert the first char upper case and join with the rest letters of word.
-				CoolUtil.tempI = CoolUtil.tempI.charAt(0).toUpperCase() + CoolUtil.tempI.substring(1);
-				// store the word in the array
-				CoolUtil.shitOutput.push(CoolUtil.tempI);
-			}
-			// join the words
-			return CoolUtil.shitOutput.join(spliter);
-		}
-		else
-			return input.toUpperCase();
-	}
 
 	// private static function getTraceColor(type:TraceType):String
 	// {

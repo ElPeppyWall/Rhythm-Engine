@@ -1,5 +1,6 @@
 package;
 
+import KeyBinds.checkKey;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -42,7 +43,7 @@ class AnimationDebug extends FlxState
 
 	var leHealthIcon:HealthIcon;
 
-	public function new(daAnim:String = 'spooky', _isDad:Bool)
+	public function new(daAnim:String = 'dad', _isDad:Bool)
 	{
 		super();
 		this.daAnim = daAnim;

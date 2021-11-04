@@ -449,7 +449,7 @@ class Controls extends FlxActionSet
 		loadKeyBinds();
 	}
 
-	public function loadKeyBinds()
+	public inline function loadKeyBinds()
 	{
 		removeKeyboard();
 

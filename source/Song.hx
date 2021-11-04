@@ -20,11 +20,15 @@ typedef SwagSong =
 
 class Song
 {
-	public static inline function curSong():String
+	public static var curSong:String;
+
+	public static inline function get_curSong():String
 		return PlayState.SONG.song.toLowerCase();
 
-	public static inline function prettySong():String
-		return CoolUtil.capitalize(curSong(), '-').replace('-', ' ');
+	public static var prettySong:String;
+
+	public static function get_prettySong():String
+		return curSong.capitalize('-').replace('-', ' ');
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{

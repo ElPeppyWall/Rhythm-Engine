@@ -6,3 +6,6 @@ import PreferencesMenu.getPref;
 import PreferencesMenu.setPref;
 import Song.curSong;
 import Song.prettySong;
+
+using CustomTools;
+using StringTools;

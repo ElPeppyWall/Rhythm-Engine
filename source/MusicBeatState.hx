@@ -1,11 +1,7 @@
 package;
 
 import Conductor.BPMChangeEvent;
-import flixel.FlxG;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
-import flixel.math.FlxRect;
-import flixel.util.FlxTimer;
 
 class MusicBeatState extends FlxUIState
 {
@@ -15,6 +11,12 @@ class MusicBeatState extends FlxUIState
 	private var curStep:Int = 0;
 	private var curBeat:Int = 0;
 	private var controls(get, never):Controls;
+
+	override function create()
+	{
+		super.create();
+		PreferencesMenu.checkPrefValue('fpsCap');
+	}
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;

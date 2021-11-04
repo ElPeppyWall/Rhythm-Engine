@@ -27,7 +27,9 @@ class Main extends Sprite
 		Lib.current.addChild(new Main());
 
 	public function setFPSCap(cap:Int)
+	{
 		openfl.Lib.current.stage.frameRate = cap;
+	}
 
 	public function new()
 	{

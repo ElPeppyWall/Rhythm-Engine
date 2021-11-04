@@ -39,6 +39,7 @@
 	<define name="assetsLogger" if="debug" unless="web" />
 	<define name="mobileC" if='mobile' />
 	<define name="ALLOW_ALONE_FUNKIN" if='windows' />
+	<define name="ALLOW_LOGS" if='windows' />
 	<!-- _____________________________ DEFINES ____________________________ -->
 
 
@@ -48,6 +49,7 @@
 
 	<classpath name="source" />
 	<classpath name="source/debugStates" />
+	<classpath name="source/editors" />
 	<classpath name="source/data" />
 	<classpath name="source/debugTools" />
 	<classpath name="source/mobile" />
@@ -156,7 +158,7 @@
 	<!--<haxedef name="FLX_NO_SOUND_SYSTEM"/>-->
 
 	<!--Disable the Flixel core focus lost screen-->
-	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
+	<!-- <haxedef name="FLX_NO_FOCUS_LOST_SCREEN" /> -->
 
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />

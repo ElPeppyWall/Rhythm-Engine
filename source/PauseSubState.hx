@@ -34,8 +34,8 @@ class PauseSubState extends MusicBeatSubstate
 		'BACK'
 	];
 	var grpIconShit:FlxTypedGroup<HealthIcon>;
-	var practiceText:FlxText;
 	#end
+	var practiceText:FlxText;
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -47,13 +47,13 @@ class PauseSubState extends MusicBeatSubstate
 	{
 		super();
 		fromOptions = _fromOptions;
-		for (i in SongsData.getSongDiffies(curSong()))
+		for (i in SongsData.getSongDiffies(curSong))
 			difficultyChoices.push(CoolUtil.getDiffPause(i));
 
 		difficultyChoices.push(langString('back'));
 		if (!PlayState.isStoryMode)
 			pauseOG.remove(langString('pauseOG')[2]);
-		if (SongsData.getSongDiffies(curSong()).length == 1)
+		if (SongsData.getSongDiffies(curSong).length == 1)
 			pauseOG.remove(langString('pauseOG')[3]);
 		menuItems = pauseOG;
 
@@ -69,7 +69,7 @@ class PauseSubState extends MusicBeatSubstate
 		add(bg);
 
 		var levelInfo = new FlxText(20, 15, 0, "", 32);
-		levelInfo.text += prettySong();
+		levelInfo.text += prettySong;
 		levelInfo.scrollFactor.set();
 		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
 		levelInfo.updateHitbox();
@@ -121,8 +121,10 @@ class PauseSubState extends MusicBeatSubstate
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
+		#if debug
 		grpIconShit = new FlxTypedGroup<HealthIcon>();
 		add(grpIconShit);
+		#end
 		regenMenu();
 
 		if (fromOptions)
@@ -276,7 +278,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		for (i in 0...menuItems.length)
 		{
-			var songText = new Alphabet(0, (70 * i) + 30, menuItems[i], true, false);
+			var songText = new Alphabet(0, (70 * i) + 30, menuItems[i], false, true);
 			songText.targetY = i;
 			songText.ID = i;
 			songText.type = [IGNORE_X];

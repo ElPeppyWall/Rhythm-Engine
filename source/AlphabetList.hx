@@ -47,7 +47,7 @@ class AlphabetList extends FlxTypedGroup<Alphabet>
 
 		for (i in 0...textList.length)
 		{
-			var text = new Alphabet(0, (70 * i) + 30, textList[i], true, false);
+			var text = new Alphabet(0, (70 * i) + 30, textList[i], false, true);
 			text.targetY = i;
 			text.type = alphabetsType;
 			add(text);

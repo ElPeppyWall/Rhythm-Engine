@@ -67,7 +67,7 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
+			var songText = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, true);
 			songText.targetY = i;
 			songText.ID = i;
 			grpSongs.add(songText);
@@ -160,6 +160,7 @@ class FreeplayState extends MusicBeatState
 	{
 		super.update(elapsed);
 
+		checkTest();
 		if (FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 

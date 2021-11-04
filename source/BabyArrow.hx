@@ -28,7 +28,7 @@ class BabyArrow extends FlxSprite
 				animation.addByPrefix('static', 'arrow${_noteDir.toUpperCase()}', 24, false, false, downscroll);
 				animation.addByPrefix('pressed', '$_noteDir press', 24, false, false, downscroll);
 				animation.addByPrefix('confirm', '$_noteDir confirm', 24, false, false, downscroll);
-				setGraphicSize(Std.int(width * 0.7));
+				setGraphicSize((width * 0.7).int());
 			case 'pixel':
 				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
 				animation.add('green', [6]);
@@ -86,7 +86,7 @@ class BabyArrow extends FlxSprite
 			confirmAnimOffsets();
 	}
 
-	private function confirmAnimOffsets():Void
+	private inline function confirmAnimOffsets():Void
 	{
 		centerOffsets();
 		offset.x -= 13;

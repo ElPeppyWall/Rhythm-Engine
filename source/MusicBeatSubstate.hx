@@ -5,7 +5,9 @@ import Conductor.BPMChangeEvent;
 class MusicBeatSubstate extends flixel.FlxSubState
 {
 	public function new()
+	{
 		super();
+	}
 
 	var parentState(get, never):MusicBeatState;
 

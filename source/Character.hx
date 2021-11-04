@@ -703,7 +703,7 @@ class Character extends flixel.FlxSprite
 	inline function addAttrib(attrib:CharacterAttrib):Void
 		characterAttribs.push(attrib);
 
-	private static function joinFrames(spriteArray:Array<String>, ?library:String):FlxAtlasFrames
+	public static function joinFrames(spriteArray:Array<String>, ?library:String):FlxAtlasFrames
 	{
 		var framesArray:Array<FlxAtlasFrames> = [];
 		var returnFrames = Paths.getSparrowAtlas(spriteArray[0], library);

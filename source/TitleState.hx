@@ -52,8 +52,8 @@ class TitleState extends MusicBeatState
 			AllData.init();
 			FlxG.sound.muteKeys = [48];
 			loadTransition(transIn, transOut);
+			PreferencesMenu.checkPrefValue('fpsCap');
 		}
-
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		super.create();
@@ -118,6 +118,7 @@ class TitleState extends MusicBeatState
 	}
 
 	var logoBl:FlxSprite;
+
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 	var titleText:FlxSprite;
@@ -141,7 +142,7 @@ class TitleState extends MusicBeatState
 		// FlxTween.tween(logoBl, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 		// FlxTween.tween(logo, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG, startDelay: 0.1});
 
-		credTextShit = new Alphabet(0, 0, "ninjamuffin99\nPhantomArcade\nkawaisprite\nevilsk8er", true);
+		credTextShit = new Alphabet(0, 0, "ninjamuffin99\nPhantomArcade\nkawaisprite\nevilsk8er", false, true);
 		credTextShit.type = [IGNORE_X, IGNORE_Y];
 
 		credTextShit.screenCenter(Y);
@@ -248,7 +249,7 @@ class TitleState extends MusicBeatState
 	{
 		for (i in 0...textArray.length)
 		{
-			var money = new Alphabet(0, 0, textArray[i], true, false);
+			var money = new Alphabet(0, 0, textArray[i], false, true);
 			money.type = [IGNORE_X, IGNORE_Y];
 			money.y += (i * 60) + 200;
 			credGroup.add(money);
@@ -258,7 +259,7 @@ class TitleState extends MusicBeatState
 
 	function addMoreText(text:String)
 	{
-		var coolText = new Alphabet(0, 0, text, true, false);
+		var coolText = new Alphabet(0, 0, text, false, true);
 		coolText.type = [IGNORE_X, IGNORE_Y];
 		coolText.y += (textGroup.length * 60) + 200;
 		credGroup.add(coolText);
@@ -357,18 +358,18 @@ class TitleState extends MusicBeatState
 
 	public static function loadTransition(?transIn:flixel.addons.transition.TransitionData, ?transOut:flixel.addons.transition.TransitionData):Void
 	{
-		var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
-		diamond.persist = true;
-		diamond.destroyOnNoUse = false;
-		FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 1, new FlxPoint(-1, 0), {asset: diamond, width: 32, height: 32},
-			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-		FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.7, new FlxPoint(1, 0), {asset: diamond, width: 32, height: 32},
-			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+		// var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
+		// diamond.persist = true;
+		// diamond.destroyOnNoUse = false;
+		// FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 1, new FlxPoint(-1, 0), {asset: diamond, width: 32, height: 32},
+		// 	new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+		// FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.7, new FlxPoint(1, 0), {asset: diamond, width: 32, height: 32},
+		// 	new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
 
-		if (transIn != null)
-		{
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;
-		}
+		// if (transIn != null)
+		// {
+		// 	transIn = FlxTransitionableState.defaultTransIn;
+		// 	transOut = FlxTransitionableState.defaultTransOut;
+		// }
 	}
 }

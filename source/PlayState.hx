@@ -16,7 +16,6 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-import flixel.system.FlxAssets.FlxShader;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
@@ -278,16 +277,6 @@ class PlayState extends MusicBeatState
 		if (!getPref('ultra-optimize'))
 			loadStage();
 
-		switch (curStage)
-		{
-			case 'mall' | 'mallEvil':
-				gfVersion = 'gf-christmas';
-			case 'school':
-				gfVersion = 'gf-pixel';
-			case 'schoolEvil':
-				gfVersion = 'gf-pixel';
-		}
-
 		if (isAloneFunkin)
 		{
 			gfVersion = 'speaker';
@@ -441,7 +430,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.borderSize = 1.25;
 
 		songNameTxt = new FlxText(4, FlxG.width,
-			'${Song.prettySong()} - ${CoolUtil.getDiffName(storyDifficulty, isAloneFunkin)} // Rhythm Engine v${GameVars.engineVer}', 20);
+			'${prettySong} - ${CoolUtil.getDiffName(storyDifficulty, isAloneFunkin)} // Rhythm Engine v${GameVars.engineVer}', 20);
 		songNameTxt.setFormat(curStage.startsWith('school') ? "Pixel Arial 11 Bold" : Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER,
 			FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		songNameTxt.scrollFactor.set();
@@ -494,7 +483,7 @@ class PlayState extends MusicBeatState
 
 		if (isStoryMode)
 		{
-			switch (curSong())
+			switch (curSong)
 			{
 				case "winter-horrorland":
 					var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
@@ -537,7 +526,7 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			switch (curSong())
+			switch (curSong)
 			{
 				default:
 					startCountdown();
@@ -1133,7 +1122,7 @@ class PlayState extends MusicBeatState
 		FlxG.watch.addQuick('bads', bads);
 		FlxG.watch.addQuick('shits', shits);
 
-		if (curSong() == 'fresh')
+		if (curSong == 'fresh')
 		{
 			switch (curBeat)
 			{
@@ -1149,7 +1138,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (curSong() == 'bopeebo')
+		if (curSong == 'bopeebo')
 		{
 			switch (curBeat)
 			{
@@ -1241,7 +1230,7 @@ class PlayState extends MusicBeatState
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
-					if (curSong() != 'tutorial')
+					if (curSong != 'tutorial')
 						camZooming = true;
 
 					if (SONG.notes[Math.floor(curStep / 16)] != null)
@@ -1675,7 +1664,7 @@ class PlayState extends MusicBeatState
 		// HARDCODING FOR MILF ZOOMS!
 		if (getPref('camera-zoom'))
 		{
-			if (curSong() == 'm.i.l.f' && curBeat >= 168 && curBeat < 200 && camZooming && FlxG.camera.zoom < 1.35)
+			if (curSong == 'm.i.l.f' && curBeat >= 168 && curBeat < 200 && camZooming && FlxG.camera.zoom < 1.35)
 			{
 				FlxG.camera.zoom += 0.015;
 				camHUD.zoom += 0.03;
@@ -1700,10 +1689,10 @@ class PlayState extends MusicBeatState
 		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
 			boyfriend.dance();
 
-		if (curBeat % 8 == 7 && curSong() == 'bopeebo')
+		if (curBeat % 8 == 7 && curSong == 'bopeebo')
 			boyfriend.playAnim('hey', true);
 
-		if (curBeat % 16 == 15 && curSong() == 'tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48)
+		if (curBeat % 16 == 15 && curSong == 'tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48)
 		{
 			boyfriend.playAnim('hey', true);
 			dad.playAnim('cheer', true);
@@ -1712,28 +1701,25 @@ class PlayState extends MusicBeatState
 
 	var cameraRightSide = false;
 
-	function characterSing(char:Character, daNote:Note, altString:String):Void
-		char.playAnim('sing${notesDir[daNote.noteData]}');
-
 	function cameraMovement():Void
 	{
 		if (camFollow.getPosition() != getCamDadPos() && !cameraRightSide)
 		{
 			camFollow.setPosition(getCamDadPos().x, getCamDadPos().y);
 
-			if (curSong() == 'tutorial')
+			if (curSong == 'tutorial')
 				tweenCamIn();
 		}
 		if (camFollow.getPosition() != getCamBFPos() && cameraRightSide)
 		{
 			camFollow.setPosition(getCamBFPos().x, getCamBFPos().y);
 
-			if (curSong() == 'tutorial')
+			if (curSong == 'tutorial')
 				FlxTween.tween(FlxG.camera, {zoom: 1}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
 		}
 	}
 
-	function getCamDadPos():FlxPoint
+	inline function getCamDadPos():FlxPoint
 	{
 		var camDadPos = new FlxPoint(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 		switch (dad.curCharacter)
@@ -1749,7 +1735,7 @@ class PlayState extends MusicBeatState
 		return camDadPos;
 	}
 
-	function getCamBFPos():FlxPoint
+	inline function getCamBFPos():FlxPoint
 	{
 		var camBFPos = new FlxPoint(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 
@@ -1804,7 +1790,7 @@ class PlayState extends MusicBeatState
 	{
 	};
 
-	function loadStage():Void
+	inline function loadStage():Void
 	{
 		switch (SONG.song.toLowerCase())
 		{
@@ -2059,6 +2045,7 @@ class PlayState extends MusicBeatState
 						bottomBoppers.dance(true);
 						santa.dance(true);
 					}
+					gfVersion = 'gf-christmas';
 				}
 			case 'winter-horrorland':
 				{
@@ -2072,6 +2059,7 @@ class PlayState extends MusicBeatState
 
 					var evilSnow = new BGSprite(["christmas/evilSnow", 'week5'], [], -200, 700);
 					add(evilSnow);
+					gfVersion = 'gf-christmas';
 				}
 			case 'senpai' | 'roses':
 				{
@@ -2122,6 +2110,7 @@ class PlayState extends MusicBeatState
 					add(bgGirls);
 
 					stageBeat = function():Void bgGirls.dance();
+					gfVersion = 'gf-pixel';
 				}
 			case 'thorns':
 				{
@@ -2130,6 +2119,7 @@ class PlayState extends MusicBeatState
 					var bg = new BGSprite(['weeb/animatedEvilSchool', 'week6'], [PIXEL], 400, 200, 0.8, 0.9, [{name: 'background 2', loop: true}]);
 					bg.scale.set(6, 6);
 					add(bg);
+					gfVersion = 'gf-pixel';
 				}
 		}
 	}
@@ -2185,7 +2175,7 @@ class PlayState extends MusicBeatState
 	}
 
 	#if debug
-	function debugToolsCheck():Void
+	inline function debugToolsCheck():Void
 	{
 		/**
 		 * Q/E: ZOOM IN/OUT

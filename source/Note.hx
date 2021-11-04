@@ -158,7 +158,7 @@ class Note extends flixel.FlxSprite
 	public static function getNoteStyle():String
 	{
 		var _noteStyle = '';
-		switch (curSong())
+		switch (curSong)
 		{
 			default:
 				_noteStyle = 'normal';

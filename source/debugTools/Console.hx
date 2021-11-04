@@ -1,7 +1,7 @@
 package;
 
+import KeyBinds.checkKey;
 import flixel.FlxG;
-import flixel.FlxState;
 import flixel.text.FlxText.FlxTextBorderStyle;
 import flixel.util.FlxColor;
 
@@ -17,6 +17,16 @@ class Console extends flixel.addons.ui.FlxUIInputText
 		y = FlxG.height - 60;
 		antialiasing = PreferencesMenu.getPref('antialiasing');
 		hasFocus = true;
+	}
+
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
+		if (checkKey('CONTROL', PRESSED) && checkKey('V'))
+		{
+			text = lime.system.Clipboard.text;
+			caretIndex = text.length;
+		}
 	}
 
 	public static function open(?callback:Bool->Bool->Void)

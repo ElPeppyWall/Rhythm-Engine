@@ -122,8 +122,12 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		#if debug
 		if (FlxG.keys.justPressed.F7)
 			Console.open();
+		if (FlxG.keys.justPressed.F8)
+			switchState(AlphabetCharEditor);
+		#end
 		if (!selectedSomethin)
 		{
 			if (FlxG.mouse.justMoved)
