@@ -358,18 +358,18 @@ class TitleState extends MusicBeatState
 
 	public static function loadTransition(?transIn:flixel.addons.transition.TransitionData, ?transOut:flixel.addons.transition.TransitionData):Void
 	{
-		// var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
-		// diamond.persist = true;
-		// diamond.destroyOnNoUse = false;
-		// FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 1, new FlxPoint(-1, 0), {asset: diamond, width: 32, height: 32},
-		// 	new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-		// FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.7, new FlxPoint(1, 0), {asset: diamond, width: 32, height: 32},
-		// 	new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+		var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
+		diamond.persist = true;
+		diamond.destroyOnNoUse = false;
+		FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 1, new FlxPoint(-1, 0), {asset: diamond, width: 32, height: 32},
+			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+		FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.7, new FlxPoint(1, 0), {asset: diamond, width: 32, height: 32},
+			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
 
-		// if (transIn != null)
-		// {
-		// 	transIn = FlxTransitionableState.defaultTransIn;
-		// 	transOut = FlxTransitionableState.defaultTransOut;
-		// }
+		if (transIn != null)
+		{
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;
+		}
 	}
 }
