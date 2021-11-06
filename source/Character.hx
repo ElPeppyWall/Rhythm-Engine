@@ -132,8 +132,8 @@ class Character extends flixel.FlxSprite
 					frames = getCharacterFrames('Speaker_Assets');
 					animation.addByIndices('danceLeft', 'SPEAKER Dancing Beat', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 					animation.addByIndices('danceRight', 'SPEAKER Dancing Beat', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-					addOffset('danceLeft', 0, -9);
-					addOffset('danceRight', 0, -9);
+					addOffset('danceLeft', 0, -305);
+					addOffset('danceRight', 0, -305);
 					playAnim('danceRight');
 
 					addAttrib(USE_DANCE_DIRS);
@@ -547,7 +547,7 @@ class Character extends flixel.FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if (!curCharacter.startsWith('bf'))
+		if (!isBF)
 		{
 			if (animation.curAnim.name.startsWith('sing'))
 				holdTimer += elapsed;
