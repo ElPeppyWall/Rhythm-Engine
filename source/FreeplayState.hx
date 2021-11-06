@@ -214,28 +214,7 @@ class FreeplayState extends MusicBeatState
 		}
 
 		if (checkKey('SPACE') && songPlaying != curSelected)
-		{
-			if (vocals != null)
-			{
-				vocals.stop();
-				vocals.volume = 0;
-				vocals.destroy();
-			}
-			songPlaying = curSelected;
-
-			FlxG.sound.music.loadEmbedded(Paths.inst(songs[curSelected].songName));
-			FlxG.sound.music.volume = 0;
-			FlxG.sound.music.play(false, FlxG.sound.music.length / 2);
-
-			vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
-			vocals.volume = 0;
-			vocals.play(false, FlxG.sound.music.time);
-			FlxG.sound.list.add(vocals);
-			new FlxTimer().start(0.1, function(tmr:FlxTimer)
-			{
-				resyncVocals();
-			});
-		}
+			previewSong(curSelected, false);
 
 		if (controls.UI_UP_P)
 			changeSelection(-1);
@@ -255,6 +234,33 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.ACCEPT)
 			enterSong();
+	}
+
+	function previewSong(songINT:Int, fromFinish:Bool):Void
+	{
+		if (vocals != null)
+		{
+			vocals.stop();
+			vocals.volume = 0;
+			vocals.destroy();
+		}
+		songPlaying = songINT;
+
+		FlxG.sound.music.loadEmbedded(Paths.inst(songs[songINT].songName), false, false, function()
+		{
+			previewSong(songPlaying, true);
+		});
+		FlxG.sound.music.volume = 0;
+		FlxG.sound.music.play(false, !fromFinish ? FlxG.sound.music.length / 2 : 0);
+
+		vocals = new FlxSound().loadEmbedded(Paths.voices(songs[songINT].songName));
+		vocals.volume = 0;
+		vocals.play(false, FlxG.sound.music.time);
+		FlxG.sound.list.add(vocals);
+		new FlxTimer().start(0.1, function(tmr:FlxTimer)
+		{
+			resyncVocals();
+		});
 	}
 
 	function enterSong():Void
