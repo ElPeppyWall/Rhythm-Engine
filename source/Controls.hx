@@ -466,9 +466,9 @@ class Controls extends FlxActionSet
 		inline bindKeys(Control.UI_UP, [FlxG.save.data.uiBinds[2], FlxKey.UP]);
 		inline bindKeys(Control.UI_RIGHT, [FlxG.save.data.uiBinds[3], FlxKey.RIGHT]);
 
-		inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
-		inline bindKeys(Control.BACK, [ESCAPE, BACKSPACE]);
-		inline bindKeys(Control.PAUSE, [ENTER, ESCAPE, BACKSPACE]);
+		inline bindKeys(Control.ACCEPT, [ENTER]);
+		inline bindKeys(Control.BACK, [ESCAPE]);
+		inline bindKeys(Control.PAUSE, [ENTER, ESCAPE]);
 		inline bindKeys(Control.RESET, [R]);
 	}
 

@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -17,9 +18,10 @@ import Discord.DiscordClient;
 class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
+	var vocals:FlxSound;
+	var songPlaying:Int;
 
 	static var curSelected:Int = 0;
-
 	static var curDifficulty:Int = 1;
 
 	var scoreText:FlxText;
@@ -96,6 +98,17 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
+		var playBG = new FlxSprite(0, FlxG.height - 35).makeGraphic(FlxG.width, 35, FlxColor.BLACK);
+		playBG.active = false;
+		playBG.alpha = 0.6;
+		add(playBG);
+
+		var playTxt = new FlxText(0, playBG.y, 0, langString('freeplayPlay'));
+		playTxt.active = false;
+		playTxt.setFormat(Paths.font("vcr.ttf"), 28, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		playTxt.screenCenter(X);
+		add(playTxt);
+
 		changeSelection();
 		changeDiff();
 
@@ -165,6 +178,9 @@ class FreeplayState extends MusicBeatState
 		if (FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 
+		if (vocals != null)
+			vocals.volume = FlxG.sound.music.volume;
+
 		lerpScore = CoolUtil.coolLerp(lerpScore, intendedScore, 0.4);
 
 		if (Math.abs(lerpScore - intendedScore) <= 10)
@@ -186,6 +202,14 @@ class FreeplayState extends MusicBeatState
 		{
 			if (FlxG.mouse.overlaps(item) && item.ID == curSelected && FlxG.mouse.justPressed)
 				enterSong();
+		}
+
+		if (checkKey('SPACE') && songPlaying != curSelected)
+		{
+			songPlaying = curSelected;
+			vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
+			FlxG.sound.list.add(vocals);
+			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 		}
 
 		if (controls.UI_UP_P)
@@ -259,10 +283,6 @@ class FreeplayState extends MusicBeatState
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		// lerpScore = 0;
-		#end
-
-		#if false
-		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 		#end
 
 		var bullShit:Int = 0;

@@ -56,5 +56,7 @@
 	],
 
 	"back": "BACK",
-	"practiceMode": "PRACTICE MODE"
+	"practiceMode": "PRACTICE MODE",
+
+	"freeplayPlay": "Press SPACE to preview the song."
 }
