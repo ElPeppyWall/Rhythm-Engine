@@ -3,9 +3,7 @@ package;
 using StringTools;
 
 #if polymod
-import polymod.format.ParseRules.TargetSignatureElement;
 #end
-
 class Note extends flixel.FlxSprite
 {
 	public static final swagWidth:Float = 160 * 0.7;
