@@ -1,16 +1,14 @@
-# Friday Night Funkin
+# Friday Night Funkin: Rhythm Engine
 
-This is the repository for Friday Night Funkin, a game originally made for Ludum Dare 47 "Stuck In a Loop".
-
-Play the Ludum Dare prototype here: https://ninja-muffin24.itch.io/friday-night-funkin
-Play the Newgrounds one here: https://www.newgrounds.com/portal/view/770371
-Support the project on the itch.io page: https://ninja-muffin24.itch.io/funkin
-
-IF YOU MAKE A MOD AND DISTRIBUTE A MODIFIED / RECOMPILED VERSION, YOU MUST OPEN SOURCE YOUR MOD AS WELL
+Just another [fnf](https://github.com/ninjamuffin99/Funkin/) engine.
 
 ## Credits / shoutouts
 
-- [ninjamuffin99 (me!)](https://twitter.com/ninja_muffin99) - Programmer
+### Original Game
+
+- <img src="https://user-images.githubusercontent.com/55158797/140619415-3c28924a-9e21-4d67-8416-8c64e28680a3.png" width="100">
+- [ninjamuffin99](https://twitter.com/ninja_muffin99)
+
 - [PhantomArcade3K](https://twitter.com/phantomarcade3k) and [Evilsk8r](https://twitter.com/evilsk8r) - Art
 - [Kawaisprite](https://twitter.com/kawaisprite) - Musician
 
