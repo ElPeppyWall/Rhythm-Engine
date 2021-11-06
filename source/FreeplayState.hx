@@ -7,6 +7,7 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import openfl.display.Shader;
 
 using StringTools;
@@ -170,6 +171,14 @@ class FreeplayState extends MusicBeatState
 				testInt = 0;
 	}
 
+	function resyncVocals():Void
+	{
+		vocals.pause();
+		FlxG.sound.music.play();
+		vocals.time = FlxG.sound.music.time;
+		vocals.play();
+	}
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -206,16 +215,26 @@ class FreeplayState extends MusicBeatState
 
 		if (checkKey('SPACE') && songPlaying != curSelected)
 		{
+			if (vocals != null)
+			{
+				vocals.stop();
+				vocals.volume = 0;
+				vocals.destroy();
+			}
 			songPlaying = curSelected;
 
 			FlxG.sound.music.loadEmbedded(Paths.inst(songs[curSelected].songName));
 			FlxG.sound.music.volume = 0;
 			FlxG.sound.music.play(false, FlxG.sound.music.length / 2);
-			vocals.destroy();
+
 			vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
 			vocals.volume = 0;
 			vocals.play(false, FlxG.sound.music.time);
 			FlxG.sound.list.add(vocals);
+			new FlxTimer().start(0.1, function(tmr:FlxTimer)
+			{
+				resyncVocals();
+			});
 		}
 
 		if (controls.UI_UP_P)
