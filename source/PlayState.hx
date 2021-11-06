@@ -79,12 +79,12 @@ class PlayState extends MusicBeatState
 
 	public static var enemyChar(get, never):Character;
 
-	public static function get_enemyChar():Character
+	public static inline function get_enemyChar():Character
 		return !opponentMode ? dad : boyfriend;
 
 	public static var playableChar(get, never):Character;
 
-	public static function get_playableChar():Character
+	public static inline function get_playableChar():Character
 		return !opponentMode ? boyfriend : dad;
 
 	private var notes:FlxTypedGroup<Note>;
@@ -174,7 +174,10 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(camPAUSE);
 		FlxCamera.defaultCameras = [camGame];
 
+		if (opponentMode)
+			camGame.flashSprite.scaleX = -1;
 		blackscreenMidScroll = new FlxSprite(500, 0).makeGraphic(500, 1000, FlxColor.BLACK);
+
 		blackscreenMidScroll.cameras = [camBACKGROUND_OPACITY];
 		blackscreenMidScroll.alpha = getPref("background-opacity");
 		blackscreenMidScroll.scrollFactor.set();
@@ -296,9 +299,6 @@ class PlayState extends MusicBeatState
 
 		gf = new Character(400, 130, gfVersion, gfArgs, false, false);
 		gf.scrollFactor.set(0.95, 0.95);
-
-		if (isAloneFunkin)
-			gf.y += 200;
 
 		dad = new Character(100, 100, dadVersion, dadArgs, false, opponentMode);
 		boyfriend = new Character(770, 450, bfVersion, bfArgs, true, opponentMode);
