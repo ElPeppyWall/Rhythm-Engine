@@ -1,6 +1,7 @@
 package;
 
 import Alphabet.AlphaCharacter.alphabet;
+import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -100,15 +101,15 @@ class PreferencesMenu extends MusicBeatSubstate
 					FlxColor.ORANGE;
 			});
 			daColor.alphaFloat = .6;
-			var daColor2 = FlxColor.WHITE;
+			var alphaAAAAA = 1;
 			switch (curPref)
 			{
 				case 'controls', 'reset options':
 					daColor.alphaFloat = 0;
-					daColor2.alphaFloat = 0;
+					alphaAAAAA = 0;
 			}
 			FlxTween.color(prefBG, CoolUtil.camLerpShit(.45), prefBG.color, daColor);
-			FlxTween.color(prefTxt, CoolUtil.camLerpShit(.45), prefTxt.color, daColor2);
+			FlxTween.tween(prefTxt, {alpha: alphaAAAAA}, CoolUtil.camLerpShit(.45));
 		}
 
 		sprOpt.changeSelection(0, false, true);
@@ -190,7 +191,7 @@ class PreferencesMenu extends MusicBeatSubstate
 						}
 						else makeAnError();
 					case 'controls':
-						// FlxG.state.openSubState(new ControlsSubMenu());
+						FlxG.state.openSubState(new KeyBindsMenu(isPause));
 				}
 		}
 		if (curPref != 'language')
@@ -383,6 +384,8 @@ class PreferencesMenu extends MusicBeatSubstate
 			preferenceCheck("first-time", true);
 			preferenceCheck("allowReset", true);
 		}
+
+		FlxG.save.flush();
 	}
 
 	public static function checkPrefValue(preference:String):Void

@@ -37,8 +37,13 @@ class TitleState extends MusicBeatState
 	var swagShader = new shaderslmfao.ColorSwap();
 	var wackyImage:FlxSprite;
 
+	static var canLoad:Bool = true;
+
 	override public function create():Void
 	{
+		if (canLoad)
+			LoadingState.loadAndSwitchState(TitleState, false, true);
+		canLoad = false;
 		{
 			FlxG.save.bind('config', 'saves');
 			FlxG.game.focusLostFramerate = 30;
@@ -46,7 +51,7 @@ class TitleState extends MusicBeatState
 			FlxG.android.preventDefaultKeys = [BACK];
 			#end
 			PreferencesMenu.initPrefs();
-			KeyBinds.initBinds();
+			KeyBinds.initBinds(true);
 			PlayerSettings.init();
 			Highscore.load();
 			AllData.init();
@@ -105,8 +110,8 @@ class TitleState extends MusicBeatState
 
 		#if FREEPLAY
 		switchState(FreeplayState);
-		#elseif CHARTING
-		switchState(ChartingState);
+		#elseif OPTIONS
+		switchState(OptionsMenu);
 		#elseif PLAYSTATE
 		PlayState.loadSong('m.i.l.f-hard', 4, false);
 		#else
@@ -231,8 +236,11 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
+				if (!firstTime)
+					switchState(MainMenuState);
+				else
+					switchState(MainMenuState);
 				firstTime = false;
-				switchState(MainMenuState);
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}

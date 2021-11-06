@@ -4,7 +4,9 @@ class OptionsMenu extends MusicBeatState
 {
 	override function create()
 	{
-		add(new MenuBG(OPTIONS));
+		var bg = new MenuBG(OPTIONS);
+		bg.active = false;
+		add(bg);
 		openSubState(new PreferencesMenu(false));
 		super.create();
 	}

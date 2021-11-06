@@ -334,12 +334,12 @@ class AnimationDebug extends FlxState
 			remove(ghostChar);
 		}
 
-		char = new Character(0, 0, daAnim, [], firstTime ? isPlayer : check_player.checked);
+		char = new Character(0, 0, daAnim, [], firstTime ? isPlayer : check_player.checked, false);
 		char.debugMode = true;
 		char.antialiasing = false;
 		add(char);
 
-		ghostChar = new Character(0, 0, char.curCharacter, [], firstTime ? isPlayer : check_player.checked);
+		ghostChar = new Character(0, 0, char.curCharacter, [], firstTime ? isPlayer : check_player.checked, false);
 		ghostChar.debugMode = true;
 		ghostChar.antialiasing = false;
 		ghostChar.alpha = 0.6;

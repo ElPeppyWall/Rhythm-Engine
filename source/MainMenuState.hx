@@ -54,8 +54,7 @@ class MainMenuState extends MusicBeatState
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 
-		if (!FlxG.sound.music.playing)
-			MusicManager.playMainMusic();
+		MusicManager.checkPlaying();
 
 		persistentUpdate = persistentDraw = true;
 

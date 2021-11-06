@@ -23,14 +23,14 @@ class LoadingState extends MusicBeatState
 	var loadBar:FlxSprite;
 	var funkay:FlxSprite;
 	var targetShit = 0.0;
-	#if PRELOAD_ALL
 	var fakeRemaining = 4;
-	#end
+	var isFake:Bool;
 
-	function new(target:Class<FlxState>, stopMusic:Bool)
+	function new(target:Class<FlxState>, stopMusic:Bool, fake:Bool = #if NO_PRELOAD_ALL false #else true #end)
 	{
 		super();
 		this.target = target;
+		isFake = fake;
 		this.stopMusic = stopMusic;
 	}
 
@@ -60,34 +60,35 @@ class LoadingState extends MusicBeatState
 		loadBar.screenCenter(X);
 		add(loadBar);
 
-		#if NO_PRELOAD_ALL
-		initSongsManifest().onComplete(function(lib)
-		{
-			callbacks = new MultiCallback(onLoad);
-			var introComplete = callbacks.add("introComplete");
-			checkLoadSong(getSongPath());
-			if (PlayState.SONG.needsVoices)
-				checkLoadSong(getVocalPath());
-			checkLibrary("shared");
-			if (PlayState.storyWeek > 0)
-				checkLibrary("week" + PlayState.storyWeek);
-			else
-				checkLibrary("tutorial");
+		if (!isFake)
+			initSongsManifest().onComplete(function(lib)
+			{
+				callbacks = new MultiCallback(onLoad);
+				var introComplete = callbacks.add("introComplete");
+				checkLoadSong(getSongPath());
+				if (PlayState.SONG.needsVoices)
+					checkLoadSong(getVocalPath());
+				checkLibrary("shared");
+				if (PlayState.storyWeek > 0)
+					checkLibrary("week" + PlayState.storyWeek);
+				else
+					checkLibrary("tutorial");
 
-			var fadeTime = 0.5;
-			FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
-			new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
-		});
-		#else
-		new FlxTimer().start(FlxG.random.float(.05, .25), function(tmr:FlxTimer)
+				var fadeTime = 0.5;
+				FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
+				new FlxTimer().start(fadeTime + MIN_TIME, function(_) introComplete());
+			});
+		else
 		{
-			fakeRemaining--;
-		}, 4);
-		new FlxTimer().start(1, function(tmr:FlxTimer)
-		{
-			fakeRemaining = 0;
-		});
-		#end
+			new FlxTimer().start(FlxG.random.float(.05, .25), function(tmr:FlxTimer)
+			{
+				fakeRemaining--;
+			}, 4);
+			new FlxTimer().start(1, function(tmr:FlxTimer)
+			{
+				fakeRemaining = 0;
+			});
+		}
 	}
 
 	function checkLoadSong(path:String)
@@ -135,14 +136,17 @@ class LoadingState extends MusicBeatState
 			funkay.setGraphicSize(Std.int(funkay.width + 60));
 			funkay.updateHitbox();
 		}
-		#if NO_PRELOAD_ALL
-		if (callbacks != null)
-			targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
-		#else
-		targetShit = FlxMath.remapToRange(fakeRemaining / 4, 1, 0, 0, 1);
-		if (fakeRemaining == 0)
-			onLoad();
-		#end
+		if (!isFake)
+		{
+			if (callbacks != null)
+				targetShit = FlxMath.remapToRange(callbacks.numRemaining / callbacks.length, 1, 0, 0, 1);
+		}
+		else
+		{
+			targetShit = FlxMath.remapToRange(fakeRemaining / 4, 1, 0, 0, 1);
+			if (fakeRemaining == 0)
+				onLoad();
+		}
 
 		loadBar.scale.x += .5 * (targetShit - loadBar.scale.x);
 	}
@@ -165,16 +169,18 @@ class LoadingState extends MusicBeatState
 		return Paths.voices(PlayState.SONG.song);
 	}
 
-	inline static public function loadAndSwitchState(target:Class<FlxState>, stopMusic = false)
-		CoolUtil.switchState(getNextState(target, stopMusic), [target, stopMusic]);
+	inline static public function loadAndSwitchState(target:Class<FlxState>, stopMusic = false, fake:Bool = #if NO_PRELOAD_ALL false #else true #end)
+		CoolUtil.switchState(getNextState(target, stopMusic, fake), [target, stopMusic, fake]);
 
-	static function getNextState(target:Class<FlxState>, stopMusic = false):Class<FlxState>
+	static function getNextState(target:Class<FlxState>, stopMusic = false, fake:Bool):Class<FlxState>
 	{
 		Paths.setCurrentLevel("week" + PlayState.storyWeek);
 		#if NO_PRELOAD_ALL
-		var loaded = isSoundLoaded(getSongPath())
-			&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))
-			&& isLibraryLoaded("shared");
+		var loaded:Bool = false;
+		if (!fake)
+			loaded = isSoundLoaded(getSongPath())
+				&& (!PlayState.SONG.needsVoices || isSoundLoaded(getVocalPath()))
+				&& isLibraryLoaded("shared");
 
 		if (!loaded)
 		#end
@@ -183,7 +189,7 @@ class LoadingState extends MusicBeatState
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		return PlayState;
+		return target;
 	}
 
 	#if NO_PRELOAD_ALL

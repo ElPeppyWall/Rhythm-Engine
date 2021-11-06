@@ -18,6 +18,7 @@ class Character extends flixel.FlxSprite
 	public var altNoteAnim = '';
 	public var altAnim = '';
 	public var isPlayer:Bool = false;
+	public var isBF:Bool = false;
 	public var curCharacter:String = 'bf';
 
 	public var holdTimer:Float = 0;
@@ -27,7 +28,7 @@ class Character extends flixel.FlxSprite
 	function get_isDead():Bool
 		return characterArgs.contains('DEAD');
 
-	public function new(x:Float, y:Float, character:String, _characterArgs:Array<String>, _isPlayer:Bool = false)
+	public function new(x:Float, y:Float, character:String, _characterArgs:Array<String>, _isPlayer:Bool, _isBF:Bool)
 	{
 		super(x, y);
 
@@ -37,6 +38,7 @@ class Character extends flixel.FlxSprite
 
 		curCharacter = character;
 		isPlayer = _isPlayer;
+		isBF = _isBF;
 
 		antialiasing = getPref('antialiasing');
 
@@ -566,6 +568,20 @@ class Character extends flixel.FlxSprite
 			case 'gf':
 				if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
 					playAnim('danceRight');
+		}
+
+		if (!debugMode && isBF)
+		{
+			if (animation.curAnim.name.startsWith('sing'))
+				holdTimer += elapsed;
+			else
+				holdTimer = 0;
+
+			if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
+				playAnim('idle', true, false, 10);
+
+			if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
+				playAnim('deathLoop');
 		}
 
 		super.update(elapsed);

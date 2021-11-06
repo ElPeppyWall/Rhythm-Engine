@@ -11,13 +11,13 @@ class BabyArrow extends FlxSprite
 	public var noteStyle:String = '';
 	public var noteData:Int;
 
-	public function new(y:Float, noteI:Int, _style:String, playerID:Int, fadeIn:Bool)
+	public function new(y:Float, noteI:Int, _style:String, playerID:Int, fadeIn:Bool, ?ignoreDownscroll:Bool = false)
 	{
 		super(0, y);
 		noteStyle = _style;
 		noteData = noteI;
 		var _noteDir = notesDir[noteData].toLowerCase();
-		var downscroll = getPref('downscroll');
+		var downscroll = getPref('downscroll') && !ignoreDownscroll;
 		switch (noteStyle)
 		{
 			default:
@@ -28,7 +28,7 @@ class BabyArrow extends FlxSprite
 				animation.addByPrefix('static', 'arrow${_noteDir.toUpperCase()}', 24, false, false, downscroll);
 				animation.addByPrefix('pressed', '$_noteDir press', 24, false, false, downscroll);
 				animation.addByPrefix('confirm', '$_noteDir confirm', 24, false, false, downscroll);
-				setGraphicSize((width * 0.7).int());
+				setGraphicSize(Std.int(width * 0.7));
 			case 'pixel':
 				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
 				animation.add('green', [6]);

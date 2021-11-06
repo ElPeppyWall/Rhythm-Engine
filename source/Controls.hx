@@ -8,6 +8,9 @@ import flixel.input.actions.FlxActionManager;
 import flixel.input.actions.FlxActionSet;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
+#if android
+import flixel.input.android.FlxAndroidKey;
+#end
 
 enum abstract Action(String) to String from String
 {
@@ -453,15 +456,15 @@ class Controls extends FlxActionSet
 	{
 		removeKeyboard();
 
-		inline bindKeys(Control.NOTE_LEFT, [FlxKey.fromString(FlxG.save.data.noteBinds[0]), FlxKey.LEFT]);
-		inline bindKeys(Control.NOTE_DOWN, [FlxKey.fromString(FlxG.save.data.noteBinds[1]), FlxKey.DOWN]);
-		inline bindKeys(Control.NOTE_UP, [FlxKey.fromString(FlxG.save.data.noteBinds[2]), FlxKey.UP]);
-		inline bindKeys(Control.NOTE_RIGHT, [FlxKey.fromString(FlxG.save.data.noteBinds[3]), FlxKey.RIGHT]);
+		inline bindKeys(Control.NOTE_LEFT, [FlxG.save.data.noteBinds[0], FlxKey.LEFT]);
+		inline bindKeys(Control.NOTE_DOWN, [FlxG.save.data.noteBinds[1], FlxKey.DOWN]);
+		inline bindKeys(Control.NOTE_UP, [FlxG.save.data.noteBinds[2], FlxKey.UP]);
+		inline bindKeys(Control.NOTE_RIGHT, [FlxG.save.data.noteBinds[3], FlxKey.RIGHT]);
 
-		inline bindKeys(Control.UI_LEFT, [FlxKey.fromString(FlxG.save.data.uiBinds[0]), FlxKey.LEFT]);
-		inline bindKeys(Control.UI_DOWN, [FlxKey.fromString(FlxG.save.data.uiBinds[1]), FlxKey.DOWN]);
-		inline bindKeys(Control.UI_UP, [FlxKey.fromString(FlxG.save.data.uiBinds[2]), FlxKey.UP]);
-		inline bindKeys(Control.UI_RIGHT, [FlxKey.fromString(FlxG.save.data.uiBinds[3]), FlxKey.RIGHT]);
+		inline bindKeys(Control.UI_LEFT, [FlxG.save.data.uiBinds[0], FlxKey.LEFT]);
+		inline bindKeys(Control.UI_DOWN, [FlxG.save.data.uiBinds[1], FlxKey.DOWN]);
+		inline bindKeys(Control.UI_UP, [FlxG.save.data.uiBinds[2], FlxKey.UP]);
+		inline bindKeys(Control.UI_RIGHT, [FlxG.save.data.uiBinds[3], FlxKey.RIGHT]);
 
 		inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 		inline bindKeys(Control.BACK, [ESCAPE, BACKSPACE]);

@@ -1,7 +1,6 @@
 package;
 
 import PlayStateUtils.*;
-import Section.SwagSection;
 import Song.SwagSong;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -73,9 +72,20 @@ class PlayState extends MusicBeatState
 	var vocals:FlxSound;
 	var firstNoteTime:Float = 0.0;
 
+	public static var opponentMode:Bool = false;
 	public static var dad:Character;
 	public static var gf:Character;
-	public static var boyfriend:Boyfriend;
+	public static var boyfriend:Character;
+
+	public static var enemyChar(get, never):Character;
+
+	public static function get_enemyChar():Character
+		return !opponentMode ? dad : boyfriend;
+
+	public static var playableChar(get, never):Character;
+
+	public static function get_playableChar():Character
+		return !opponentMode ? boyfriend : dad;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -284,15 +294,14 @@ class PlayState extends MusicBeatState
 			bfVersion = 'bf';
 		}
 
-		gf = new Character(400, 130, gfVersion, gfArgs, false);
+		gf = new Character(400, 130, gfVersion, gfArgs, false, false);
 		gf.scrollFactor.set(0.95, 0.95);
 
 		if (isAloneFunkin)
 			gf.y += 200;
 
-		dad = new Character(100, 100, dadVersion, dadArgs, false);
-
-		boyfriend = new Boyfriend(770, 450, bfVersion, bfArgs);
+		dad = new Character(100, 100, dadVersion, dadArgs, false, opponentMode);
+		boyfriend = new Character(770, 450, bfVersion, bfArgs, true, opponentMode);
 
 		var camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -437,8 +446,8 @@ class PlayState extends MusicBeatState
 		songNameTxt.borderSize = 1.25;
 		songNameTxt.y = FlxG.height * 0.9 + 45;
 
-		var iconP1_Char = !getPref('ultra-optimize') ? boyfriend.curCharacter : SONG.player1;
-		var iconP2_Char = !getPref('ultra-optimize') ? dad.curCharacter : SONG.player2;
+		var iconP1_Char = !getPref('ultra-optimize') ? playableChar.curCharacter : (!opponentMode ? SONG.player1 : SONG.player1);
+		var iconP2_Char = !getPref('ultra-optimize') ? enemyChar.curCharacter : (!opponentMode ? SONG.player2 : SONG.player1);
 		iconP1 = new HealthIcon(iconP1_Char, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
@@ -803,14 +812,9 @@ class PlayState extends MusicBeatState
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 
-		var noteData:Array<SwagSection>;
-
-		// NEW SHIT
-		noteData = songData.notes;
-
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 		var i = 0;
-		for (section in noteData)
+		for (section in songData.notes)
 		{
 			for (songNotes in section.sectionNotes)
 			{
@@ -829,6 +833,7 @@ class PlayState extends MusicBeatState
 				if (songNotes[1] % 8 >= 4)
 					gottaHitNote = !section.mustHitSection;
 
+				gottaHitNote = !opponentMode ? gottaHitNote : !gottaHitNote;
 				var oldNote:Note;
 				if (unspawnNotes.length > 0)
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
@@ -1103,16 +1108,17 @@ class PlayState extends MusicBeatState
 			// Conductor.lastSongPos = FlxG.sound.music.time;
 		}
 
-		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null)
+		var curSection = PlayState.SONG.notes[Std.int(curStep / 16)];
+		if (generatedMusic && curSection != null)
 		{
-			cameraRightSide = PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection;
+			cameraRightSide = !isAloneFunkin ? curSection.mustHitSection : true;
 			cameraMovement();
 		}
 
 		if (camZooming)
 		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
+			FlxG.camera.zoom = defaultCamZoom + 0.95 * (FlxG.camera.zoom - defaultCamZoom);
+			camHUD.zoom = 1 + 0.95 * (camHUD.zoom - 1);
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -1147,13 +1153,6 @@ class PlayState extends MusicBeatState
 			}
 		}
 		// better streaming of shit
-
-		// RESET = Quick Game Over Screen
-		if (controls.RESET)
-		{
-			health = 0;
-			trace("RESET = True");
-		}
 
 		// CHEAT = brandon's a pussy
 		if (controls.CHEAT)
@@ -1236,15 +1235,15 @@ class PlayState extends MusicBeatState
 					if (SONG.notes[Math.floor(curStep / 16)] != null)
 					{
 						if (SONG.notes[Math.floor(curStep / 16)].altAnim)
-							dad.altNoteAnim = '-alt';
+							enemyChar.altNoteAnim = '-alt';
 						else
-							dad.altNoteAnim = '';
+							enemyChar.altNoteAnim = '';
 					}
 					else
-						dad.altNoteAnim = '';
+						enemyChar.altNoteAnim = '';
 
-					dad.sing(daNote);
-					dad.holdTimer = 0;
+					enemyChar.sing(daNote);
+					enemyChar.holdTimer = 0;
 
 					if (SONG.needsVoices)
 						vocals.volume = 1;
@@ -1530,9 +1529,9 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !controlHoldArray.contains(true))
-				if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
-					boyfriend.dance();
+			if (playableChar.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !controlHoldArray.contains(true))
+				if (playableChar.animation.curAnim.name.startsWith('sing') && !playableChar.animation.curAnim.name.endsWith('miss'))
+					playableChar.dance();
 		}
 
 		playerStrums.forEach(function(spr:BabyArrow)
@@ -1575,7 +1574,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 
-		boyfriend.playAnim('sing${notesDir[daNote.noteData]}miss', true);
+		playableChar.playAnim('sing${notesDir[daNote.noteData]}miss', true);
 	}
 
 	function goodNoteHit(note:Note):Void
@@ -1594,7 +1593,7 @@ class PlayState extends MusicBeatState
 		else
 			health += 0.004;
 
-		boyfriend.sing(note);
+		playableChar.sing(note);
 
 		playerStrums.forEach(function(spr:BabyArrow)
 		{
@@ -1653,13 +1652,13 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (dad.animation.curAnim.name.startsWith('sing'))
+		if (enemyChar.animation.curAnim.name.startsWith('sing'))
 		{
-			if (dad.animation.curAnim.finished)
-				dad.dance();
+			if (enemyChar.animation.curAnim.finished)
+				enemyChar.dance();
 		}
 		else
-			dad.dance();
+			enemyChar.dance();
 
 		// HARDCODING FOR MILF ZOOMS!
 		if (getPref('camera-zoom'))
@@ -1686,8 +1685,8 @@ class PlayState extends MusicBeatState
 		if (curBeat % gfSpeed == 0)
 			gf.dance();
 
-		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
-			boyfriend.dance();
+		if (!playableChar.animation.curAnim.name.startsWith("sing"))
+			playableChar.dance();
 
 		if (curBeat % 8 == 7 && curSong == 'bopeebo')
 			boyfriend.playAnim('hey', true);

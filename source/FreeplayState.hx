@@ -99,7 +99,8 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		changeDiff();
 
-		if (!FlxG.sound.music.playing || fromPlayState)
+		MusicManager.checkPlaying();
+		if (fromPlayState)
 			MusicManager.playMainMusic();
 		super.create();
 	}

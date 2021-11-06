@@ -20,12 +20,12 @@ typedef SwagSong =
 
 class Song
 {
-	public static var curSong:String;
+	public static var curSong(get, never):String;
 
 	public static inline function get_curSong():String
 		return PlayState.SONG.song.toLowerCase();
 
-	public static var prettySong:String;
+	public static var prettySong(get, never):String;
 
 	public static function get_prettySong():String
 		return curSong.capitalize('-').replace('-', ' ');
