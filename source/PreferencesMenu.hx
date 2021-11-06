@@ -111,7 +111,7 @@ class PreferencesMenu extends MusicBeatSubstate
 			FlxTween.tween(prefTxt, {alpha: alphaAAAAA}, CoolUtil.camLerpShit(.45));
 		}
 
-		sprOpt.changeSelection(0, false, true);
+		sprOpt.changeSelection(0, false);
 
 		if (isPause)
 			cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];

@@ -58,7 +58,7 @@ class Alphabet extends flixel.group.FlxSpriteGroup
 			if (character == " ")
 				lastWasSpace = true;
 
-			if (!['\n', ' '].contains(character))
+			if (!character.contains('\n') && !character.contains(' '))
 			{
 				if (lastSprite != null)
 					xPos = lastSprite.x + lastSprite.width;

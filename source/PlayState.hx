@@ -933,9 +933,7 @@ class PlayState extends MusicBeatState
 		if (paused)
 		{
 			if (FlxG.sound.music != null && !startingSong)
-			{
 				resyncVocals();
-			}
 
 			if (!startTimer.finished)
 				startTimer.active = true;

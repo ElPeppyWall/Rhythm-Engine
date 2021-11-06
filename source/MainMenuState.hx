@@ -135,10 +135,7 @@ class MainMenuState extends MusicBeatState
 					if (FlxG.mouse.overlaps(opItem) && !selectedSomethin)
 					{
 						if (curSelected != opItem.ID)
-						{
-							FlxG.sound.play(Paths.sound('scrollMenu'));
 							changeItem(opItem.ID, true);
-						}
 
 						if (FlxG.mouse.justPressed)
 							selectItem();
@@ -146,22 +143,13 @@ class MainMenuState extends MusicBeatState
 				}
 
 			if (FlxG.mouse.wheel != 0)
-			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(FlxG.mouse.wheel == 1 ? -1 : 1);
-			}
 
 			if (controls.UI_UP_P)
-			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
-			}
 
 			if (controls.UI_DOWN_P)
-			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
-			}
 
 			if (controls.BACK)
 				switchState(TitleState);
@@ -236,6 +224,8 @@ class MainMenuState extends MusicBeatState
 
 	function changeItem(huh:Int = 0, force:Bool = false)
 	{
+		if (huh != 0)
+			FlxG.sound.play(Paths.sound('scrollMenu'));
 		curSelected += huh;
 
 		if (!force)

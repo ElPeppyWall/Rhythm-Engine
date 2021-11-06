@@ -52,13 +52,13 @@ class AlphabetList extends FlxTypedGroup<Alphabet>
 			text.type = alphabetsType;
 			add(text);
 		}
-		changeSelection(0, true, true);
+		changeSelection(0, true);
 	}
 
-	public function changeSelection(change:Int = 0, force:Bool = false, firstTime:Bool = false)
+	public function changeSelection(change:Int = 0, force:Bool = false)
 	{
 		selectedIndex = !force ? (selectedIndex + change) : change;
-		if (!firstTime && !alphabetsArgs.contains(NO_CHANGE_SOUND))
+		if (change != 0 && !alphabetsArgs.contains(NO_CHANGE_SOUND))
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		if (selectedIndex < 0)
