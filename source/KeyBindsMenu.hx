@@ -104,6 +104,8 @@ class KeyBindsMenu extends MusicBeatSubstate
 		daBG.scrollFactor.set();
 		add(daBG);
 		daBG.visible = false;
+		if (isPause)
+			cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
 	override function update(elapsed:Float)
