@@ -207,9 +207,15 @@ class FreeplayState extends MusicBeatState
 		if (checkKey('SPACE') && songPlaying != curSelected)
 		{
 			songPlaying = curSelected;
+
+			FlxG.sound.music.loadEmbedded(Paths.inst(songs[curSelected].songName));
+			FlxG.sound.music.volume = 0;
+			FlxG.sound.music.play(false, FlxG.sound.music.length / 2);
+			vocals.destroy();
 			vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
+			vocals.volume = 0;
+			vocals.play(false, FlxG.sound.music.time);
 			FlxG.sound.list.add(vocals);
-			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 		}
 
 		if (controls.UI_UP_P)
