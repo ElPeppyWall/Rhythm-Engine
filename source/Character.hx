@@ -56,44 +56,51 @@ class Character extends flixel.FlxSprite
 				case 'bf':
 					frames = getCharacterFrames('BOYFRIEND_ASSETS/BOYFRIEND', 'shared');
 
-					addAnim('BF idle dance', {
-						name: 'idle',
-						offsets: [-5, 0],
-						playerOffsets: [-5, 0],
-					});
-
-					var singOffsets = [[-38, -6], [-40, -50], [1, 27], [32, -7]];
-					var singOffsetsPlayer = [[12, -6], [-10, -50], [-29, 27], [-38, -7]];
-					for (dir in 0...4)
-						addAnim('BF NOTE ${notesDir[dir]}0', {
-							name: 'sing${notesDir[dir]}',
-							offsets: singOffsets[dir],
-							playerOffsets: singOffsetsPlayer[dir],
+					if (!isDead)
+					{
+						addAnim('BF idle dance', {
+							name: 'idle',
+							offsets: [-5, 0],
+							playerOffsets: [-5, 0],
 						});
 
-					animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
-					animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
-					animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
-					animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
-					animation.addByPrefix('hey', 'BF HEY', 24, false);
+						var singOffsets = [[-38, -6], [-40, -50], [1, 27], [32, -7]];
+						var singOffsetsPlayer = [[12, -6], [-10, -50], [-29, 27], [-38, -7]];
+						for (dir in 0...4)
+							addAnim('BF NOTE ${notesDir[dir]}0', {
+								name: 'sing${notesDir[dir]}',
+								offsets: singOffsets[dir],
+								playerOffsets: singOffsetsPlayer[dir],
+							});
 
-					animation.addByPrefix('firstDeath', "BF dies", 24, false);
-					animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
-					animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
+						animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
+						animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
+						animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
+						animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
+						animation.addByPrefix('hey', 'BF HEY', 24, false);
 
-					animation.addByPrefix('scared', 'BF idle shaking', 24);
+						if (hasArg('SHAKE'))
+						{
+							animation.addByPrefix('scared', 'BF idle shaking', 24);
+							addOffset('scared', -4);
+						}
+						addOffset("singUPmiss", -29, 27);
+						addOffset("singRIGHTmiss", -30, 21);
+						addOffset("singLEFTmiss", 12, 24);
+						addOffset("singDOWNmiss", -11, -19);
+						addOffset("hey", 7, 4);
+						playAnim('idle');
+					}
+					else
+					{
+						animation.addByPrefix('firstDeath', "BF dies", 24, false);
+						animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
+						animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
 
-					addOffset("singUPmiss", -29, 27);
-					addOffset("singRIGHTmiss", -30, 21);
-					addOffset("singLEFTmiss", 12, 24);
-					addOffset("singDOWNmiss", -11, -19);
-					addOffset("hey", 7, 4);
-					addOffset('firstDeath', 37, 11);
-					addOffset('deathLoop', 37, 5);
-					addOffset('deathConfirm', 37, 69);
-					addOffset('scared', -4);
-
-					playAnim('idle');
+						addOffset('firstDeath', 37, 11);
+						addOffset('deathLoop', 37, 5);
+						addOffset('deathConfirm', 37, 69);
+					}
 
 					flipX = true;
 				case 'gf':
@@ -126,7 +133,7 @@ class Character extends flixel.FlxSprite
 
 					playAnim('danceRight');
 
-					addAttrib(USE_DANCE_DIRS);
+					addAttrib(IS_GF);
 				case 'speaker':
 					frames = getCharacterFrames('Speaker_Assets');
 					animation.addByIndices('danceLeft', 'SPEAKER Dancing Beat', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
@@ -244,7 +251,7 @@ class Character extends flixel.FlxSprite
 					addOffset('danceRight', 0);
 
 					playAnim('danceRight');
-					addAttrib(USE_DANCE_DIRS);
+					addAttrib(IS_GF);
 				case 'mom-car':
 					frames = getCharacterFrames('momCar', 'week4');
 
@@ -339,7 +346,7 @@ class Character extends flixel.FlxSprite
 					addOffset('scared', -2, -17);
 
 					playAnim('danceRight');
-					addAttrib(USE_DANCE_DIRS);
+					addAttrib(IS_GF);
 				case 'parents-christmas':
 					frames = getCharacterFrames('christmas/mom_dad_christmas_assets', 'week5');
 					animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
@@ -444,7 +451,7 @@ class Character extends flixel.FlxSprite
 					setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 					updateHitbox();
 					antialiasing = false;
-					addAttrib(USE_DANCE_DIRS);
+					addAttrib(IS_GF);
 				case 'senpai':
 					frames = getCharacterFrames('weeb/senpai', 'week6');
 					animation.addByPrefix('idle', 'Senpai Idle', 24, false);
@@ -608,60 +615,8 @@ class Character extends flixel.FlxSprite
 		{
 			switch (curCharacter)
 			{
-				case 'gf':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
-						danced = !danced;
-
-						if (danced)
-							playAnim('danceRight');
-						else
-							playAnim('danceLeft');
-					}
-
-				case 'gf-christmas':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
-						danced = !danced;
-
-						if (danced)
-							playAnim('danceRight');
-						else
-							playAnim('danceLeft');
-					}
-
-				case 'gf-car':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
-						danced = !danced;
-
-						if (danced)
-							playAnim('danceRight');
-						else
-							playAnim('danceLeft');
-					}
-				case 'gf-pixel':
-					if (!animation.curAnim.name.startsWith('hair'))
-					{
-						danced = !danced;
-
-						if (danced)
-							playAnim('danceRight');
-						else
-							playAnim('danceLeft');
-					}
-
-				case 'spooky':
-					danced = !danced;
-
-					if (danced)
-						playAnim('danceRight');
-					else
-						playAnim('danceLeft');
 				default:
-					if (!characterAttribs.contains(USE_DANCE_DIRS))
-						playAnim('idle');
-					else
+					if (characterAttribs.contains(USE_DANCE_DIRS))
 					{
 						danced = !danced;
 
@@ -670,6 +625,20 @@ class Character extends flixel.FlxSprite
 						else
 							playAnim('danceLeft');
 					}
+					else if (characterAttribs.contains(IS_GF))
+					{
+						if (!animation.curAnim.name.startsWith('hair'))
+						{
+							danced = !danced;
+
+							if (danced)
+								playAnim('danceRight');
+							else
+								playAnim('danceLeft');
+						}
+					}
+					else
+						playAnim('idle');
 			}
 		}
 	}
@@ -701,6 +670,19 @@ class Character extends flixel.FlxSprite
 
 	public function sing(daNote:Note, ?playState:PlayState)
 	{
+		if (!isPlayer && !debugMode)
+		{
+			@:privateAccess
+			if (PlayState.SONG.notes[Math.floor(PlayState.instance.curStep / 16)] != null)
+			{
+				if (PlayState.SONG.notes[Math.floor(PlayState.instance.curStep / 16)].altAnim)
+					altNoteAnim = '-alt';
+				else
+					altNoteAnim = '';
+			}
+			else
+				altNoteAnim = '';
+		}
 		playAnim('sing${notesDir[daNote.noteData]}$altNoteAnim', !daNote.isSustainNote);
 		// true -> !daNote.isSustainNote since character shakes with double notes with trail
 
@@ -717,6 +699,9 @@ class Character extends flixel.FlxSprite
 
 	inline function addAttrib(attrib:CharacterAttrib):Void
 		characterAttribs.push(attrib);
+
+	inline function hasArg(arg:String):Bool
+		return characterArgs.contains(arg);
 
 	public static function joinFrames(spriteArray:Array<String>, ?library:String):FlxAtlasFrames
 	{
@@ -741,7 +726,7 @@ class Character extends flixel.FlxSprite
 		for (i in characterArgs)
 			spriteName.push('${spriteName[0]}_${i}');
 
-		if (spriteName.contains('DEAD'))
+		if (isDead)
 			spriteName = ['${key}_DEAD'];
 
 		return joinFrames(spriteName, library);
@@ -752,5 +737,7 @@ enum CharacterAttrib
 {
 	PIXEL;
 	USE_DANCE_DIRS;
+	IS_GF;
 	HAS_DEAD;
+	HAS_IDLE_HOLD;
 }

@@ -69,8 +69,8 @@ class LoadingState extends MusicBeatState
 				if (PlayState.SONG.needsVoices)
 					checkLoadSong(getVocalPath());
 				checkLibrary("shared");
-				if (PlayState.storyWeek > 0)
-					checkLibrary("week" + PlayState.storyWeek);
+				if (PlayState.curWeek > 0)
+					checkLibrary("week" + PlayState.curWeek);
 				else
 					checkLibrary("tutorial");
 
@@ -174,7 +174,7 @@ class LoadingState extends MusicBeatState
 
 	static function getNextState(target:Class<FlxState>, stopMusic = false, fake:Bool):Class<FlxState>
 	{
-		Paths.setCurrentLevel("week" + PlayState.storyWeek);
+		Paths.setCurrentLevel("week" + PlayState.curWeek);
 		#if NO_PRELOAD_ALL
 		var loaded:Bool = false;
 		if (!fake)

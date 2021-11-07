@@ -76,7 +76,7 @@ class PauseSubState extends MusicBeatSubstate
 		add(levelInfo);
 
 		var levelDifficulty = new FlxText(20, 47, 0, "", 32);
-		levelDifficulty.text += CoolUtil.getDiffName(PlayState.storyDifficulty, PlayState.isAloneFunkin);
+		levelDifficulty.text += CoolUtil.getDiffName(PlayState.curDifficulty, PlayState.isAloneFunkin);
 		levelDifficulty.scrollFactor.set();
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
 		levelDifficulty.updateHitbox();
@@ -182,11 +182,11 @@ class PauseSubState extends MusicBeatSubstate
 				menuItems = difficultyChoices;
 				regenMenu();
 			case 'EASY', 'FACIL':
-				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-easy', PlayState.storyWeek, PlayState.weekColor, PlayState.isStoryMode, true);
+				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-easy', PlayState.curWeek, PlayState.weekColor, PlayState.isStoryMode, true);
 			case 'NORMAL':
-				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-normal', PlayState.storyWeek, PlayState.weekColor, PlayState.isStoryMode, true);
+				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-normal', PlayState.curWeek, PlayState.weekColor, PlayState.isStoryMode, true);
 			case 'HARD':
-				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-hard', PlayState.storyWeek, PlayState.weekColor, PlayState.isStoryMode, true);
+				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-hard', PlayState.curWeek, PlayState.weekColor, PlayState.isStoryMode, true);
 			case 'Toggle Practice Mode', "Alternar modo pausa":
 				PlayState.practiceMode = !PlayState.practiceMode;
 				practiceText.set_visible(PlayState.practiceMode);

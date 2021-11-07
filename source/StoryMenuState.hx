@@ -308,7 +308,7 @@ class StoryMenuState extends MusicBeatState
 			PlayState.storyPlaylist = weeks[curWeek].weekSongs;
 			selectedWeek = true;
 
-			PlayState.storyDifficulty = curDifficulty;
+			PlayState.curDifficulty = curDifficulty;
 
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{

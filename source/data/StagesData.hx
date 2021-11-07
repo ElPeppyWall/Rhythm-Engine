@@ -8,12 +8,13 @@ class StagesData
 	{
 		stageNames = new Map<String, String>();
 
-		stageNames['stage'] = 'on The Stage';
-		stageNames['spooky'] = 'in the Girlfriend’s House';
-		stageNames['philly'] = 'on Newgrounds Office Roof';
-		stageNames['limo'] = 'on The Limousine';
-		stageNames['mall'] = 'in The Mall';
-		stageNames['mallEvil'] = 'in The Mall??';
-		stageNames['school'] = 'inside The Dating Simulator';
+		stageNames['stage'] = 'The Stage';
+		stageNames['spooky'] = 'Girlfriend’s House';
+		stageNames['philly'] = 'Newgrounds Office Roof';
+		stageNames['limo'] = 'The Limousine';
+		stageNames['mall'] = 'The Mall';
+		stageNames['mallEvil'] = 'The Mall??';
+		stageNames['school'] = 'Dating Simulator';
+		stageNames['schoolEvil'] = 'Dating Simulator??';
 	}
 }
