@@ -20,6 +20,7 @@ class MenuBG extends flixel.FlxSprite
 				'Options';
 		}));
 
+		active = false;
 		scrollFactor.set();
 		updateHitbox();
 		screenCenter();
