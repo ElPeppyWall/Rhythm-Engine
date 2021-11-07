@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
@@ -20,7 +21,7 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
 	var vocals:FlxSound;
-	var songPlaying:Int;
+	var songPlaying:Int = -1;
 
 	static var curSelected:Int = 0;
 	static var curDifficulty:Int = 1;
@@ -30,7 +31,7 @@ class FreeplayState extends MusicBeatState
 	var diffText:FlxText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
-	var coolColors = [-7179779, -7179779, -14535868, -7072173, -223529, -6237697, -34625, -608764];
+	var coolColors = [-7179779, -7179779, -14535868, -7072173, -223529, -6237697, -34625, 0xFF57cde4];
 	var bg = new MenuBG(DESAT);
 	var fromPlayState:Bool = false;
 
@@ -59,7 +60,7 @@ class FreeplayState extends MusicBeatState
 		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
 		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
 		#if ALLOW_ALONE_FUNKIN
-		addWeek(['Alone-Funkin\''], 0, ['']);
+		addWeek(["Alone-Funkin'"], 7, ['']);
 		#end
 
 		bg.color = coolColors[0];
@@ -99,12 +100,12 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
-		var playBG = new FlxSprite(0, FlxG.height - 35).makeGraphic(FlxG.width, 35, FlxColor.BLACK);
+		playBG = new FlxSprite(0, FlxG.height - 35).makeGraphic(FlxG.width, 35, FlxColor.BLACK);
 		playBG.active = false;
 		playBG.alpha = 0.6;
 		add(playBG);
 
-		var playTxt = new FlxText(0, playBG.y, 0, langString('freeplayPlay'));
+		playTxt = new FlxText(0, playBG.y, 0, langString('freeplayPlay'));
 		playTxt.active = false;
 		playTxt.setFormat(Paths.font("vcr.ttf"), 28, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		playTxt.screenCenter(X);
@@ -118,6 +119,9 @@ class FreeplayState extends MusicBeatState
 			MusicManager.playMainMusic();
 		super.create();
 	}
+
+	var playBG:FlxSprite;
+	var playTxt:FlxText;
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String)
 		songs.push(new SongMetadata(songName, weekNum, songCharacter));
@@ -215,8 +219,12 @@ class FreeplayState extends MusicBeatState
 				enterSong();
 		}
 
-		if (checkKey('SPACE') && songPlaying != curSelected)
+		if (checkKey('SPACE') && songPlaying != curSelected && songs[curSelected].songName != "Alone-Funkin'")
+		{
+			for (i in [playBG, playTxt])
+				FlxTween.tween(i, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
 			previewSong(curSelected, false);
+		}
 
 		if (controls.UI_UP_P)
 			changeSelection(-1);
@@ -311,6 +319,13 @@ class FreeplayState extends MusicBeatState
 
 		if (force)
 			change = curSelected;
+
+		if (songPlaying == curSelected || songs[curSelected].songName == "Alone-Funkin'")
+			for (i in [playBG, playTxt])
+				FlxTween.tween(i, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
+		else
+			for (i in [playBG, playTxt])
+				FlxTween.tween(i, {y: FlxG.height - 35}, 0.25, {ease: FlxEase.bounceOut});
 
 		// selector.y = (70 * curSelected) + 30;
 
