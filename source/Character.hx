@@ -2,7 +2,6 @@ package;
 
 import PlayState.notesDir;
 import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.ui.FlxVirtualPad;
 
 using StringTools;
 
