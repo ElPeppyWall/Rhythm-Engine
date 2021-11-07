@@ -209,7 +209,9 @@ class FreeplayState extends MusicBeatState
 
 		for (item in grpSongs)
 		{
-			if (FlxG.mouse.overlaps(item) && item.ID == curSelected && FlxG.mouse.justPressed)
+			if ((FlxG.mouse.overlaps(item) || FlxG.mouse.overlaps(iconArray[grpSongs.members.indexOf(item)]))
+				&& item.ID == curSelected
+				&& FlxG.mouse.justPressed)
 				enterSong();
 		}
 
