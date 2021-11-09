@@ -26,6 +26,8 @@ class LoadingState extends MusicBeatState
 	var fakeRemaining = 4;
 	var isFake:Bool;
 
+	static var loadedSongs:Array<String> = [];
+
 	function new(target:Class<FlxState>, stopMusic:Bool, fake:Bool = #if NO_PRELOAD_ALL false #else true #end)
 	{
 		super();
@@ -46,6 +48,8 @@ class LoadingState extends MusicBeatState
 		Assets.cache.clear();
 		LimeAssets.cache.clear();
 		#end
+		if (ignoreThis)
+			onLoad();
 		var funkayBG = new FlxSprite(-900, -900).makeGraphic(10000, 10000, 0xFFcaff4d);
 		funkayBG.antialiasing = getPref('antialiasing');
 		add(funkayBG);
@@ -151,23 +155,22 @@ class LoadingState extends MusicBeatState
 		loadBar.scale.x += .5 * (targetShit - loadBar.scale.x);
 	}
 
-	function onLoad()
+	inline function onLoad()
 	{
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
-
+		if (PlayState.SONG != null)
+			loadedSongs.push(PlayState.SONG.song.toLowerCase());
 		switchState(target);
 	}
 
-	static function getSongPath()
-	{
-		return Paths.inst(PlayState.SONG.song);
-	}
+	var ignoreThis = false;
 
-	static function getVocalPath()
-	{
+	inline static function getSongPath()
+		return Paths.inst(PlayState.SONG.song);
+
+	inline static function getVocalPath()
 		return Paths.voices(PlayState.SONG.song);
-	}
 
 	inline static public function loadAndSwitchState(target:Class<FlxState>, stopMusic = false, fake:Bool = #if NO_PRELOAD_ALL false #else true #end)
 		CoolUtil.switchState(getNextState(target, stopMusic, fake), [target, stopMusic, fake]);
