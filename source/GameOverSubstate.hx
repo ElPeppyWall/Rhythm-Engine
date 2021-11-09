@@ -44,14 +44,19 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (controls.ACCEPT)
-			endBullshit();
-
-		if (controls.BACK && !isEnding)
+		if (!isEnding)
 		{
-			FlxG.sound.music.stop();
-			PlayState.exit();
+			if (controls.ACCEPT)
+				endBullshit();
+
+			if (controls.BACK && !isEnding)
+			{
+				FlxG.sound.music.stop();
+				PlayState.exit();
+			}
 		}
+		else if (controls.ACCEPT)
+			LoadingState.loadAndSwitchState(PlayState);
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
 			FlxG.camera.follow(camFollow, LOCKON, 0.01);
