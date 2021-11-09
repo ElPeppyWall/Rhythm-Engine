@@ -34,6 +34,8 @@ class LoadingState extends MusicBeatState
 		this.target = target;
 		isFake = fake;
 		this.stopMusic = stopMusic;
+		if (PlayState.SONG != null)
+			ignoreThis = loadedSongs.contains(PlayState.SONG.song.toLowerCase());
 	}
 
 	override function create()
@@ -48,8 +50,12 @@ class LoadingState extends MusicBeatState
 		Assets.cache.clear();
 		LimeAssets.cache.clear();
 		#end
+		trace(loadedSongs);
 		if (ignoreThis)
+		{
 			onLoad();
+			return;
+		}
 		var funkayBG = new FlxSprite(-900, -900).makeGraphic(10000, 10000, 0xFFcaff4d);
 		funkayBG.antialiasing = getPref('antialiasing');
 		add(funkayBG);
@@ -133,6 +139,8 @@ class LoadingState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		if (ignoreThis)
+			return;
 		funkay.setGraphicSize(Std.int(.88 * FlxG.width + .9 * (funkay.width - .88 * FlxG.width)));
 		funkay.updateHitbox();
 		if (controls.ACCEPT)
