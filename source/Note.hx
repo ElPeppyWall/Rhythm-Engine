@@ -18,7 +18,7 @@ class Note extends flixel.FlxSprite
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
 	public var prevNote:Note;
-	public var isAlt = false;
+	public var singSuffix = '';
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;

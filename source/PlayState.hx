@@ -838,8 +838,7 @@ class PlayState extends MusicBeatState
 
 	private function generateSong():Void
 	{
-		var songData = SONG;
-		Conductor.changeBPM(songData.bpm);
+		Conductor.changeBPM(SONG.bpm);
 
 		vocals = getVocals();
 		FlxG.sound.list.add(vocals);
@@ -849,7 +848,7 @@ class PlayState extends MusicBeatState
 
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 		var i = 0;
-		for (section in songData.notes)
+		for (section in SONG.notes)
 		{
 			for (songNotes in section.sectionNotes)
 			{
@@ -876,6 +875,9 @@ class PlayState extends MusicBeatState
 					oldNote = null;
 
 				var swagNote = new Note(daStrumTime, daNoteData, oldNote);
+				if ((section.altAnim && (!opponentMode ? !gottaHitNote : gottaHitNote))
+					|| (Std.isOfType(songNotes[3], Bool) && songNotes[3] == true))
+					swagNote.singSuffix = '-alt';
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
 
@@ -889,6 +891,9 @@ class PlayState extends MusicBeatState
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
 					var sustainNote = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true, true);
+					if ((section.altAnim && (!opponentMode ? !gottaHitNote : gottaHitNote))
+						|| (Std.isOfType(songNotes[3], Bool) && songNotes[3] == true))
+						sustainNote.singSuffix = '-alt';
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -1037,7 +1042,10 @@ class PlayState extends MusicBeatState
 
 		if (checkKey('NINE'))
 		{
-			iconP1.swapOldIcon();
+			if (!opponentMode)
+				iconP1.swapOldIcon();
+			else
+				iconP2.swapOldIcon();
 			healthBar.createFilledBar(HealthIconsData.getIconColor(iconP2.char), HealthIconsData.getIconColor(iconP1.char));
 			healthBar.updateFilledBar();
 		}
@@ -1397,6 +1405,8 @@ class PlayState extends MusicBeatState
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2));
 		rating.screenCenter();
 		rating.x = (FlxG.width * 0.55) - 40;
+		if (getPref('midscroll'))
+			rating.x += 250;
 		rating.y -= 60;
 		rating.acceleration.y = 550;
 		rating.velocity.y -= FlxG.random.int(140, 175);

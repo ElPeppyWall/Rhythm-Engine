@@ -14,8 +14,7 @@ class Character extends flixel.FlxSprite
 	public var debugMode:Bool = false;
 	public var characterArgs:Array<String> = [];
 	public var characterAttribs:Array<CharacterAttrib> = [];
-	public var altNoteAnim = '';
-	public var altAnim = '';
+	public var animSuffix = '';
 	public var isPlayer:Bool = false;
 	public var isBF:Bool = false;
 	public var curCharacter:String = 'bf';
@@ -647,7 +646,7 @@ class Character extends flixel.FlxSprite
 	{
 		if (curCharacter != 'null' && !getPref('ultra-optimize'))
 		{
-			animation.play(AnimName + altAnim, Force, Reversed, Frame);
+			animation.play(AnimName + animSuffix, Force, Reversed, Frame);
 
 			var daOffset = animOffsets.get(AnimName);
 			if (animOffsets.exists(AnimName))
@@ -670,20 +669,7 @@ class Character extends flixel.FlxSprite
 
 	public function sing(daNote:Note, ?playState:PlayState)
 	{
-		if (!isPlayer && !debugMode)
-		{
-			@:privateAccess
-			if (PlayState.SONG.notes[Math.floor(PlayState.instance.curStep / 16)] != null)
-			{
-				if (PlayState.SONG.notes[Math.floor(PlayState.instance.curStep / 16)].altAnim)
-					altNoteAnim = '-alt';
-				else
-					altNoteAnim = '';
-			}
-			else
-				altNoteAnim = '';
-		}
-		playAnim('sing${notesDir[daNote.noteData]}$altNoteAnim', !daNote.isSustainNote);
+		playAnim('sing${notesDir[daNote.noteData]}${daNote.singSuffix}', !daNote.isSustainNote);
 		// true -> !daNote.isSustainNote since character shakes with double notes with trail
 
 		if (playState != null)
