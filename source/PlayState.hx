@@ -1838,6 +1838,7 @@ class PlayState extends MusicBeatState
 							gf.playAnim('scared', true);
 						}
 					};
+					bfArgs.push('SHAKE');
 				}
 			case 'pico', 'philly-nice', 'blammed':
 				{
