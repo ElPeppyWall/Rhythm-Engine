@@ -1701,7 +1701,7 @@ class PlayState extends MusicBeatState
 		if (curBeat % gfSpeed == 0)
 			gf.dance();
 
-		if (!playableChar.animation.curAnim.name.startsWith("sing") && playableChar.animation.curAnim.finished)
+		if (!playableChar.animation.curAnim.name.startsWith("sing"))
 			playableChar.dance();
 
 		if (curBeat % 8 == 7 && curSong == 'bopeebo')
