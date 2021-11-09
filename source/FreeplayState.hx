@@ -294,7 +294,8 @@ class FreeplayState extends MusicBeatState
 
 	function enterSong():Void
 	{
-		vocals.fadeOut(.25, 0);
+		if (vocals != null)
+			vocals.fadeOut(.25, 0);
 		FlxG.sound.music.fadeOut(.25, 0, function(twn:FlxTween)
 		{
 			FlxTween.cancelTweensOf(bg);
