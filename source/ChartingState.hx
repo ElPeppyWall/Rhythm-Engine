@@ -61,6 +61,8 @@ class ChartingState extends MusicBeatState
 	var _song:SwagSong;
 
 	var typingShit:FlxInputText;
+	var player1Input:FlxInputText;
+	var player2Input:FlxInputText;
 	/*
 	 * WILL BE THE CURRENT / LAST PLACED NOTE
 	**/
@@ -162,8 +164,7 @@ class ChartingState extends MusicBeatState
 
 	function addSongUI():Void
 	{
-		var UI_songTitle = new FlxUIInputText(10, 10, 70, _song.song, 8);
-		typingShit = UI_songTitle;
+		typingShit = new FlxUIInputText(10, 10, 70, _song.song, 8);
 
 		var check_voices = new FlxUICheckBox(10, 25, null, null, "Has voice track", 100);
 		check_voices.checked = _song.needsVoices;
@@ -213,23 +214,11 @@ class ChartingState extends MusicBeatState
 
 		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
 
-		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
-		{
-			_song.player1 = characters[Std.parseInt(character)];
-		});
-		player1DropDown.selectedLabel = _song.player1;
-
-		var player2DropDown = new FlxUIDropDownMenu(140, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
-		{
-			_song.player2 = characters[Std.parseInt(character)];
-		});
-
-		player2DropDown.selectedLabel = _song.player2;
-
+		player1Input = new FlxUIInputText(10, 100, 70, _song.player1, 8);
+		player2Input = new FlxUIInputText(10, 140, 70, _song.player2, 8);
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
-		tab_group_song.add(UI_songTitle);
-
+		tab_group_song.add(typingShit);
 		tab_group_song.add(check_voices);
 		tab_group_song.add(check_mute_inst);
 		tab_group_song.add(saveButton);
@@ -238,8 +227,8 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(loadAutosaveBtn);
 		tab_group_song.add(stepperBPM);
 		tab_group_song.add(stepperSpeed);
-		tab_group_song.add(player1DropDown);
-		tab_group_song.add(player2DropDown);
+		tab_group_song.add(player1Input);
+		tab_group_song.add(player2Input);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.scrollFactor.set();
@@ -458,6 +447,8 @@ class ChartingState extends MusicBeatState
 
 		Conductor.songPosition = FlxG.sound.music.time;
 		_song.song = typingShit.text;
+		_song.player1 = player1Input.text;
+		_song.player2 = player2Input.text;
 
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps));
 
@@ -478,86 +469,92 @@ class ChartingState extends MusicBeatState
 		FlxG.watch.addQuick('daBeat', curBeat);
 		FlxG.watch.addQuick('daStep', curStep);
 
-		if (FlxG.mouse.justPressed)
+		if (!typingShit.hasFocus && !player1Input.hasFocus && !player2Input.hasFocus)
 		{
-			if (FlxG.mouse.overlaps(curRenderedNotes))
+			var shiftThing:Int = 1;
+			if (FlxG.keys.pressed.SHIFT)
+				shiftThing = 4;
+			if (FlxG.keys.justPressed.RIGHT || FlxG.keys.justPressed.D)
+				changeSection(curSection + shiftThing);
+			if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A)
+				changeSection(curSection - shiftThing);
+			if (FlxG.mouse.justPressed)
 			{
-				curRenderedNotes.forEach(function(note:Note)
+				if (FlxG.mouse.overlaps(curRenderedNotes))
 				{
-					if (FlxG.mouse.overlaps(note))
+					curRenderedNotes.forEach(function(note:Note)
 					{
-						if (checkKey('CONTROL', PRESSED))
-							selectNote(note);
-						else
+						if (FlxG.mouse.overlaps(note))
 						{
-							trace('tryin to delete note...');
-							deleteNote(note);
+							if (checkKey('CONTROL', PRESSED))
+								selectNote(note);
+							else
+							{
+								trace('tryin to delete note...');
+								deleteNote(note);
+							}
 						}
-					}
-				});
-			}
-			else
-			{
-				if (FlxG.mouse.x > gridBG.x
-					&& FlxG.mouse.x < gridBG.x + gridBG.width
-					&& FlxG.mouse.y > gridBG.y
-					&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * _song.notes[curSection].lengthInSteps))
+					});
+				}
+				else
 				{
-					FlxG.log.add('added note');
-					addNote();
+					if (FlxG.mouse.x > gridBG.x
+						&& FlxG.mouse.x < gridBG.x + gridBG.width
+						&& FlxG.mouse.y > gridBG.y
+						&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * _song.notes[curSection].lengthInSteps))
+					{
+						FlxG.log.add('added note');
+						addNote();
+					}
 				}
 			}
-		}
 
-		if (FlxG.mouse.x > gridBG.x
-			&& FlxG.mouse.x < gridBG.x + gridBG.width
-			&& FlxG.mouse.y > gridBG.y
-			&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * _song.notes[curSection].lengthInSteps))
-		{
-			dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
-			if (FlxG.keys.pressed.SHIFT)
-				dummyArrow.y = FlxG.mouse.y;
-			else
-				dummyArrow.y = Math.floor(FlxG.mouse.y / GRID_SIZE) * GRID_SIZE;
-		}
-
-		if (FlxG.keys.justPressed.ENTER)
-		{
-			lastSection = curSection;
-
-			PlayState.SONG = _song;
-			FlxG.sound.music.stop();
-			vocals.stop();
-			switchState(PlayState);
-		}
-
-		if (FlxG.keys.justPressed.E)
-		{
-			changeNoteSustain(Conductor.stepCrochet);
-		}
-		if (FlxG.keys.justPressed.Q)
-		{
-			changeNoteSustain(-Conductor.stepCrochet);
-		}
-
-		if (FlxG.keys.justPressed.TAB)
-		{
-			if (FlxG.keys.pressed.SHIFT)
+			if (FlxG.mouse.x > gridBG.x
+				&& FlxG.mouse.x < gridBG.x + gridBG.width
+				&& FlxG.mouse.y > gridBG.y
+				&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * _song.notes[curSection].lengthInSteps))
 			{
-				UI_box.selected_tab -= 1;
-				if (UI_box.selected_tab < 0)
-					UI_box.selected_tab = 2;
+				dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
+				if (FlxG.keys.pressed.SHIFT)
+					dummyArrow.y = FlxG.mouse.y;
+				else
+					dummyArrow.y = Math.floor(FlxG.mouse.y / GRID_SIZE) * GRID_SIZE;
 			}
-			else
-			{
-				UI_box.selected_tab += 1;
-				if (UI_box.selected_tab >= 3)
-					UI_box.selected_tab = 0;
-			}
-		}
 
-		if (!typingShit.hasFocus)
-		{
+			if (FlxG.keys.justPressed.ENTER)
+			{
+				lastSection = curSection;
+
+				PlayState.SONG = _song;
+				FlxG.sound.music.stop();
+				vocals.stop();
+				switchState(PlayState);
+			}
+
+			if (FlxG.keys.justPressed.E)
+			{
+				changeNoteSustain(Conductor.stepCrochet);
+			}
+			if (FlxG.keys.justPressed.Q)
+			{
+				changeNoteSustain(-Conductor.stepCrochet);
+			}
+
+			if (FlxG.keys.justPressed.TAB)
+			{
+				if (FlxG.keys.pressed.SHIFT)
+				{
+					UI_box.selected_tab -= 1;
+					if (UI_box.selected_tab < 0)
+						UI_box.selected_tab = 2;
+				}
+				else
+				{
+					UI_box.selected_tab += 1;
+					if (UI_box.selected_tab >= 3)
+						UI_box.selected_tab = 0;
+				}
+			}
 			if (FlxG.keys.justPressed.SPACE)
 			{
 				if (FlxG.sound.music.playing)
@@ -627,6 +624,15 @@ class ChartingState extends MusicBeatState
 					vocals.time = FlxG.sound.music.time;
 				}
 			}
+			FlxG.sound.muteKeys = [];
+			FlxG.sound.volumeDownKeys = [];
+			FlxG.sound.volumeUpKeys = [];
+		}
+		else
+		{
+			FlxG.sound.muteKeys = [48];
+			FlxG.sound.volumeDownKeys = [MINUS, NUMPADMINUS];
+			FlxG.sound.volumeUpKeys = [PLUS, NUMPADPLUS];
 		}
 
 		_song.bpm = tempBpm;
@@ -635,14 +641,6 @@ class ChartingState extends MusicBeatState
 				Conductor.changeBPM(Conductor.bpm + 1);
 			if (FlxG.keys.justPressed.DOWN)
 				Conductor.changeBPM(Conductor.bpm - 1); */
-
-		var shiftThing:Int = 1;
-		if (FlxG.keys.pressed.SHIFT)
-			shiftThing = 4;
-		if (FlxG.keys.justPressed.RIGHT || FlxG.keys.justPressed.D)
-			changeSection(curSection + shiftThing);
-		if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A)
-			changeSection(curSection - shiftThing);
 
 		bpmTxt.text = bpmTxt.text = Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2))
 			+ " / "
