@@ -96,7 +96,7 @@ class PlayState extends MusicBeatState
 	// --------------------
 	// ---- CHARACTERS ----
 	// --------------------
-	public static var opponentMode:Bool = true;
+	public static var opponentMode:Bool = false;
 	public static var dad:Character;
 	public static var gf:Character;
 	public static var boyfriend:Character;
@@ -2276,8 +2276,13 @@ class PlayState extends MusicBeatState
 		// notes.forEachAlive(function(note:Note) note.loadFrames());
 	}
 
-	public static inline function exit():Void
-		switchState(stateToBack);
+	public static function exit():Void
+	{
+		var args = [];
+		if (stateToBack == FreeplayState)
+			args.push(true);
+		switchState(stateToBack, args);
+	}
 
 	var blackscreenMidScroll:FlxSprite;
 	var blackscreen1:FlxSprite;

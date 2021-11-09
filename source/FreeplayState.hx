@@ -199,8 +199,6 @@ class FreeplayState extends MusicBeatState
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
 
-		FlxTween.color(bg, CoolUtil.camLerpShit(.25), bg.color, coolColors[songs[curSelected].week]);
-
 		// ninjamuffin color change sucks in windows lol
 		// var color2 = coolColors[songs[curSelected].week % coolColors.length];
 		// if (bg.color != color2)
@@ -208,43 +206,64 @@ class FreeplayState extends MusicBeatState
 
 		scoreText.text = '${langString('personalBest')}:' + lerpScore;
 		positionHighscore();
-		if (FlxG.mouse.wheel != 0)
-			changeSelection(FlxG.mouse.wheel == 1 ? -1 : 1);
 
-		for (item in grpSongs)
+		if (!exiting)
 		{
-			if ((FlxG.mouse.overlaps(item) || FlxG.mouse.overlaps(iconArray[grpSongs.members.indexOf(item)]))
-				&& item.ID == curSelected
-				&& FlxG.mouse.justPressed)
+			if (FlxG.mouse.wheel != 0)
+				changeSelection(FlxG.mouse.wheel == 1 ? -1 : 1);
+
+			for (item in grpSongs)
+			{
+				if ((FlxG.mouse.overlaps(item) || FlxG.mouse.overlaps(iconArray[grpSongs.members.indexOf(item)]))
+					&& item.ID == curSelected
+					&& FlxG.mouse.justPressed)
+					enterSong();
+			}
+
+			if (checkKey('SPACE') && songPlaying != curSelected && songs[curSelected].songName != "Alone-Funkin'")
+			{
+				for (i in [playBG, playTxt])
+					FlxTween.tween(i, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
+				previewSong(curSelected, false);
+			}
+
+			if (controls.UI_UP_P)
+				changeSelection(-1);
+			if (controls.UI_DOWN_P)
+				changeSelection(1);
+
+			if (controls.UI_LEFT_P)
+				changeDiff(-1);
+			if (controls.UI_RIGHT_P)
+				changeDiff(1);
+
+			if (controls.BACK)
+			{
+				exiting = true;
+				if (songPlaying != -1)
+				{
+					vocals.fadeOut(.25, 0);
+					FlxG.sound.music.fadeOut(.25, 0, function(twn:FlxTween)
+					{
+						MusicManager.playMainMusic(0);
+						FlxG.sound.music.fadeIn(.25, 0, 1);
+						FlxTween.cancelTweensOf(bg);
+						switchState(MainMenuState);
+					});
+				}
+				else
+				{
+					FlxTween.cancelTweensOf(bg);
+					switchState(MainMenuState);
+				}
+			}
+
+			if (controls.ACCEPT)
 				enterSong();
 		}
-
-		if (checkKey('SPACE') && songPlaying != curSelected && songs[curSelected].songName != "Alone-Funkin'")
-		{
-			for (i in [playBG, playTxt])
-				FlxTween.tween(i, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
-			previewSong(curSelected, false);
-		}
-
-		if (controls.UI_UP_P)
-			changeSelection(-1);
-		if (controls.UI_DOWN_P)
-			changeSelection(1);
-
-		if (controls.UI_LEFT_P)
-			changeDiff(-1);
-		if (controls.UI_RIGHT_P)
-			changeDiff(1);
-
-		if (controls.BACK)
-		{
-			FlxTween.cancelTweensOf(bg);
-			switchState(MainMenuState);
-		}
-
-		if (controls.ACCEPT)
-			enterSong();
 	}
+
+	var exiting:Bool = false;
 
 	function previewSong(songINT:Int, fromFinish:Bool):Void
 	{
@@ -275,17 +294,21 @@ class FreeplayState extends MusicBeatState
 
 	function enterSong():Void
 	{
-		FlxTween.cancelTweensOf(bg);
-		switch (songs[curSelected].songName.toLowerCase())
+		vocals.fadeOut(.25, 0);
+		FlxG.sound.music.fadeOut(.25, 0, function(twn:FlxTween)
 		{
-			#if ALLOW_ALONE_FUNKIN
-			case 'alone-funkin\'':
-				switchState(AloneFunkinState);
-			#end
-			default:
-				PlayState.loadSong(CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty), songs[curSelected].week,
-					coolColors[songs[curSelected].week], false);
-		}
+			FlxTween.cancelTweensOf(bg);
+			switch (songs[curSelected].songName.toLowerCase())
+			{
+				#if ALLOW_ALONE_FUNKIN
+				case 'alone-funkin\'':
+					switchState(AloneFunkinState);
+				#end
+				default:
+					PlayState.loadSong(CoolUtil.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty), songs[curSelected].week,
+						coolColors[songs[curSelected].week], false);
+			}
+		});
 	}
 
 	function changeDiff(change:Int = 0)
@@ -320,6 +343,7 @@ class FreeplayState extends MusicBeatState
 		if (force)
 			change = curSelected;
 
+		FlxTween.color(bg, CoolUtil.camLerpShit(.25), bg.color, coolColors[songs[curSelected].week]);
 		if (songPlaying == curSelected || songs[curSelected].songName == "Alone-Funkin'")
 			for (i in [playBG, playTxt])
 				FlxTween.tween(i, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
