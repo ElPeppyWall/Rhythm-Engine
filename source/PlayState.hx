@@ -348,7 +348,7 @@ class PlayState extends MusicBeatState
 		gf.scrollFactor.set(0.95, 0.95);
 
 		dad = new Character(100, 100, dadVersion, dadArgs, false, opponentMode);
-		boyfriend = new Character(770, 450, bfVersion, bfArgs, true, opponentMode);
+		boyfriend = new Character(770, 450, bfVersion, bfArgs, true, !opponentMode);
 
 		var camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
