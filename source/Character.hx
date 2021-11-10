@@ -597,7 +597,7 @@ class Character extends flixel.FlxSprite
 	function addAnim(animOnXML:String, animClass:Anims.Anim)
 	{
 		animClass = Anims.animFilter(animClass);
-		if (animClass.useIndices)
+		if (animClass.indices != null)
 			animation.addByIndices(animClass.name, animOnXML, animClass.indices, '', 24, animClass.loop);
 		else
 			animation.addByPrefix(animClass.name, animOnXML, animClass.frameRate, animClass.loop);

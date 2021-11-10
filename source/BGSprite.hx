@@ -45,10 +45,15 @@ class BGSprite extends flixel.FlxSprite
 				frames = Paths.getSparrowAtlas(spriteName[0], spriteName[1]);
 			for (anim in anims)
 			{
-				if (!anim.useIndices)
-					animation.addByPrefix(anim.name, anim.name, anim.frameRate, anim.loop);
+				if (!spriteArgs.contains(PACKER_ATLAS))
+				{
+					if (anim.indices == null)
+						animation.addByPrefix(anim.name, anim.name, anim.frameRate, anim.loop);
+					else
+						animation.addByIndices(anim.name, anim.name, anim.indices, '', anim.frameRate, anim.loop);
+				}
 				else
-					animation.addByIndices(anim.name, anim.name, anim.indices, '', anim.frameRate, anim.loop);
+					animation.add(anim.name, anim.indices, anim.frameRate, anim.loop);
 			}
 
 			playAnim(firstAnim.name);

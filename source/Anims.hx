@@ -5,7 +5,6 @@ typedef Anim =
 	@:optional var loop:Bool; // Anim Looped
 	@:optional var offsets:Array<Int>; // Anim Offsets
 	@:optional var playerOffsets:Array<Int>; // Anim Player Offsets (only for a Character)
-	@:optional var useIndices:Bool; // Anim Use Indices
 	@:optional var indices:Array<Int>; // Anim Indices
 }
 
@@ -24,12 +23,6 @@ class Anims
 
 		if (anim.playerOffsets == null)
 			anim.playerOffsets = [0, 0];
-
-		if (anim.useIndices == null)
-			anim.useIndices = false;
-
-		if (anim.indices == null)
-			anim.indices = [0];
 
 		return anim;
 	}
