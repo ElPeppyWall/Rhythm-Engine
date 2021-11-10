@@ -724,6 +724,5 @@ enum CharacterAttrib
 	PIXEL;
 	USE_DANCE_DIRS;
 	IS_GF;
-	HAS_DEAD;
 	HAS_IDLE_HOLD;
 }
