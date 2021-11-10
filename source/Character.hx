@@ -388,52 +388,52 @@ class Character extends flixel.FlxSprite
 
 				case 'bf-pixel':
 					frames = getCharacterFrames('weeb/bfPixel', 'week6');
-					animation.addByPrefix('idle', 'BF IDLE', 24, false);
-					animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
-					animation.addByPrefix('singLEFT', 'BF LEFT NOTE', 24, false);
-					animation.addByPrefix('singRIGHT', 'BF RIGHT NOTE', 24, false);
-					animation.addByPrefix('singDOWN', 'BF DOWN NOTE', 24, false);
-					animation.addByPrefix('singUPmiss', 'BF UP MISS', 24, false);
-					animation.addByPrefix('singLEFTmiss', 'BF LEFT MISS', 24, false);
-					animation.addByPrefix('singRIGHTmiss', 'BF RIGHT MISS', 24, false);
-					animation.addByPrefix('singDOWNmiss', 'BF DOWN MISS', 24, false);
+					if (!isDead)
+					{
+						animation.addByPrefix('idle', 'BF IDLE', 24, false);
+						animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
+						animation.addByPrefix('singLEFT', 'BF LEFT NOTE', 24, false);
+						animation.addByPrefix('singRIGHT', 'BF RIGHT NOTE', 24, false);
+						animation.addByPrefix('singDOWN', 'BF DOWN NOTE', 24, false);
+						animation.addByPrefix('singUPmiss', 'BF UP MISS', 24, false);
+						animation.addByPrefix('singLEFTmiss', 'BF LEFT MISS', 24, false);
+						animation.addByPrefix('singRIGHTmiss', 'BF RIGHT MISS', 24, false);
+						animation.addByPrefix('singDOWNmiss', 'BF DOWN MISS', 24, false);
 
-					addOffset('idle');
-					addOffset("singUP");
-					addOffset("singRIGHT");
-					addOffset("singLEFT");
-					addOffset("singDOWN");
-					addOffset("singUPmiss");
-					addOffset("singRIGHTmiss");
-					addOffset("singLEFTmiss");
-					addOffset("singDOWNmiss");
+						addOffset('idle');
+						addOffset("singUP");
+						addOffset("singRIGHT");
+						addOffset("singLEFT");
+						addOffset("singDOWN");
+						addOffset("singUPmiss");
+						addOffset("singRIGHTmiss");
+						addOffset("singLEFTmiss");
+						addOffset("singDOWNmiss");
 
-					setGraphicSize(Std.int(width * 6));
-					updateHitbox();
+						setGraphicSize(Std.int(width * 6));
+						updateHitbox();
 
-					playAnim('idle');
+						playAnim('idle');
 
-					width -= 100;
-					height -= 100;
+						width -= 100;
+						height -= 100;
+					}
+					else
+					{
+						animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
+						animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
+						animation.addByPrefix('deathLoop', "Retry Loop", 24, true);
+						animation.addByPrefix('deathConfirm', "RETRY CONFIRM", 24, false);
+						animation.play('firstDeath');
 
-					antialiasing = false;
+						addOffset('firstDeath');
+						addOffset('deathLoop', -37);
+						addOffset('deathConfirm', -37);
+						playAnim('firstDeath');
+						setGraphicSize(Std.int(width * 6));
+						updateHitbox();
+					}
 
-					flipX = true;
-				case 'bf-pixel-dead':
-					frames = getCharacterFrames('weeb/bfPixelsDEAD', 'week6');
-					animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
-					animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
-					animation.addByPrefix('deathLoop', "Retry Loop", 24, true);
-					animation.addByPrefix('deathConfirm', "RETRY CONFIRM", 24, false);
-					animation.play('firstDeath');
-
-					addOffset('firstDeath');
-					addOffset('deathLoop', -37);
-					addOffset('deathConfirm', -37);
-					playAnim('firstDeath');
-					// pixel bullshit
-					setGraphicSize(Std.int(width * 6));
-					updateHitbox();
 					antialiasing = false;
 					flipX = true;
 				case 'gf-pixel':
