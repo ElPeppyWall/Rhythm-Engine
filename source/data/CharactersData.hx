@@ -4,6 +4,7 @@ class CharactersData
 {
 	public static var characterNames:Map<String, String>;
 	public static final characterWithoutAntialiasing = ['bf-pixel', 'gf-pixel', 'senpai', 'senpai-angry', 'spirit'];
+	public static var characterDead:Map<String, String>;
 
 	public static function init()
 	{
@@ -34,5 +35,18 @@ class CharactersData
 			characterNames['senpai-angry'] = 'Senpai';
 			characterNames['spirit'] = '???Senpai???';
 		}
+		characterDead = new Map<String, String>();
+		{
+			characterDead['bf-car'] = 'bf';
+			characterDead['bf-christmas'] = 'bf';
+		}
+	}
+
+	public static function getCharDead(char:String):String
+	{
+		if (characterDead.exists(char))
+			return characterDead[char];
+		else
+			return char;
 	}
 }
