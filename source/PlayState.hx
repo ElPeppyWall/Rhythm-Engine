@@ -113,7 +113,7 @@ class PlayState extends MusicBeatState
 	// ---- CAMERAS ----
 	// -----------------
 	var cameraRightSide = false;
-	private var camZooming:Bool = false;
+	private var camZooming:Bool = true;
 	private var camGame:FlxCamera;
 	private var camBACKGROUND_OPACITY:FlxCamera;
 	private var camHUD:FlxCamera;
@@ -1169,7 +1169,6 @@ class PlayState extends MusicBeatState
 			switch (curBeat)
 			{
 				case 16:
-					camZooming = true;
 					gfSpeed = 2;
 				case 48:
 					gfSpeed = 1;
@@ -1265,9 +1264,6 @@ class PlayState extends MusicBeatState
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
-					if (curSong != 'tutorial')
-						camZooming = true;
-
 					opponentChar.sing(daNote);
 					opponentChar.holdTimer = 0;
 
@@ -2241,6 +2237,7 @@ class PlayState extends MusicBeatState
 
 	public function checkSettingsInGame(firstTime:Bool, fadeInStrums:Bool):Void
 	{
+		camZooming = curSong != 'tutorial' && getPref('camera-zoom');
 		camNOTES.flashSprite.scaleY = getPref('downscroll') ? -1 : 1;
 
 		if (getPref('downscroll'))
