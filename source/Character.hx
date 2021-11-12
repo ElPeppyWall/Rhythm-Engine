@@ -642,6 +642,14 @@ class Character extends flixel.FlxSprite
 		}
 	}
 
+	var newSize:Float = 1;
+
+	public function setNewSize(?_newSize:Float = 1):Void
+	{
+		newSize = _newSize;
+		scale.set(newSize, newSize);
+	}
+
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
 		if (curCharacter != 'null' && !getPref('ultra-optimize'))
@@ -650,7 +658,7 @@ class Character extends flixel.FlxSprite
 
 			var daOffset = animOffsets.get(AnimName);
 			if (animOffsets.exists(AnimName))
-				offset.set(daOffset[0], daOffset[1]);
+				offset.set(daOffset[0] * newSize, daOffset[1] * newSize);
 			else
 				offset.set(0, 0);
 
