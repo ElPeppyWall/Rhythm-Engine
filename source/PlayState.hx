@@ -1808,6 +1808,8 @@ class PlayState extends MusicBeatState
 					var stageCurtains = new BGSprite(['stagecurtains', 'shared'], [], -500, -300, 1.3, 1.3);
 					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
 					add(stageCurtains);
+					if (curSong == 'tutorial')
+						gfArgs = ['CHEER', 'SING'];
 				}
 			case 'spookeez', 'south', 'monster':
 				{
@@ -1835,6 +1837,7 @@ class PlayState extends MusicBeatState
 						}
 					};
 					bfArgs.push('SHAKE');
+					gfArgs.push('FEAR');
 				}
 			case 'pico', 'philly-nice', 'blammed':
 				{
@@ -1947,6 +1950,8 @@ class PlayState extends MusicBeatState
 							}
 						}
 					};
+
+					gfArgs.push('BLOWING');
 				}
 			case 'm.i.l.f' | 'satin-panties' | 'high':
 				{
