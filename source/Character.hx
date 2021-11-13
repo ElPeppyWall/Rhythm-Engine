@@ -83,6 +83,14 @@ class Character extends flixel.FlxSprite
 							animation.addByPrefix('scared', 'BF idle shaking', 24);
 							addOffset('scared', -4);
 						}
+						if (hasArg('DODGE'))
+						{
+							animation.addByPrefix('singHit', 'BF hit', 24);
+							animation.addByPrefix('singDodge', 'boyfriend dodge', 24);
+
+							addOffset('singHit', 15, 19);
+							addOffset('singDodge', -5, -14);
+						}
 						addOffset("singUPmiss", -29, 27);
 						addOffset("singRIGHTmiss", -30, 21);
 						addOffset("singLEFTmiss", 12, 24);
