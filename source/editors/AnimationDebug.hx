@@ -327,8 +327,6 @@ class AnimationDebug extends FlxState
 		};
 
 		check_dead = new FlxUICheckBox(10, 120, null, null, "Simulate Dead", 100);
-		check_dead.button.label.setFormat(Paths.font("vcr.ttf"), 13, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		check_dead.button.label.borderSize = 1.5;
 		check_dead.checked = false;
 		check_dead.callback = function():Void
 		{
