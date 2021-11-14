@@ -200,10 +200,10 @@ class Character extends flixel.FlxSprite
 					animation.addByPrefix('singRIGHT', 'Monster left note', 24, false);
 
 					addOffset('idle');
-					addOffset("singUP", -20, 94);
-					addOffset("singLEFT", -51, 30);
-					addOffset("singRIGHT", -30, 20);
-					addOffset("singDOWN", -30, -80);
+					addOffset("singUP", -25, 93);
+					addOffset("singLEFT", -58, 15);
+					addOffset("singRIGHT", -30, 4);
+					addOffset("singDOWN", -60, -83);
 					playAnim('idle');
 
 				case 'pico':
