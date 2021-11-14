@@ -21,12 +21,11 @@ class PauseSubState extends MusicBeatSubstate
 		langString('pauseOG')[2],
 		langString('pauseOG')[3],
 		langString('pauseOG')[4],
-		#if debug 'Animation Debug', 'Chart Editor',
-		#end
+		'Animation Debug',
+		'Chart Editor',
 		langString('pauseOG')[5],
 		langString('pauseOG')[6]
 	];
-	#if debug
 	var characterList = [
 		PlayState.dad.curCharacter,
 		PlayState.gf.curCharacter,
@@ -34,7 +33,6 @@ class PauseSubState extends MusicBeatSubstate
 		'BACK'
 	];
 	var grpIconShit:FlxTypedGroup<HealthIcon>;
-	#end
 	var practiceText:FlxText;
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
@@ -121,10 +119,8 @@ class PauseSubState extends MusicBeatSubstate
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
-		#if debug
 		grpIconShit = new FlxTypedGroup<HealthIcon>();
 		add(grpIconShit);
-		#end
 		regenMenu();
 
 		if (fromOptions)
@@ -190,14 +186,12 @@ class PauseSubState extends MusicBeatSubstate
 			case 'Toggle Practice Mode', "Alternar modo pausa":
 				PlayState.practiceMode = !PlayState.practiceMode;
 				practiceText.set_visible(PlayState.practiceMode);
-			#if debug
 			case 'Animation Debug':
 				lastSelected = curSelected;
 				menuItems = characterList;
 				regenMenu(true);
 			case 'Chart Editor':
 				switchState(ChartingState);
-			#end
 			case 'Options', "Opciones":
 				FlxG.state.openSubState(new PreferencesMenu(true));
 			case "Exit to menu", "Salir al menu":
@@ -257,14 +251,12 @@ class PauseSubState extends MusicBeatSubstate
 			}
 		}
 
-		#if debug
 		for (item in grpIconShit.members)
 		{
 			item.alpha = 0.6;
 			if (item.ID == curSelected)
 				item.alpha = 1;
 		}
-		#end
 	}
 
 	function regenMenu(animDebug = false):Void
@@ -273,10 +265,8 @@ class PauseSubState extends MusicBeatSubstate
 		for (i in 0...grpMenuShit.members.length)
 			grpMenuShit.remove(grpMenuShit.members[0], true);
 
-		#if debug
 		for (i in 0...grpIconShit.members.length)
 			grpIconShit.remove(grpIconShit.members[0], true);
-		#end
 
 		for (i in 0...menuItems.length)
 		{
@@ -286,7 +276,6 @@ class PauseSubState extends MusicBeatSubstate
 			songText.type = [IGNORE_X];
 			grpMenuShit.add(songText);
 
-			#if debug
 			if (animDebug && songText.text != 'BACK')
 			{
 				var icon = new HealthIcon(characterList[i]);
@@ -294,7 +283,6 @@ class PauseSubState extends MusicBeatSubstate
 				icon.sprTracker = songText;
 				grpIconShit.add(icon);
 			}
-			#end
 		}
 		curSelected = 0;
 		changeSelection();
