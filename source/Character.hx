@@ -64,7 +64,7 @@ class Character extends flixel.FlxSprite
 						});
 
 						var singOffsets = [[-38, -6], [-40, -50], [1, 27], [32, -7]];
-						var singOffsetsPlayer = [[12, -6], [-10, -50], [-29, 27], [-38, -7]];
+						var singOffsetsPlayer = [[2, -7], [-27, -48], [-45, 28], [-48, -6]];
 						for (dir in 0...4)
 							addAnim('BF NOTE ${notesDir[dir]}0', {
 								name: 'sing${notesDir[dir]}',
@@ -78,24 +78,25 @@ class Character extends flixel.FlxSprite
 						animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
 						animation.addByPrefix('hey', 'BF HEY', 24, false);
 
+						addOffset("singUPmiss", -44, 28);
+						addOffset("singRIGHTmiss", -46, 21);
+						addOffset("singLEFTmiss", -1, 19);
+						addOffset("singDOWNmiss", -33, -17);
+						addOffset("hey", -4, 5);
+
 						if (hasArg('SHAKE'))
 						{
 							animation.addByPrefix('scared', 'BF idle shaking', 24);
-							addOffset('scared', -4);
+							addOffset('scared', -6, 1);
 						}
 						if (hasArg('DODGE'))
 						{
-							animation.addByPrefix('singHIT', 'BF hit', 24);
-							animation.addByPrefix('singDODGE', 'boyfriend dodge', 24);
+							animation.addByPrefix('singHIT', 'BF hit', 24, false);
+							animation.addByPrefix('singDODGE', 'boyfriend dodge', 24, false);
 
-							addOffset('singHIT', 15, 19);
-							addOffset('singDODGE', -5, -14);
+							addOffset('singHIT', 13, 19);
+							addOffset('singDODGE', -9, -16);
 						}
-						addOffset("singUPmiss", -29, 27);
-						addOffset("singRIGHTmiss", -30, 21);
-						addOffset("singLEFTmiss", 12, 24);
-						addOffset("singDOWNmiss", -11, -19);
-						addOffset("hey", 7, 4);
 						playAnim('idle');
 					}
 					else
@@ -107,6 +108,7 @@ class Character extends flixel.FlxSprite
 						addOffset('firstDeath', 37, 11);
 						addOffset('deathLoop', 37, 5);
 						addOffset('deathConfirm', 37, 69);
+						playAnim('firstDeath');
 					}
 
 					flipX = true;

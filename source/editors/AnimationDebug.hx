@@ -153,13 +153,32 @@ class AnimationDebug extends FlxState
 			var singList = ['idle', 'singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 			var singNormalList = ['idle', 'singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 			var singAltList = ['idle', 'singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
+			var singShiftList = ['idle', 'singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
+			switch (char.curCharacter)
+			{
+				case 'parents-christmas':
+					singAltList = ['idle', 'singLEFT-alt', 'singDOWN-alt', 'singUP-alt', 'singRIGHT-alt'];
+				case 'bf':
+					singShiftList = ['hey', 'singLEFTmiss', 'singDOWNmiss', 'singUPmiss', 'singRIGHTmiss'];
+					singAltList = ['scared', 'singHIT', 'singDODGE', 'singUP', 'singRIGHT'];
+					if (char.isDead)
+						singNormalList = ['firstDeath', 'deathLoop', 'deathLoop', 'deathConfirm', 'deathLoop'];
+				case 'gf':
+					singNormalList = ['sad', 'danceLeft', 'sad', 'sad', 'danceRight'];
+					singShiftList = ['sad', 'singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
+					singAltList = ['scared', 'cheer', 'duck', 'hairBlow', 'hairFall'];
+				case 'speaker':
+					singNormalList = ['danceLeft', 'danceLeft', 'danceLeft', 'danceLeft', 'danceRight'];
+			}
 			switch (char.curCharacter)
 			{
 				default:
 					if (checkKey('ALT', PRESSED))
 						singList = singAltList;
+					else if (checkKey('SHIFT', PRESSED))
+						singList = singShiftList;
 					else
-						singList = singAltList;
+						singList = singNormalList;
 
 					char.playAnim(singList[controlArray.indexOf(true)]);
 			}
@@ -270,6 +289,7 @@ class AnimationDebug extends FlxState
 
 	var charDropText:FlxInputText;
 	var check_player:FlxUICheckBox;
+	var check_dead:FlxUICheckBox;
 	var ghostChar_check:FlxUICheckBox;
 
 	var focusGained = function():Void
@@ -306,6 +326,15 @@ class AnimationDebug extends FlxState
 			char.alpha = ghostChar.visible ? .85 : 1;
 		};
 
+		check_dead = new FlxUICheckBox(10, 120, null, null, "Simulate Dead", 100);
+		check_dead.button.label.setFormat(Paths.font("vcr.ttf"), 13, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		check_dead.button.label.borderSize = 1.5;
+		check_dead.checked = false;
+		check_dead.callback = function():Void
+		{
+			reloadChar();
+		};
+
 		charDropText = new FlxInputText(10, 30, 70, daAnim, 8, FlxColor.BLACK, FlxColor.TRANSPARENT);
 		charDropText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		charDropText.focusGained = focusGained;
@@ -321,6 +350,7 @@ class AnimationDebug extends FlxState
 		tab_group.add(new FlxText(charDropText.x, charDropText.y - 18, 0, 'Character:'));
 		tab_group.add(check_player);
 		tab_group.add(ghostChar_check);
+		tab_group.add(check_dead);
 		tab_group.add(reloadCharacter);
 		tab_group.add(charDropText);
 		UI_box.addGroup(tab_group);
@@ -334,12 +364,26 @@ class AnimationDebug extends FlxState
 			remove(ghostChar);
 		}
 
-		char = new Character(0, 0, daAnim, [], firstTime ? isPlayer : check_player.checked, false);
+		var charArgs:Array<String> = [];
+
+		switch (daAnim)
+		{
+			case 'bf':
+				charArgs = ['DODGE', 'SHAKE'];
+			case 'gf':
+				charArgs = ['BLOWING', 'CHEER', 'DUCK', 'FEAR', 'SING'];
+		}
+
+		if (check_dead != null)
+			if (check_dead.checked)
+				charArgs = ['DEAD'];
+
+		char = new Character(0, 0, daAnim, charArgs, firstTime ? isPlayer : check_player.checked, false);
 		char.debugMode = true;
 		char.antialiasing = false;
 		add(char);
 
-		ghostChar = new Character(0, 0, char.curCharacter, [], firstTime ? isPlayer : check_player.checked, false);
+		ghostChar = new Character(0, 0, char.curCharacter, charArgs, firstTime ? isPlayer : check_player.checked, false);
 		ghostChar.debugMode = true;
 		ghostChar.antialiasing = false;
 		ghostChar.alpha = 0.6;
