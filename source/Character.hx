@@ -234,20 +234,30 @@ class Character extends flixel.FlxSprite
 					var tex = getCharacterFrames('bfCar', 'week4');
 					frames = tex;
 					animation.addByPrefix('idle', 'BF idle dance', 24, false);
+					animation.addByIndices('idleHOLD', 'BF idle dance', [10, 11, 12, 13], "", 24, true);
 					animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
+					animation.addByIndices('singUPHOLD', 'BF NOTE UP0', [12, 13, 14, 15], "", 24, true);
 					animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
+					animation.addByIndices('singLEFTHOLD', 'BF NOTE LEFT0', [13, 14, 15, 16], "", 24, true);
 					animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
+					animation.addByIndices('singRIGHTHOLD', 'BF NOTE RIGHT0', [59, 60, 61, 62], "", 24, true);
 					animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
+					animation.addByIndices('singDOWNHOLD', 'BF NOTE DOWN0', [27, 28, 29, 30], "", 24, true);
 					animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
 					animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
 					animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
 					animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
 
 					addOffset('idle', -5);
+					addOffset('idleHOLD', -5);
 					addOffset("singUP", -29, 27);
+					addOffset("singUPHOLD", -29, 27);
 					addOffset("singRIGHT", -38, -7);
+					addOffset("singRIGHTHOLD", -38, -7);
 					addOffset("singLEFT", 12, -6);
+					addOffset("singLEFTHOLD", 12, -6);
 					addOffset("singDOWN", -10, -50);
+					addOffset("singDOWNHOLD", -10, -50);
 					addOffset("singUPmiss", -29, 27);
 					addOffset("singRIGHTmiss", -30, 21);
 					addOffset("singLEFTmiss", 12, 24);
@@ -272,18 +282,28 @@ class Character extends flixel.FlxSprite
 					frames = getCharacterFrames('momCar', 'week4');
 
 					animation.addByPrefix('idle', "Mom Idle", 24, false);
+					animation.addByIndices('idleHOLD', 'Mom Idle', [11, 12, 13, 14], "", 24, true);
 					animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
+					animation.addByIndices('singUPHOLD', 'Mom Up Pose', [12, 13, 14, 15], "", 24, true);
 					animation.addByPrefix('singDOWN', "MOM DOWN POSE", 24, false);
+					animation.addByIndices('singDOWNHOLD', 'MOM DOWN POSE', [12, 13, 14, 15], "", 24, true);
 					animation.addByPrefix('singLEFT', 'Mom Left Pose', 24, false);
+					animation.addByIndices('singLEFTHOLD', 'Mom Left Pose', [7, 8, 9, 10], "", 24, true);
 					// ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
 					// CUZ DAVE IS DUMB!
 					animation.addByPrefix('singRIGHT', 'Mom Pose Left', 24, false);
+					animation.addByIndices('singRIGHTHOLD', 'Mom Pose Left', [7, 8, 9, 10], "", 24, true);
 
 					addOffset('idle');
+					addOffset('idleHOLD');
 					addOffset("singUP", 14, 71);
+					addOffset("singUPHOLD", 14, 71);
 					addOffset("singRIGHT", 10, -60);
+					addOffset("singRIGHTHOLD", 10, -60);
 					addOffset("singLEFT", 250, -23);
+					addOffset("singLEFTHOLD", 250, -23);
 					addOffset("singDOWN", 20, -160);
+					addOffset("singDOWNHOLD", 20, -160);
 
 					playAnim('idle');
 				case 'mom':
@@ -541,6 +561,7 @@ class Character extends flixel.FlxSprite
 			addAnim('idle', {name: 'idle'});
 			playAnim('idle');
 			animation.play('idle', true);
+			active = false;
 		}
 		dance();
 
@@ -584,6 +605,10 @@ class Character extends flixel.FlxSprite
 				holdTimer = 0;
 			}
 		}
+
+		if (animation.getByName('${animation.curAnim.name}HOLD') != null)
+			if (animation.curAnim.finished)
+				playAnim('${animation.curAnim.name}HOLD');
 
 		switch (curCharacter)
 		{
@@ -749,5 +774,4 @@ enum CharacterAttrib
 	PIXEL;
 	USE_DANCE_DIRS;
 	IS_GF;
-	HAS_IDLE_HOLD;
 }
