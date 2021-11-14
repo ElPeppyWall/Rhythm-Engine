@@ -123,22 +123,19 @@ class AnimationDebug extends FlxState
 		if (FlxG.mouse.wheel != 0)
 			FlxG.camera.zoom += (FlxG.mouse.wheel / 10);
 
-		if (!textingAnim)
-		{
-			if (FlxG.keys.pressed.I)
-				camFollow.velocity.y = -180;
-			else if (FlxG.keys.pressed.K)
-				camFollow.velocity.y = 180;
-			else
-				camFollow.velocity.y = 0;
+		if (FlxG.keys.pressed.I)
+			camFollow.velocity.y = -180;
+		else if (FlxG.keys.pressed.K)
+			camFollow.velocity.y = 180;
+		else
+			camFollow.velocity.y = 0;
 
-			if (FlxG.keys.pressed.J)
-				camFollow.velocity.x = -180;
-			else if (FlxG.keys.pressed.L)
-				camFollow.velocity.x = 180;
-			else
-				camFollow.velocity.x = 0;
-		}
+		if (FlxG.keys.pressed.J)
+			camFollow.velocity.x = -180;
+		else if (FlxG.keys.pressed.L)
+			camFollow.velocity.x = 180;
+		else
+			camFollow.velocity.x = 0;
 
 		var controlArray = [
 			FlxG.keys.justPressed.SPACE,
@@ -148,7 +145,7 @@ class AnimationDebug extends FlxState
 			FlxG.keys.justPressed.D
 		];
 
-		if (controlArray.contains(true) && !textingAnim)
+		if (controlArray.contains(true))
 		{
 			var singList = ['idle', 'singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 			var singNormalList = ['idle', 'singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
@@ -169,6 +166,8 @@ class AnimationDebug extends FlxState
 					singAltList = ['scared', 'cheer', 'duck', 'hairBlow', 'hairFall'];
 				case 'speaker':
 					singNormalList = ['danceLeft', 'danceLeft', 'danceLeft', 'danceLeft', 'danceRight'];
+				case 'spooky':
+					singShiftList = ['danceLeft', 'danceLeft', 'danceLeft', 'danceLeft', 'danceRight'];
 			}
 			switch (char.curCharacter)
 			{
@@ -182,35 +181,16 @@ class AnimationDebug extends FlxState
 
 					char.playAnim(singList[controlArray.indexOf(true)]);
 			}
-			charAnims.selectedLabel = char.animation.curAnim.name;
-		}
-
-		var holdShift = FlxG.keys.pressed.SHIFT;
-		var multiplier = 1;
-		if (holdShift)
-			multiplier = 10;
-
-		animDropText = new FlxInputText(60, 50, 1000, '', 100, FlxColor.BLACK, FlxColor.TRANSPARENT);
-		animDropText.setFormat(Paths.font("vcr.ttf"), 72, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		animDropText.screenCenter();
-		animDropText.focusGained = focusGained;
-		animDropText.focusLost = focusLost;
-		animDropText.cameras = [camHUD];
-
-		if (FlxG.keys.justPressed.Z)
-		{
-			if (!textingAnim)
-			{
-				textingAnim = true;
-				add(animDropText);
-				animDropText.hasFocus = true;
-				animDropText.focusGained();
-			}
 		}
 
 		var checkArray = [checkKey('UP'), checkKey('DOWN'), checkKey('LEFT'), checkKey('RIGHT')];
 		if (checkArray.contains(true))
 		{
+			var holdShift = FlxG.keys.pressed.SHIFT;
+			var multiplier = 1;
+			if (holdShift)
+				multiplier = 10;
+
 			if (checkArray[0])
 				char.animOffsets.get(char.animation.curAnim.name)[1] += 1 * multiplier;
 			if (checkArray[1])
@@ -225,41 +205,12 @@ class AnimationDebug extends FlxState
 
 		if (checkKey('U'))
 			trace(generateOffsetCode(char.animation.curAnim.name));
-		// if (FlxG.keys.justPressed.Z)
-
-		// {
-		// 	var daTextInput = new FlxInputText(0, 0,)
-		// }
-
-		// if (FlxG.mouse.pressed)
-		// {
-		// 	updateTexts();
-		// 	char.animOffsets.get(char.animation.curAnim.name)[0] = FlxG.mouse.x - char.x - char.offset.x;
-		// 	char.animOffsets.get(char.animation.curAnim.name)[1] = FlxG.mouse.y - char.y - char.offset.y;
-		// 	updateTexts();
-		// 	genBoyOffsets(false);
-		// 	char.playAnim(char.animation.curAnim.name);
-		// }
 
 		if (FlxG.keys.justPressed.ENTER)
-		{
-			if (!textingAnim)
-				LoadingState.loadAndSwitchState(PlayState);
-			else
-			{
-				textingAnim = false;
-				changeAnim(animDropText.text);
-				remove(animDropText);
-				animDropText.text = '';
-				animDropText.hasFocus = false;
-				animDropText.focusLost();
-			}
-		}
+			LoadingState.loadAndSwitchState(PlayState);
 
 		if (FlxG.keys.justPressed.ESCAPE)
-		{
 			saveOffsetsInCode();
-		}
 		super.update(elapsed);
 	}
 
@@ -268,9 +219,6 @@ class AnimationDebug extends FlxState
 		char.playAnim(daAnim);
 		charAnims.selectedLabel = char.animation.curAnim.name;
 	}
-
-	var textingAnim = false;
-	var animDropText:FlxInputText;
 
 	private function saveOffsetsInCode():Void
 	{

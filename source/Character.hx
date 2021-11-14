@@ -183,10 +183,10 @@ class Character extends flixel.FlxSprite
 					addOffset('danceLeft');
 					addOffset('danceRight');
 
-					addOffset("singUP", -20, 26);
-					addOffset("singRIGHT", -130, -14);
-					addOffset("singLEFT", 130, -10);
-					addOffset("singDOWN", -50, -130);
+					addOffset("singUP", -20, 24);
+					addOffset("singRIGHT", -119, -15);
+					addOffset("singLEFT", 112, -16);
+					addOffset("singDOWN", -18, -142);
 
 					playAnim('danceRight');
 
