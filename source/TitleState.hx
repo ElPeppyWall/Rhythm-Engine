@@ -113,7 +113,7 @@ class TitleState extends MusicBeatState
 		#elseif OPTIONS
 		switchState(OptionsMenu);
 		#elseif PLAYSTATE
-		PlayState.loadSong('m.i.l.f-hard', 4, false);
+		PlayState.loadSong('m.i.l.f-hard', 4, 0xFFFFFF, false);
 		#else
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
