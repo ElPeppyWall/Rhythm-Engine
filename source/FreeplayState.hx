@@ -84,6 +84,9 @@ class FreeplayState extends MusicBeatState
 				add(icon);
 		}
 
+		for (i in 0...100)
+			grpSongs.update(0);
+
 		scoreText = new FlxText(0.7 * FlxG.width, 5, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreText.borderSize = 1.5;
@@ -238,28 +241,31 @@ class FreeplayState extends MusicBeatState
 				changeDiff(1);
 
 			if (controls.BACK)
-			{
-				exiting = true;
-				if (songPlaying != -1)
-				{
-					vocals.fadeOut(.25, 0);
-					FlxG.sound.music.fadeOut(.25, 0, function(twn:FlxTween)
-					{
-						MusicManager.playMainMusic(0);
-						FlxG.sound.music.fadeIn(.25, 0, 1);
-						FlxTween.cancelTweensOf(bg);
-						switchState(MainMenuState);
-					});
-				}
-				else
-				{
-					FlxTween.cancelTweensOf(bg);
-					switchState(MainMenuState);
-				}
-			}
+				back();
 
 			if (controls.ACCEPT)
 				enterSong();
+		}
+	}
+
+	function back():Void
+	{
+		exiting = true;
+		if (songPlaying != -1)
+		{
+			vocals.fadeOut(.25, 0);
+			FlxG.sound.music.fadeOut(.25, 0, function(twn:FlxTween)
+			{
+				MusicManager.playMainMusic(0);
+				FlxG.sound.music.fadeIn(.25, 0, 1);
+				FlxTween.cancelTweensOf(bg);
+				switchState(MainMenuState);
+			});
+		}
+		else
+		{
+			FlxTween.cancelTweensOf(bg);
+			switchState(MainMenuState);
 		}
 	}
 

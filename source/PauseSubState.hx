@@ -296,6 +296,8 @@ class PauseSubState extends MusicBeatSubstate
 			}
 			#end
 		}
+		for (i in 0...100)
+			grpMenuShit.update(0);
 		curSelected = 0;
 		changeSelection();
 	}
