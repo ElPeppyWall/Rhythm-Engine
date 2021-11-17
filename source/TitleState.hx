@@ -90,7 +90,7 @@ class TitleState extends MusicBeatState
 		titleText = new FlxSprite(100, FlxG.height * 0.8);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
-		if (!getPref('flashing-menu'))
+		if (getPref('flashing-menu'))
 			titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
 		else
 			titleText.animation.addByIndices('press', "ENTER PRESSED", [1], '', 24);
