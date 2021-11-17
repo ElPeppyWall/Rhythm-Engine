@@ -93,9 +93,11 @@ class Character extends flixel.FlxSprite
 						{
 							animation.addByPrefix('singHIT', 'BF hit', 24, false);
 							animation.addByPrefix('singDODGE', 'boyfriend dodge', 24, false);
+							animation.addByIndices('singDODGEHOLD', 'boyfriend dodge', [13, 14, 15], "", 24, true);
 
 							addOffset('singHIT', 13, 19);
 							addOffset('singDODGE', -9, -16);
+							addOffset('singDODGEHOLD', -9, -16);
 						}
 						playAnim('idle');
 					}
@@ -606,7 +608,7 @@ class Character extends flixel.FlxSprite
 			}
 		}
 
-		if (animation.getByName('${animation.curAnim.name}HOLD') != null)
+		if (animation.getByName('${animation.curAnim.name}HOLD') != null && !debugMode)
 			if (animation.curAnim.finished)
 				playAnim('${animation.curAnim.name}HOLD');
 
