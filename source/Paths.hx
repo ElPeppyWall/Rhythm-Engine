@@ -78,15 +78,11 @@ class Paths
 	inline static public function font(key:String)
 		return 'assets/fonts/$key';
 
-	inline static public function getSparrowAtlas(key:String, ?library:String)
+	inline static public function getSparrowAtlas(key:String, ?library:String, ?overrideXML:String)
 	{
-		#if assetsLogger
-		if (!OpenFlAssets.exists(image(key, library)))
-			trace('ERROR: Could not find $library/images/$key');
-		if (!OpenFlAssets.exists(file('images/$key.xml', library)))
-			trace('ERROR: Could not find $library/images/$key.xml');
-		#end
-		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));
+		if (overrideXML == null)
+			overrideXML = key;
+		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$overrideXML.xml', library));
 	}
 
 	inline static public function getPackerAtlas(key:String, ?library:String)
