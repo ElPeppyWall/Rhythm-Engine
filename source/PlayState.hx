@@ -2030,7 +2030,7 @@ class PlayState extends MusicBeatState
 					bgEscalator.setGraphicSize(Std.int(bgEscalator.width * 0.9));
 					add(bgEscalator);
 
-					var tree = new BGSprite(['christmas/christmasTree', 'week5'], [], -370, -250, .4, .4);
+					var tree = new BGSprite(['christmas/christmasTree', 'week5'], [], 370, -250, .4, .4);
 					add(tree);
 
 					var bottomBoppers = new BGSprite(['christmas/bottomBop', 'week5'], [], -300, 140, .9, .9, [{name: 'Bottom Level Boppers'}]);
