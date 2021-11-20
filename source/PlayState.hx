@@ -961,8 +961,9 @@ class PlayState extends MusicBeatState
 				vocals.pause();
 			}
 
-			if (!startTimer.finished)
-				startTimer.active = false;
+			if (startTimer != null)
+				if (!startTimer.finished)
+					startTimer.active = false;
 		}
 
 		super.openSubState(SubState);
@@ -975,18 +976,22 @@ class PlayState extends MusicBeatState
 			if (FlxG.sound.music != null && !startingSong)
 				resyncVocals();
 
-			if (!startTimer.finished)
-				startTimer.active = true;
+			if (startTimer != null)
+				if (!startTimer.finished)
+					startTimer.active = true;
 			paused = false;
 
 			#if (windows && cpp)
-			if (startTimer.finished)
+			if (startTimer != null)
 			{
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + curDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
-			}
-			else
-			{
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + curDifficultyText + ")", iconRPC);
+				if (startTimer.finished)
+				{
+					DiscordClient.changePresence(detailsText, SONG.song + " (" + curDifficultyText + ")", iconRPC, true, songLength - Conductor.songPosition);
+				}
+				else
+				{
+					DiscordClient.changePresence(detailsText, SONG.song + " (" + curDifficultyText + ")", iconRPC);
+				}
 			}
 			#end
 		}
