@@ -187,7 +187,7 @@ class PauseSubState extends MusicBeatSubstate
 				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-normal', PlayState.curWeek, PlayState.weekColor, PlayState.isStoryMode, true);
 			case 'HARD':
 				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-hard', PlayState.curWeek, PlayState.weekColor, PlayState.isStoryMode, true);
-			case 'Toggle Practice Mode', "Alternar modo pausa":
+			case 'Toggle Practice Mode', "Alternar modo practica":
 				PlayState.practiceMode = !PlayState.practiceMode;
 				practiceText.set_visible(PlayState.practiceMode);
 			#if debug
