@@ -84,9 +84,6 @@ class FreeplayState extends MusicBeatState
 				add(icon);
 		}
 
-		for (i in 0...100)
-			grpSongs.update(0);
-
 		scoreText = new FlxText(0.7 * FlxG.width, 5, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreText.borderSize = 1.5;
@@ -115,6 +112,8 @@ class FreeplayState extends MusicBeatState
 		add(playTxt);
 
 		changeSelection();
+		for (i in 0...100)
+			grpSongs.update(0);
 		changeDiff();
 
 		MusicManager.checkPlaying();
