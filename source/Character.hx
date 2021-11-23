@@ -700,6 +700,7 @@ class Character extends flixel.FlxSprite
 		{
 			animation.play(AnimName + animSuffix, Force, Reversed, Frame);
 
+			AnimName = animation.curAnim.name;
 			var daOffset = animOffsets.get(AnimName);
 			if (animOffsets.exists(AnimName))
 				offset.set(daOffset[0] * newSize, daOffset[1] * newSize);
