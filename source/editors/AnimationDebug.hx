@@ -109,6 +109,7 @@ class AnimationDebug extends FlxState
 
 	override function update(elapsed:Float)
 	{
+		#if FLX_MOUSE
 		if (FlxG.mouse.overlaps(leHealthIcon) && FlxG.mouse.justPressed)
 		{
 			switch (leHealthIcon.animation.curAnim.curFrame)
@@ -122,6 +123,7 @@ class AnimationDebug extends FlxState
 
 		if (FlxG.mouse.wheel != 0)
 			FlxG.camera.zoom += (FlxG.mouse.wheel / 10);
+		#end
 
 		if (FlxG.keys.pressed.I)
 			camFollow.velocity.y = -180;

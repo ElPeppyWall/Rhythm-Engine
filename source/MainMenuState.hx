@@ -4,7 +4,6 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
@@ -50,9 +49,6 @@ class MainMenuState extends MusicBeatState
 		#if (windows && cpp)
 		DiscordClient.changePresence("In the Menus", null);
 		#end
-
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
 
 		MusicManager.checkPlaying();
 
@@ -108,10 +104,8 @@ class MainMenuState extends MusicBeatState
 		versionShit.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		versionShit.borderSize = 1.25;
 		versionShit.screenCenter(X);
+		versionShit.scrollFactor.set();
 		add(versionShit);
-
-		if (getPref("first-time"))
-			null; // anashei;
 
 		changeItem();
 		super.create();
@@ -129,32 +123,45 @@ class MainMenuState extends MusicBeatState
 		#end
 		if (!selectedSomethin)
 		{
-			if (FlxG.mouse.justMoved)
-				for (opItem in menuItems)
+			var up = false, down = false, accept = false, back = false;
+			#if mobileC
+			for (swipe in FlxG.swipes)
+			{
+				var f = swipe.startPosition.x - swipe.endPosition.x;
+				var g = swipe.startPosition.y - swipe.endPosition.y;
+				if (25 <= Math.sqrt(f * f + g * g))
 				{
-					if (FlxG.mouse.overlaps(opItem) && !selectedSomethin)
-					{
-						if (curSelected != opItem.ID)
-							changeItem(opItem.ID, true);
-
-						if (FlxG.mouse.justPressed)
-							selectItem();
-					}
+					if ((-45 <= swipe.startPosition.angleBetween(swipe.endPosition)
+						&& 45 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+						down = true;
+					if (-180 <= swipe.startPosition.angleBetween(swipe.endPosition)
+						&& -135 >= swipe.startPosition.angleBetween(swipe.endPosition)
+						|| (135 <= swipe.startPosition.angleBetween(swipe.endPosition)
+							&& 180 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+						up = true;
 				}
+				else
+					accept = true;
+			}
+			if (MobileControls.androidBack)
+				back = true;
+			#else
+			up = controls.UI_UP_P;
+			down = controls.UI_DOWN_P;
+			back = controls.BACK;
+			accept = controls.ACCEPT;
+			#end
 
-			if (FlxG.mouse.wheel != 0)
-				changeItem(FlxG.mouse.wheel == 1 ? -1 : 1);
-
-			if (controls.UI_UP_P)
+			if (up)
 				changeItem(-1);
 
-			if (controls.UI_DOWN_P)
+			if (down)
 				changeItem(1);
 
-			if (controls.BACK)
+			if (back)
 				switchState(TitleState);
 
-			if (controls.ACCEPT)
+			if (accept)
 				selectItem();
 		}
 
@@ -208,8 +215,6 @@ class MainMenuState extends MusicBeatState
 							case 'freeplay':
 								switchState(FreeplayState);
 							case 'options':
-								FlxTransitionableState.skipNextTransIn = true;
-								FlxTransitionableState.skipNextTransOut = true;
 								switchState(OptionsMenu);
 						}
 					};

@@ -6,6 +6,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.text.FlxTypeText;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -58,6 +59,8 @@ class PreferencesMenu extends MusicBeatSubstate
 		}
 
 		sprOpt = new AlphabetList(optionsNameList);
+		for (i in 0...100)
+			sprOpt.update(0);
 		add(sprOpt);
 
 		descriptionBG = new FlxSprite(0.7 * FlxG.width - 6, 0).makeGraphic(1, Std.int(FlxG.height / 2), FlxColor.BLACK);
@@ -113,9 +116,17 @@ class PreferencesMenu extends MusicBeatSubstate
 
 		sprOpt.changeSelection(0, false);
 
+		#if mobileC
+		key_shift = new FlxSprite(prefBG.x, prefBG.y + 100, Paths.image('mobileControls/key_shift', 'shared'));
+		add(key_shift);
+		#end
 		if (isPause)
 			cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
+
+	#if mobileC
+	var key_shift:FlxSprite;
+	#end
 
 	var optionsNameList(get, never):Array<String>;
 
@@ -190,7 +201,14 @@ class PreferencesMenu extends MusicBeatSubstate
 						}
 						else makeAnError();
 					case 'controls':
+						#if mobileC
+						if (!isPause)
+							FlxG.state.openSubState(new MobileControlsSubState());
+						else
+							makeAnError();
+						#else
 						FlxG.state.openSubState(new KeyBindsMenu(isPause));
+						#end
 				}
 		}
 		if (curPref != 'language')
@@ -199,42 +217,63 @@ class PreferencesMenu extends MusicBeatSubstate
 
 	override function update(elapsed:Float)
 	{
-		for (item in sprOpt)
+		var up = false,
+			down = false,
+			left = false,
+			right = false,
+			accept = false,
+			back = false;
+		#if mobileC
+		for (swipe in FlxG.swipes)
 		{
-			if (FlxG.mouse.overlaps(item) && item.ID == curSelected && FlxG.mouse.justPressed)
-				accept();
-		}
-		if (controls.ACCEPT)
-			accept();
-
-		if (controls.UI_LEFT_P || controls.UI_RIGHT_P)
-		{
-			var change = controls.UI_LEFT_P ? -1 : 1;
-			var floatChange = controls.UI_LEFT_P ? -.01 : .01;
-			if (KeyBinds.checkKey('SHIFT', PRESSED))
+			var f = swipe.startPosition.x - swipe.endPosition.x;
+			var g = swipe.startPosition.y - swipe.endPosition.y;
+			if (25 <= Math.sqrt(f * f + g * g))
 			{
-				change = controls.UI_LEFT_P ? -10 : 10;
-				floatChange = controls.UI_LEFT_P ? -.1 : .1;
+				if ((-45 <= swipe.startPosition.angleBetween(swipe.endPosition)
+					&& 45 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+					down = true;
+				if (-135 < swipe.startPosition.angleBetween(swipe.endPosition)
+					&& -45 > swipe.startPosition.angleBetween(swipe.endPosition))
+					left = true;
+				if (45 < swipe.startPosition.angleBetween(swipe.endPosition) && 135 > swipe.startPosition.angleBetween(swipe.endPosition))
+					right = true;
+				if (-180 <= swipe.startPosition.angleBetween(swipe.endPosition)
+					&& -135 >= swipe.startPosition.angleBetween(swipe.endPosition)
+					|| (135 <= swipe.startPosition.angleBetween(swipe.endPosition)
+						&& 180 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+					up = true;
 			}
-			switch (curPrefType)
-			{
-				case Int:
-					setPref(curPref, getPref(curPref) + change);
-				case Float:
-					setPref(curPref, getPref(curPref) + floatChange);
-				case Bool:
-					toggleOption(curPref);
-			}
-			sprOpt._changeSelection(false);
-		}
-		if (controls.BACK)
-		{
-			close();
-			if (!isPause)
-				CoolUtil.switchState(MainMenuState);
 			else
-				FlxG.state.openSubState(new PauseSubState(PlayState.boyfriend.getScreenPosition().x, PlayState.boyfriend.getScreenPosition().y, true));
+				accept = true;
 		}
+		if (MobileControls.androidBack)
+			back = true;
+		if (sprOpt.canChangeSel)
+		{
+			if (up)
+				sprOpt.changeSelection(-1);
+			if (down)
+				sprOpt.changeSelection(1);
+		}
+		#else
+		up = controls.UI_UP_P;
+		down = controls.UI_DOWN_P;
+		left = controls.UI_LEFT_P;
+		right = controls.UI_RIGHT_P;
+		back = controls.BACK;
+		accept = controls.ACCEPT;
+		#end
+		if (cast(accept, Bool))
+			this.accept();
+
+		if (left)
+			leftOrRight(-1);
+		if (right)
+			leftOrRight(1);
+
+		if (cast(back, Bool))
+			this.back();
 
 		descriptionTxt.x = (FlxG.width - descriptionTxt.width - 6);
 		prefTxt.x = (FlxG.width - descriptionTxt.width - 6);
@@ -243,6 +282,35 @@ class PreferencesMenu extends MusicBeatSubstate
 		prefBG.scale.x = (FlxG.width - descriptionTxt.x + 6);
 		prefBG.x = (FlxG.width - descriptionBG.scale.x / 2);
 		super.update(elapsed);
+	}
+
+	function leftOrRight(dir:Int):Void
+	{
+		var floatChange = dir / 100;
+		if (KeyBinds.checkKey('SHIFT', PRESSED))
+		{
+			dir *= 10;
+			floatChange *= 10;
+		}
+		switch (curPrefType)
+		{
+			case Int:
+				setPref(curPref, getPref(curPref) + dir);
+			case Float:
+				setPref(curPref, getPref(curPref) + floatChange);
+			case Bool:
+				toggleOption(curPref);
+		}
+		sprOpt._changeSelection(false);
+	}
+
+	function back():Void
+	{
+		close();
+		if (!isPause)
+			CoolUtil.switchState(MainMenuState);
+		else
+			FlxG.state.openSubState(new PauseSubState(PlayState.boyfriend.getScreenPosition().x, PlayState.boyfriend.getScreenPosition().y, true));
 	}
 
 	function toggleOption(daPref:String)
@@ -363,6 +431,13 @@ class PreferencesMenu extends MusicBeatSubstate
 
 		{
 			// gameplay
+			preferenceCheck("mobileControlsType", 0);
+			preferenceCheck("mobileCustomPositions", [
+				new FlxPoint(FlxG.width - 86 * 3, FlxG.height - 66 - 116 * 3),
+				new FlxPoint(FlxG.width - 130 * 3, FlxG.height - 66 - 81 * 3),
+				new FlxPoint(FlxG.width - 44 * 3, FlxG.height - 66 - 81 * 3),
+				new FlxPoint(FlxG.width - 86 * 3, FlxG.height - 66 - 45 * 3),
+			]);
 			preferenceCheck("downscroll", false);
 			preferenceCheck("midscroll", false);
 			preferenceCheck("ghostTapping", true);

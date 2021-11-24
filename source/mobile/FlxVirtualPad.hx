@@ -1,5 +1,6 @@
 package;
 
+import PreferencesMenu.getPref;
 import flash.display.BitmapData;
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
@@ -18,12 +19,12 @@ import openfl.utils.ByteArray;
  *
  * @author Ka Wing Chin
  */
-@:keep @:bitmap("assets/preload/images/mobile/virtual-input.png")
+@:keep @:bitmap("assets/shared/images/mobileControls/virtual-input.png")
 class GraphicVirtualInput extends BitmapData
 {
 }
 
-@:file("assets/preload/images/mobile/virtual-input.txt")
+@:file("assets/shared/images/mobileControls/virtual-input.txt")
 class VirtualInputData extends #if (lime_legacy || nme) ByteArray #else ByteArrayData #end
 {
 }
@@ -39,6 +40,11 @@ class FlxVirtualPad extends FlxSpriteGroup
 	public var buttonUp:FlxButton;
 	public var buttonRight:FlxButton;
 	public var buttonDown:FlxButton;
+
+	public var buttonLeft2:FlxButton;
+	public var buttonUp2:FlxButton;
+	public var buttonRight2:FlxButton;
+	public var buttonDown2:FlxButton;
 
 	/**
 	 * Group of directions buttons.
@@ -94,6 +100,25 @@ class FlxVirtualPad extends FlxSpriteGroup
 				dPad.add(add(buttonLeft = createButton(FlxG.width - 130 * 3, FlxG.height - 66 - 81 * 3, 44 * 3, 45 * 3, "left")));
 				dPad.add(add(buttonRight = createButton(FlxG.width - 44 * 3, FlxG.height - 66 - 81 * 3, 44 * 3, 45 * 3, "right")));
 				dPad.add(add(buttonDown = createButton(FlxG.width - 86 * 3, FlxG.height - 66 - 45 * 3, 44 * 3, 45 * 3, "down")));
+			case DOUBLE_FULL:
+				dPad.add(add(buttonUp = createButton(35 * 3, FlxG.height - 116 * 3, 44 * 3, 45 * 3, "up")));
+				dPad.add(add(buttonLeft = createButton(0, FlxG.height - 81 * 3, 44 * 3, 45 * 3, "left")));
+				dPad.add(add(buttonRight = createButton(69 * 3, FlxG.height - 81 * 3, 44 * 3, 45 * 3, "right")));
+				dPad.add(add(buttonDown = createButton(35 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "down")));
+				dPad.add(add(buttonUp2 = createButton(FlxG.width - 86 * 3, FlxG.height - 66 - 116 * 3, 44 * 3, 45 * 3, "up")));
+				dPad.add(add(buttonLeft2 = createButton(FlxG.width - 130 * 3, FlxG.height - 66 - 81 * 3, 44 * 3, 45 * 3, "left")));
+				dPad.add(add(buttonRight2 = createButton(FlxG.width - 44 * 3, FlxG.height - 66 - 81 * 3, 44 * 3, 45 * 3, "right")));
+				dPad.add(add(buttonDown2 = createButton(FlxG.width - 86 * 3, FlxG.height - 66 - 45 * 3, 44 * 3, 45 * 3, "down")));
+			case CUSTOM:
+				var nashing:Array<FlxPoint> = getPref('mobileCustomPositions');
+				dPad.add(add(buttonUp = createButton(FlxG.width - 86 * 3, FlxG.height - 66 - 116 * 3, 44 * 3, 45 * 3, "up")));
+				dPad.add(add(buttonLeft = createButton(FlxG.width - 130 * 3, FlxG.height - 66 - 81 * 3, 44 * 3, 45 * 3, "left")));
+				dPad.add(add(buttonRight = createButton(FlxG.width - 44 * 3, FlxG.height - 66 - 81 * 3, 44 * 3, 45 * 3, "right")));
+				dPad.add(add(buttonDown = createButton(FlxG.width - 86 * 3, FlxG.height - 66 - 45 * 3, 44 * 3, 45 * 3, "down")));
+				buttonUp.setPosition(nashing[0].x, nashing[0].y);
+				buttonLeft.setPosition(nashing[1].x, nashing[1].y);
+				buttonRight.setPosition(nashing[2].x, nashing[2].y);
+				buttonDown.setPosition(nashing[3].x, nashing[3].y);
 			case NONE: // do nothing
 		}
 
@@ -101,18 +126,30 @@ class FlxVirtualPad extends FlxSpriteGroup
 		{
 			case A:
 				actions.add(add(buttonA = createButton(FlxG.width - 44 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "a")));
+			case B:
+				actions.add(add(buttonB = createButton(FlxG.width - 44 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "b")));
+			case C:
+				actions.add(add(buttonC = createButton(FlxG.width - 44 * 3, 0, 44 * 3, 45 * 3, "c")));
+			case X:
+				actions.add(add(buttonX = createButton(FlxG.width - 44 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "x")));
 			case A_B:
 				actions.add(add(buttonA = createButton(FlxG.width - 44 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "a")));
 				actions.add(add(buttonB = createButton(FlxG.width - 86 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "b")));
 			case A_B_C:
-				actions.add(add(buttonA = createButton(FlxG.width - 128, FlxG.height - 45, 44, 45, "a")));
-				actions.add(add(buttonB = createButton(FlxG.width - 86, FlxG.height - 45, 44, 45, "b")));
-				actions.add(add(buttonC = createButton(FlxG.width - 44, FlxG.height - 45, 44, 45, "c")));
+				actions.add(add(buttonA = createButton(FlxG.width - 44 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "a")));
+				actions.add(add(buttonB = createButton(FlxG.width - 86 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "b")));
+				actions.add(add(buttonC = createButton(FlxG.width - 128 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "c")));
+			case A_B_C_X_Y:
+				actions.add(add(buttonY = createButton(FlxG.width - 86 * 3, FlxG.height - 90 * 3, 44 * 3, 45 * 3, "y")));
+				actions.add(add(buttonX = createButton(FlxG.width - 44 * 3, FlxG.height - 90 * 3, 44 * 3, 45 * 3, "x")));
+				actions.add(add(buttonA = createButton(FlxG.width - 44 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "a")));
+				actions.add(add(buttonB = createButton(FlxG.width - 86 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "b")));
+				actions.add(add(buttonC = createButton(FlxG.width - 128 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "c")));
 			case A_B_X_Y:
-				actions.add(add(buttonY = createButton(FlxG.width - 86, FlxG.height - 85, 44, 45, "y")));
-				actions.add(add(buttonX = createButton(FlxG.width - 44, FlxG.height - 85, 44, 45, "x")));
-				actions.add(add(buttonB = createButton(FlxG.width - 86, FlxG.height - 45, 44, 45, "b")));
-				actions.add(add(buttonA = createButton(FlxG.width - 44, FlxG.height - 45, 44, 45, "a")));
+				actions.add(add(buttonY = createButton(FlxG.width - 86 * 3, FlxG.height - 90 * 3, 44 * 3, 45 * 3, "y")));
+				actions.add(add(buttonX = createButton(FlxG.width - 44 * 3, FlxG.height - 90 * 3, 44 * 3, 45 * 3, "x")));
+				actions.add(add(buttonB = createButton(FlxG.width - 86 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "b")));
+				actions.add(add(buttonA = createButton(FlxG.width - 44 * 3, FlxG.height - 45 * 3, 44 * 3, 45 * 3, "a")));
 			case NONE: // do nothing
 		}
 	}
@@ -193,10 +230,12 @@ enum FlxDPadMode
 {
 	NONE;
 	UP_DOWN;
+	DOUBLE_FULL;
 	LEFT_RIGHT;
 	UP_LEFT_RIGHT;
 	RIGHT_FULL;
 	FULL;
+	CUSTOM;
 }
 
 enum FlxActionMode
@@ -204,7 +243,10 @@ enum FlxActionMode
 	NONE;
 	A;
 	B;
+	C;
+	X;
 	A_B;
 	A_B_C;
+	A_B_C_X_Y;
 	A_B_X_Y;
 }

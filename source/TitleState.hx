@@ -166,7 +166,9 @@ class TitleState extends MusicBeatState
 
 		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
+		#if FLX_MOUSE
 		FlxG.mouse.useSystemCursor = true;
+		#end
 
 		if (initialized)
 			skipIntro();
@@ -364,7 +366,7 @@ class TitleState extends MusicBeatState
 		}
 	}
 
-	public static function loadTransition(?transIn:flixel.addons.transition.TransitionData, ?transOut:flixel.addons.transition.TransitionData):Void
+	public static function loadTransition(?transIn:TransitionData, ?transOut:TransitionData):Void
 	{
 		var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
 		diamond.persist = true;

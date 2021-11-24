@@ -58,5 +58,6 @@
 	"back": "BACK",
 	"practiceMode": "PRACTICE MODE",
 
-	"freeplayPlay": "Press SPACE to preview the song."
+	"freeplayPlay": "Press SPACE to preview the song.",
+	"freeplayPlayMobile": "Press PLAY BUTTON to preview the song."
 }

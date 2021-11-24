@@ -156,11 +156,12 @@ class Note extends flixel.FlxSprite
 	public static function getNoteStyle():String
 	{
 		var _noteStyle = '';
-		switch (curSong)
-		{
-			default:
-				_noteStyle = 'normal';
-		}
+		if (PlayState.SONG != null)
+			switch (curSong)
+			{
+				default:
+					_noteStyle = 'normal';
+			}
 		switch (PlayState.curStage)
 		{
 			case 'school', 'schoolEvil':

@@ -99,8 +99,8 @@ class Controls extends FlxActionSet
 	var _ui_down = new FlxActionDigital(Action.UI_DOWN);
 	var _ui_upP = new FlxActionDigital(Action.UI_UP_P);
 	var _ui_leftP = new FlxActionDigital(Action.UI_LEFT_P);
-	var _ui_rightP = new FlxActionDigital(Action.UI_RIGHT_P);
-	var _ui_downP = new FlxActionDigital(Action.UI_DOWN_P);
+	var _ui_rightP = new FlxActionDigital(Action.UI_RIGHT_P) #if FLX_MOUSE .addMouseWheel(true, JUST_PRESSED) #end;
+	var _ui_downP = new FlxActionDigital(Action.UI_DOWN_P) #if FLX_MOUSE .addMouseWheel(false, JUST_PRESSED) #end;
 	var _ui_upR = new FlxActionDigital(Action.UI_UP_R);
 	var _ui_leftR = new FlxActionDigital(Action.UI_LEFT_R);
 	var _ui_rightR = new FlxActionDigital(Action.UI_RIGHT_R);

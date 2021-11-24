@@ -115,7 +115,9 @@ class ChartingState extends MusicBeatState
 		curRenderedNotes = new FlxTypedGroup<Note>();
 		curRenderedSustains = new FlxTypedGroup<FlxSprite>();
 
+		#if FLX_MOUSE
 		FlxG.mouse.visible = true;
+		#end
 
 		tempBpm = _song.bpm;
 
@@ -478,6 +480,7 @@ class ChartingState extends MusicBeatState
 				changeSection(curSection + shiftThing);
 			if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A)
 				changeSection(curSection - shiftThing);
+			#if FLX_MOUSE
 			if (FlxG.mouse.justPressed)
 			{
 				if (FlxG.mouse.overlaps(curRenderedNotes))
@@ -520,6 +523,7 @@ class ChartingState extends MusicBeatState
 				else
 					dummyArrow.y = Math.floor(FlxG.mouse.y / GRID_SIZE) * GRID_SIZE;
 			}
+			#end
 
 			if (FlxG.keys.justPressed.ENTER)
 			{
@@ -577,6 +581,7 @@ class ChartingState extends MusicBeatState
 					resetSection();
 			}
 
+			#if FLX_MOUSE
 			if (FlxG.mouse.wheel != 0)
 			{
 				FlxG.sound.music.pause();
@@ -585,6 +590,7 @@ class ChartingState extends MusicBeatState
 				FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * 0.4);
 				vocals.time = FlxG.sound.music.time;
 			}
+			#end
 
 			if (!FlxG.keys.pressed.SHIFT)
 			{
@@ -919,6 +925,7 @@ class ChartingState extends MusicBeatState
 		updateGrid();
 	}
 
+	#if Flx_MOUSE
 	private function addNote():Void
 	{
 		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
@@ -942,6 +949,7 @@ class ChartingState extends MusicBeatState
 
 		autosaveSong();
 	}
+	#end
 
 	function getStrumTime(yPos:Float):Float
 	{

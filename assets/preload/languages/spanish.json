@@ -67,5 +67,6 @@
 	"back": "ATRAS",
 	"practiceMode": "MODO PRACTICA",
 
-	"freeplayPlay": "Presiona ESPACIO para previsualizar la canción."
+	"freeplayPlay": "Presiona ESPACIO para previsualizar la canción.",
+	"freeplayPlayMobile": "Presiona el BOTON DE PLAY para previsualizar la canción."
 }

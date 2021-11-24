@@ -23,7 +23,7 @@ class Song
 	public static var curSong(get, never):String;
 
 	public static inline function get_curSong():String
-		return PlayState.SONG.song.toLowerCase();
+		return PlayState.SONG.song.toLowerCase() != null ? PlayState.SONG.song.toLowerCase() : '';
 
 	public static var prettySong(get, never):String;
 

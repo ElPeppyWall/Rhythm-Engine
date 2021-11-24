@@ -118,6 +118,9 @@ class PlayState extends MusicBeatState
 	private var camBACKGROUND_OPACITY:FlxCamera;
 	private var camHUD:FlxCamera;
 	private var camNOTES:FlxCamera;
+	#if mobileC
+	private var camCONTROLS:FlxCamera;
+	#end
 	private var camPAUSE:FlxCamera;
 	private var camFollow:FlxObject;
 
@@ -195,6 +198,11 @@ class PlayState extends MusicBeatState
 	var detailsPausedText:String = "";
 	#end
 
+	#if mobileC
+	var mcontrols:MobileControls;
+	var pauseButton:FlxVirtualPad;
+	#end
+
 	override public function create()
 	{
 		resetPlayState(true);
@@ -211,6 +219,10 @@ class PlayState extends MusicBeatState
 		camHUD.bgColor.alpha = 0;
 		camNOTES = new FlxCamera();
 		camNOTES.bgColor.alpha = 0;
+		#if mobileC
+		camCONTROLS = new FlxCamera();
+		camCONTROLS.bgColor.alpha = 0;
+		#end
 		camPAUSE = new FlxCamera();
 		camPAUSE.bgColor.alpha = 0;
 
@@ -218,6 +230,9 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(camBACKGROUND_OPACITY);
 		FlxG.cameras.add(camHUD);
 		FlxG.cameras.add(camNOTES);
+		#if mobileC
+		FlxG.cameras.add(camCONTROLS);
+		#end
 		FlxG.cameras.add(camPAUSE);
 		FlxCamera.defaultCameras = [camGame];
 
@@ -467,7 +482,24 @@ class PlayState extends MusicBeatState
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
-		// FlxG.fixedTimestep = false;
+		FlxG.fixedTimestep = false;
+
+		#if mobileC
+		pauseButton = new FlxVirtualPad(NONE, C);
+		pauseButton.cameras = [camCONTROLS];
+		pauseButton.alpha = 0.75;
+		mcontrols = new MobileControls();
+		mcontrols.cameras = [camCONTROLS];
+
+		mcontrols.active = false;
+		pauseButton.active = false;
+
+		mcontrols.visible = false;
+		pauseButton.visible = false;
+
+		add(mcontrols);
+		add(pauseButton);
+		#end
 
 		healthBarBG = new FlxSprite(0, FlxG.height * 0.9, Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
@@ -521,7 +553,7 @@ class PlayState extends MusicBeatState
 
 		checkSettingsInGame(true, false);
 		#if debug
-		debugTxt = new FlxText(0, 0, FlxG.width, "DEBUG TOOLS:
+		debugTxt = new FlxText(0, 100, FlxG.width, "DEBUG TOOLS:
 		Q/E: ZOOM IN/OUT
 		U/I: ADD/REMOVE HEALTH
 		B: TRACE curBeat
@@ -619,7 +651,11 @@ class PlayState extends MusicBeatState
 			remove(black);
 
 			if (SONG.song.toLowerCase() == 'thorns')
+			{
 				add(red);
+				camHUD.alpha = 0;
+				camBACKGROUND_OPACITY.alpha = 0;
+			}
 		}
 
 		new FlxTimer().start(0.3, function(tmr:FlxTimer)
@@ -654,6 +690,8 @@ class PlayState extends MusicBeatState
 								{
 									remove(senpaiEvil);
 									remove(red);
+									FlxTween.tween(camHUD, {alpha: 1}, 0.01);
+									FlxTween.tween(camBACKGROUND_OPACITY, {alpha: 1}, 0.01);
 									FlxG.camera.fade(FlxColor.WHITE, 0.01, true, function()
 									{
 										add(dialogueBox);
@@ -680,6 +718,7 @@ class PlayState extends MusicBeatState
 	function startCountdown():Void
 	{
 		inCutscene = false;
+		seenCutscene = true;
 
 		checkSettingsInGame(false, true);
 
@@ -800,6 +839,13 @@ class PlayState extends MusicBeatState
 					add(go);
 					FlxG.sound.play(Paths.sound('introGo'), 0.6);
 				case 4:
+					#if mobileC
+					mcontrols.active = true;
+					pauseButton.active = true;
+
+					mcontrols.visible = true;
+					pauseButton.visible = true;
+					#end
 			}
 
 			swagCounter += 1;
@@ -1079,7 +1125,9 @@ class PlayState extends MusicBeatState
 		scoreTxt.text = '${langString('score')}: $songScore | ${langString('misses')}: $misses';
 		scoreTxt.screenCenter(X);
 
-		if (controls.PAUSE && startedCountdown && canPause)
+		if ((controls.PAUSE #if mobileC || pauseButton.buttonC.justPressed || MobileControls.androidBack #end)
+			&& startedCountdown
+			&& canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -1315,6 +1363,14 @@ class PlayState extends MusicBeatState
 
 	public function endSong():Void
 	{
+		#if mobileC
+		mcontrols.active = false;
+		pauseButton.active = false;
+
+		mcontrols.visible = false;
+		pauseButton.visible = false;
+		#end
+
 		canPause = false;
 		FlxG.sound.music.stop();
 		FlxG.sound.music.volume = 0;
@@ -1350,14 +1406,9 @@ class PlayState extends MusicBeatState
 					FlxG.sound.play(Paths.sound('Lights_Shut_off'));
 				}
 
-				FlxTransitionableState.skipNextTransIn = true;
-				FlxTransitionableState.skipNextTransOut = true;
 				prevCamFollow = camFollow;
 
-				PlayState.SONG = Song.loadFromJson(CoolUtil.formatSong(PlayState.storyPlaylist[0].toLowerCase(), curDifficulty), PlayState.storyPlaylist[0]);
-				FlxG.sound.music.stop();
-
-				LoadingState.loadAndSwitchState(PlayState);
+				loadSong(CoolUtil.formatSong(PlayState.storyPlaylist[0].toLowerCase(), curDifficulty), curWeek, weekColor, isStoryMode, true);
 			}
 		}
 		else
@@ -1491,12 +1542,19 @@ class PlayState extends MusicBeatState
 	private function keyShit():Void
 	{
 		var controlArray:Array<Bool> = [
-			controls.NOTE_LEFT_P,
-			controls.NOTE_DOWN_P,
-			controls.NOTE_UP_P,
-			controls.NOTE_RIGHT_P
+			#if mobileC //
+			mcontrols.NOTE_LEFT_P, mcontrols.NOTE_DOWN_P, mcontrols.NOTE_UP_P, mcontrols.NOTE_RIGHT_P //
+			#else //
+			controls.NOTE_LEFT_P, controls.NOTE_DOWN_P, controls.NOTE_UP_P, controls.NOTE_RIGHT_P //
+			#end //
 		];
-		var controlHoldArray:Array<Bool> = [controls.NOTE_LEFT, controls.NOTE_DOWN, controls.NOTE_UP, controls.NOTE_RIGHT];
+		var controlHoldArray:Array<Bool> = [
+			#if mobileC //
+			mcontrols.NOTE_LEFT, mcontrols.NOTE_DOWN, mcontrols.NOTE_UP, mcontrols.NOTE_RIGHT //
+			#else //
+			controls.NOTE_LEFT, controls.NOTE_DOWN, controls.NOTE_UP, controls.NOTE_RIGHT //
+			#end //
+		];
 
 		if (controlArray.contains(true) && getPref('hitsound'))
 			FlxG.sound.play(Paths.sound('hitsound'), .65);
@@ -2177,6 +2235,7 @@ class PlayState extends MusicBeatState
 		isAloneFunkin = usePATH;
 		isStoryMode = isStory;
 		curWeek = week;
+		seenCutscene = false;
 
 		resetPlayState(false);
 		LoadingState.loadAndSwitchState(PlayState, stopMusic);
@@ -2218,12 +2277,14 @@ class PlayState extends MusicBeatState
 		if (checkKey('F7'))
 			Console.open(checkSettingsInGame);
 
+		#if FLX_MOUSE
 		if (FlxG.mouse.justPressedMiddle)
 		{
 			camHUD.visible = !camHUD.visible;
 			camNOTES.visible = camHUD.visible;
 			camBACKGROUND_OPACITY.visible = camHUD.visible;
 		}
+		#end
 	}
 	#end
 

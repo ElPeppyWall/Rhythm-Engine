@@ -38,25 +38,45 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.camera.target = null;
 
 		bf.playAnim('firstDeath');
+
+		_pad = new FlxVirtualPad(NONE, B);
+		_pad.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		add(_pad);
 	}
+
+	var _pad:FlxVirtualPad;
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
+		var accept = false;
+		var back = false;
+		#if mobileC
+		for (touch in FlxG.touches.list)
+			if (touch.overlaps(bf))
+				accept = true;
+		back = _pad.buttonB.justPressed;
+		#else
+		accept = controls.ACCEPT;
+		back = controls.BACK;
+		#end
+
 		if (!isEnding)
 		{
-			if (controls.ACCEPT)
+			if (accept)
 				endBullshit();
 
-			if (controls.BACK && !isEnding)
+			if (back && !isEnding)
 			{
 				FlxG.sound.music.stop();
 				PlayState.exit();
 			}
 		}
-		else if (controls.ACCEPT)
+		#if !mobileC
+		else if (accept)
 			LoadingState.loadAndSwitchState(PlayState);
+		#end
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
 			FlxG.camera.follow(camFollow, LOCKON, 0.01);

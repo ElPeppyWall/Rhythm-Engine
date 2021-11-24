@@ -5,7 +5,6 @@ import Discord.DiscordClient;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
@@ -79,9 +78,6 @@ class StoryMenuState extends MusicBeatState
 				weekColor: WeekData.Weeks.weeksColors[weekNum]
 			});
 		}
-
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
 
 		MusicManager.checkPlaying();
 
@@ -244,18 +240,52 @@ class StoryMenuState extends MusicBeatState
 
 		if (!movedBack)
 		{
+			var up = false, down = false, left = false, right = false, accept = false;
+			#if mobileC
+			for (swipe in FlxG.swipes)
+			{
+				var f = swipe.startPosition.x - swipe.endPosition.x;
+				var g = swipe.startPosition.y - swipe.endPosition.y;
+				if (25 <= Math.sqrt(f * f + g * g))
+				{
+					if ((-45 <= swipe.startPosition.angleBetween(swipe.endPosition)
+						&& 45 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+						down = true;
+					if (-135 < swipe.startPosition.angleBetween(swipe.endPosition)
+						&& -45 > swipe.startPosition.angleBetween(swipe.endPosition))
+						left = true;
+					if (45 < swipe.startPosition.angleBetween(swipe.endPosition)
+						&& 135 > swipe.startPosition.angleBetween(swipe.endPosition))
+						right = true;
+					if (-180 <= swipe.startPosition.angleBetween(swipe.endPosition)
+						&& -135 >= swipe.startPosition.angleBetween(swipe.endPosition)
+						|| (135 <= swipe.startPosition.angleBetween(swipe.endPosition)
+							&& 180 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+						up = true;
+				}
+				else
+					accept = true;
+			}
+			#else
+			up = controls.UI_UP_P;
+			down = controls.UI_DOWN_P;
+			left = controls.UI_LEFT_P;
+			right = controls.UI_RIGHT_P;
+			accept = controls.ACCEPT;
+			#end
 			if (!selectedWeek)
 			{
-				if (controls.UI_UP_P)
+				if (up)
 				{
 					changeWeek(-1);
 				}
 
-				if (controls.UI_DOWN_P)
+				if (down)
 				{
 					changeWeek(1);
 				}
 
+				#if !mobileC
 				if (controls.UI_RIGHT)
 					rightArrow.animation.play('press')
 				else
@@ -265,20 +295,28 @@ class StoryMenuState extends MusicBeatState
 					leftArrow.animation.play('press');
 				else
 					leftArrow.animation.play('idle');
+				#end
 
-				if (controls.UI_RIGHT_P)
+				if (right)
 					changeDifficulty(1);
-				if (controls.UI_LEFT_P)
+				if (left)
 					changeDifficulty(-1);
 			}
 
-			if (controls.ACCEPT)
+			if (accept)
 			{
 				selectWeek();
 			}
 		}
 
-		if (controls.BACK && !movedBack && !selectedWeek)
+		var back:Bool = false;
+		#if mobileC
+		if (MobileControls.androidBack)
+			back = true;
+		#else
+		back = controls.BACK;
+		#end
+		if (back && !movedBack && !selectedWeek)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			movedBack = true;
@@ -289,6 +327,7 @@ class StoryMenuState extends MusicBeatState
 	}
 
 	var movedBack:Bool = false;
+
 	var selectedWeek:Bool = false;
 	var stopspamming:Bool = false;
 

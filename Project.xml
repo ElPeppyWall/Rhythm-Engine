@@ -52,11 +52,12 @@
 	<classpath name="source/debugStates" />
 	<classpath name="source/editors" />
 	<classpath name="source/data" />
-	<classpath name="source/debugTools" />
+	<classpath name="source/debugTools" if="debug" />
 	<classpath name="source/mobile" />
 
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web" />
 	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web" />
+	<assets path="assets/shared/images/mobileControls" exclude="*" unless="mobileC" />
 	<!-- <define name="PRELOAD_ALL"/> -->
 	<define name="PRELOAD_ALL" unless="web" />
 	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL" />
@@ -147,9 +148,9 @@
 	<!--<haxedef name="FLX_NO_NATIVE_CURSOR"/>-->
 
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
-	<!-- <haxedef name="FLX_NO_MOUSE" if="mobile"/> -->
+	<haxedef name="FLX_NO_MOUSE" if="mobile" />
 	<!-- <haxedef name="FLX_NO_KEYBOARD" if="mobile"/> -->
-	<!-- <haxedef name="FLX_NO_TOUCH" if="desktop"/> -->
+	<haxedef name="FLX_NO_TOUCH" if="desktop" />
 	<!--<haxedef name="FLX_NO_GAMEPAD"/>-->
 
 	<!--Disable the Flixel core sound tray-->

@@ -145,23 +145,50 @@ class PauseSubState extends MusicBeatSubstate
 
 		super.update(elapsed);
 
-		if (controls.UI_UP_P)
+		var up = false, down = false, accept = false, back = false;
+		#if mobileC
+		for (swipe in FlxG.swipes)
+		{
+			var f = swipe.startPosition.x - swipe.endPosition.x;
+			var g = swipe.startPosition.y - swipe.endPosition.y;
+			if (25 <= Math.sqrt(f * f + g * g))
+			{
+				if ((-45 <= swipe.startPosition.angleBetween(swipe.endPosition)
+					&& 45 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+					down = true;
+				if (-180 <= swipe.startPosition.angleBetween(swipe.endPosition)
+					&& -135 >= swipe.startPosition.angleBetween(swipe.endPosition)
+					|| (135 <= swipe.startPosition.angleBetween(swipe.endPosition)
+						&& 180 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+					up = true;
+			}
+			else
+				accept = true;
+		}
+		if (MobileControls.androidBack)
+			back = true;
+		#else
+		up = controls.UI_UP_P;
+		down = controls.UI_DOWN_P;
+		back = controls.BACK;
+		accept = controls.ACCEPT;
+		#end
+		if (up)
 			changeSelection(-1);
-		if (controls.UI_DOWN_P)
+		if (down)
 			changeSelection(1);
 
-		if (FlxG.mouse.wheel != 0)
-			changeSelection(FlxG.mouse.wheel == 1 ? -1 : 1);
-
+		#if FLX_MOUSE
 		for (item in grpMenuShit)
 		{
 			if (FlxG.mouse.overlaps(item) && item.ID == curSelected && FlxG.mouse.justPressed)
-				accept();
+				accept = true;
 		}
+		#end
 
-		if (controls.ACCEPT)
-			accept();
-		if (controls.BACK)
+		if (accept)
+			this.accept();
+		if (back)
 			resumeSelected();
 	}
 

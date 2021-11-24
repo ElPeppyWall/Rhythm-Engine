@@ -30,13 +30,12 @@ class AlphabetList extends FlxTypedGroup<Alphabet>
 	{
 		if (canChangeSel)
 		{
-			if (FlxG.mouse.wheel != 0)
-				changeSelection(FlxG.mouse.wheel == 1 ? -1 : 1);
-
+			#if !mobileC
 			if (controls.UI_UP_P)
 				changeSelection(-1);
 			if (controls.UI_DOWN_P)
 				changeSelection(1);
+			#end
 		}
 		super.update(elapsed);
 	}

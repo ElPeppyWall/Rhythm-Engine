@@ -119,8 +119,20 @@ class FreeplayState extends MusicBeatState
 		MusicManager.checkPlaying();
 		if (fromPlayState)
 			MusicManager.playMainMusic();
+
+		#if mobileC
+		playButton = new FlxVirtualPad(NONE, X);
+		playButton.alpha = .65;
+		playButton.y -= 50;
+		add(playButton);
+		#end
+
 		super.create();
 	}
+
+	#if mobileC
+	var playButton:FlxVirtualPad;
+	#end
 
 	var playBG:FlxSprite;
 	var playTxt:FlxText;
@@ -211,39 +223,100 @@ class FreeplayState extends MusicBeatState
 
 		if (!exiting)
 		{
-			if (FlxG.mouse.wheel != 0)
-				changeSelection(FlxG.mouse.wheel == 1 ? -1 : 1);
+			var up = false,
+				down = false,
+				left = false,
+				right = false,
+				accept = false,
+				back = false,
+				space = false;
+			#if mobileC
+			var touchOverlaps:Bool = false;
 
+			#if FLX_TOUCH
+			for (touch in FlxG.touches.list)
+				if (touch.overlaps(playButton))
+					touchOverlaps = true;
+			#else
+			#if FLX_MOUSE
+			if (FlxG.mouse.overlaps(playButton))
+				touchOverlaps = true;
+			#end
+			#end
+
+			if (!touchOverlaps)
+				for (swipe in FlxG.swipes)
+				{
+					var f = swipe.startPosition.x - swipe.endPosition.x;
+					var g = swipe.startPosition.y - swipe.endPosition.y;
+					if (25 <= Math.sqrt(f * f + g * g))
+					{
+						if ((-45 <= swipe.startPosition.angleBetween(swipe.endPosition)
+							&& 45 >= swipe.startPosition.angleBetween(swipe.endPosition)))
+							down = true;
+						if (-135 < swipe.startPosition.angleBetween(swipe.endPosition)
+							&& -45 > swipe.startPosition.angleBetween(swipe.endPosition))
+							left = true;
+						if (45 < swipe.startPosition.angleBetween(swipe.endPosition)
+							&& 135 > swipe.startPosition.angleBetween(swipe.endPosition))
+							right = true;
+						if (-180 <= swipe.startPosition.angleBetween(swipe.endPosition)
+							&& -135 >= swipe.startPosition.angleBetween(swipe.endPosition)
+							|| 135 <= swipe.startPosition.angleBetween(swipe.endPosition)
+							&& 180 >= swipe.startPosition.angleBetween(swipe.endPosition))
+							up = true;
+					}
+					else
+						accept = true;
+				}
+			if (MobileControls.androidBack)
+				back = true;
+			space = playButton.buttonX.justPressed;
+			#else
+			#if FLX_MOUSE
 			for (item in grpSongs)
 			{
 				if ((FlxG.mouse.overlaps(item) || FlxG.mouse.overlaps(iconArray[grpSongs.members.indexOf(item)]))
 					&& item.ID == curSelected
 					&& FlxG.mouse.justPressed)
-					enterSong();
+					accept = true;
 			}
+			#end
+			up = controls.UI_UP_P;
+			down = controls.UI_DOWN_P;
+			left = controls.UI_LEFT_P;
+			right = controls.UI_RIGHT_P;
+			back = controls.BACK;
+			accept = controls.ACCEPT;
+			space = checkKey('SPACE');
+			#end
 
-			if (checkKey('SPACE') && songPlaying != curSelected && songs[curSelected].songName != "Alone-Funkin'")
+			if (up)
+				changeSelection(-1);
+			if (down)
+				changeSelection(1);
+
+			if (left)
+				changeDiff(-1);
+			if (right)
+				changeDiff(1);
+
+			if (back)
+				this.back();
+
+			if (accept)
+				enterSong();
+
+			if (space && songPlaying != curSelected && songs[curSelected].songName != "Alone-Funkin'")
 			{
 				for (i in [playBG, playTxt])
 					FlxTween.tween(i, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
+				#if mobileC
+				if (playButton != null)
+					FlxTween.tween(playButton, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
+				#end
 				previewSong(curSelected, false);
 			}
-
-			if (controls.UI_UP_P)
-				changeSelection(-1);
-			if (controls.UI_DOWN_P)
-				changeSelection(1);
-
-			if (controls.UI_LEFT_P)
-				changeDiff(-1);
-			if (controls.UI_RIGHT_P)
-				changeDiff(1);
-
-			if (controls.BACK)
-				back();
-
-			if (controls.ACCEPT)
-				enterSong();
 		}
 	}
 
@@ -351,11 +424,23 @@ class FreeplayState extends MusicBeatState
 
 		FlxTween.color(bg, CoolUtil.camLerpShit(.25), bg.color, coolColors[songs[curSelected].week]);
 		if (songPlaying == curSelected || songs[curSelected].songName == "Alone-Funkin'")
+		{
 			for (i in [playBG, playTxt])
 				FlxTween.tween(i, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
+			#if mobileC
+			if (playButton != null)
+				FlxTween.tween(playButton, {y: FlxG.height}, 0.25, {ease: FlxEase.bounceOut});
+			#end
+		}
 		else
+		{
 			for (i in [playBG, playTxt])
 				FlxTween.tween(i, {y: FlxG.height - 35}, 0.25, {ease: FlxEase.bounceOut});
+			#if mobileC
+			if (playButton != null)
+				FlxTween.tween(playButton, {y: -50}, 0.25, {ease: FlxEase.bounceOut});
+			#end
+		}
 
 		// selector.y = (70 * curSelected) + 30;
 

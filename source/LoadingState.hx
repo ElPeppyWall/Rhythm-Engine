@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
 import haxe.io.Path;
@@ -90,16 +91,19 @@ class LoadingState extends MusicBeatState
 			});
 		else
 		{
-			new FlxTimer().start(FlxG.random.float(.05, .25), function(tmr:FlxTimer)
+			new FlxTimer().start(FlxG.random.float(minFakeTime, maxFakeTime), function(tmr:FlxTimer)
 			{
 				fakeRemaining--;
 			}, 4);
-			new FlxTimer().start(1, function(tmr:FlxTimer)
+			new FlxTimer().start(maxFakeTime * 4, function(tmr:FlxTimer)
 			{
 				fakeRemaining = 0;
 			});
 		}
 	}
+
+	static inline final maxFakeTime = #if mobileC .5 #else .25 #end;
+	static inline final minFakeTime = #if mobileC .1 #else .05 #end;
 
 	function checkLoadSong(path:String)
 	{
@@ -143,7 +147,13 @@ class LoadingState extends MusicBeatState
 			return;
 		funkay.setGraphicSize(Std.int(.88 * FlxG.width + .9 * (funkay.width - .88 * FlxG.width)));
 		funkay.updateHitbox();
-		if (controls.ACCEPT)
+		#if FLX_TOUCH
+		var touchJustPressed = false;
+		for (touch in FlxG.touches.list)
+			if (touch.justPressed)
+				touchJustPressed = true;
+		#end
+		if (controls.ACCEPT #if FLX_TOUCH || touchJustPressed #end)
 		{
 			funkay.setGraphicSize(Std.int(funkay.width + 60));
 			funkay.updateHitbox();
@@ -165,10 +175,13 @@ class LoadingState extends MusicBeatState
 
 	inline function onLoad()
 	{
+		FlxG.camera.fade();
+		// FlxG.camera.flash();
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		if (PlayState.SONG != null)
 			loadedSongs.push(PlayState.SONG.song.toLowerCase());
+		FlxTransitionableState.skipNextTransOut = true;
 		switchState(target);
 	}
 
