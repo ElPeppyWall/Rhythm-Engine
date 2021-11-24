@@ -925,7 +925,7 @@ class ChartingState extends MusicBeatState
 		updateGrid();
 	}
 
-	#if Flx_MOUSE
+	#if FLX_MOUSE
 	private function addNote():Void
 	{
 		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
