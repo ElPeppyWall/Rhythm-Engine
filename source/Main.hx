@@ -19,6 +19,8 @@ class Main extends Sprite
 	static var fpsCounter:FPSCounter;
 	static var fpsBitMap:openfl.display.Bitmap;
 
+	var gameLoop:GameLoop;
+
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
@@ -61,11 +63,18 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
+		gameLoop = new GameLoop();
 		fpsCounter = new FPSCounter(10, 3, 0);
 		fpsBitMap = ImageWithOutline.renderImage(fpsCounter, 1, 0x000000, true);
 		fpsBitMap.smoothing = true;
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 		addChild(fpsCounter);
+	}
+
+	@:noCompletion private override function __update(transformOnly:Bool, updateChildren:Bool):Void
+	{
+		gameLoop.update();
+		super.__update(transformOnly, updateChildren);
 	}
 
 	public static inline function fpsCounterVisible(visible:Bool):Void
