@@ -4,41 +4,47 @@ import flixel.util.FlxColor;
 
 class HealthIconsData
 {
-	public static var healthIconsForCharacter:Map<String, String>;
-	public static var healthIconsColors:Map<String, Int>;
-	public static final charsWithWinningIcons = []; // example: ['agoti']
-
-	public static function init():Void
-	{
-		healthIconsForCharacter = new Map<String, String>();
-		healthIconsForCharacter['bf-car'] = 'bf';
-		healthIconsForCharacter['gf-car'] = 'gf';
-		healthIconsForCharacter['mom-car'] = 'mom';
-
-		healthIconsForCharacter['bf-christmas'] = 'bf';
-		healthIconsForCharacter['gf-christmas'] = 'gf';
-		healthIconsForCharacter['parents-christmas'] = 'parents';
-		healthIconsForCharacter['monster-christmas'] = 'monster';
-
-		healthIconsForCharacter['gf-pixel'] = 'gf';
-		healthIconsForCharacter['senpai-angry'] = 'senpai';
-
-		healthIconsColors = new Map<String, Int>();
-		healthIconsColors['bf'] = 0xFF31b0d1;
-		healthIconsColors['bf-old'] = 0xFFe9ff48;
-		healthIconsColors['gf'] = 0xFFa5004d;
-		healthIconsColors['dad'] = 0xFFaf66ce;
-		healthIconsColors['spooky'] = 0xFFb4b4b4;
-		healthIconsColors['monster'] = 0xFFf3ff6e;
-		healthIconsColors['pico'] = 0xFFb7d855;
-		healthIconsColors['mom'] = 0xFFd8558e;
-		healthIconsColors['parents'] = 0xFFaf66ce;
-		healthIconsColors['bf-pixel'] = 0xFF7bd6f6;
-		healthIconsColors['senpai'] = 0xFFffaa6f;
-		healthIconsColors['spirit'] = 0xFFff3c6e;
-		healthIconsColors['face'] = 0xFFa1a1a1;
-		healthIconsColors['none'] = FlxColor.GRAY;
-	}
+	public static final healthIconsForCharacter:Map<String, String> = [
+		// - WEEK 4
+		'bf-car' => 'bf',
+		'gf-car' => 'gf',
+		'mom-car' => 'mom',
+		// - WEEK 5
+		'bf-christmas' => 'bf',
+		'gf-christmas' => 'gf',
+		'parents-christmas' => 'parents',
+		'monster-christmas' => 'monster',
+		// - WEEK 6
+		'gf-pixel' => 'gf',
+		'senpai-angry' => 'senpai',
+	];
+	public static final healthIconsBarColors:Map<String, Int> = [
+		// - DEFAULT GAME
+		'bf' => 0xFF31b0d1,
+		'bf-old' => 0xFFe9ff48,
+		'gf' => 0xFFa5004d,
+		// - WEEK 1
+		'dad' => 0xFFaf66ce,
+		// - WEEK 2
+		'spooky' => 0xFFb4b4b4,
+		'monster' => 0xFFf3ff6e,
+		// - WEEK 3
+		'pico' => 0xFFb7d855,
+		// - WEEK 4
+		'mom' => 0xFFd8558e,
+		// - WEEK 5
+		'parents' => 0xFFaf66ce,
+		// - WEEK 6
+		'bf-pixel' => 0xFF7bd6f6,
+		'senpai' => 0xFFffaa6f,
+		'spirit' => 0xFFff3c6e,
+		// - ETC
+		'face' => 0xFFa1a1a1,
+		'none' => FlxColor.GRAY,
+	];
+	public static final charsWithWinningIcons = [
+		// example: ['agoti']
+	];
 
 	public static function getCharIcon(char:String):String
 	{
@@ -50,8 +56,8 @@ class HealthIconsData
 
 	public static function getIconColor(char:String):Int
 	{
-		if (healthIconsColors.exists(char))
-			return healthIconsColors[char];
+		if (healthIconsBarColors.exists(char))
+			return healthIconsBarColors[char];
 		else
 		{
 			trace('$char DOESN\'T HAVE A ICON COLOR!!!');

@@ -2,14 +2,16 @@ package;
 
 class SongsData
 {
-	public static final pixelSongs = ['senpai', 'roses', 'thorns'];
-	public static var songWithLessOrMoreDiffies:Map<String, Array<Int>>;
-
-	public static function init():Void
-	{
-		songWithLessOrMoreDiffies = new Map<String, Array<Int>>();
-		songWithLessOrMoreDiffies['test'] = [1];
-	}
+	public static final pixelSongs = [
+		// - WEEK 6
+		'senpai',
+		'roses',
+		'thorns'
+	];
+	public static final songWithLessOrMoreDiffies:Map<String, Array<Int>> = [
+		// - ETC
+		'test' => [1],
+	];
 
 	public static function getSongDiffies(song:String):Array<Int>
 	{

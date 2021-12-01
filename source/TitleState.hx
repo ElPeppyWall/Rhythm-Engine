@@ -54,7 +54,6 @@ class TitleState extends MusicBeatState
 			KeyBinds.initBinds(true);
 			PlayerSettings.init();
 			Highscore.load();
-			AllData.init();
 			FlxG.sound.muteKeys = [48];
 			loadTransition(transIn, transOut);
 			PreferencesMenu.checkPrefValue('fpsCap');

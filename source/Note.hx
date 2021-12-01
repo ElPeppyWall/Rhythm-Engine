@@ -78,10 +78,8 @@ class Note extends flixel.FlxSprite
 			if (animation.curAnim.name.endsWith('Scroll'))
 				flipY = downscroll;
 		if (tooLate)
-		{
 			if (alpha > 0.3)
 				alpha = 0.3;
-		}
 	}
 
 	public function loadNote()

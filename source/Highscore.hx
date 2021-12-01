@@ -66,8 +66,6 @@ class Highscore
 		daSave = new FlxSave();
 		daSave.bind('scores', 'saves');
 		if (daSave.data.songScores != null)
-		{
 			songScores = daSave.data.songScores;
-		}
 	}
 }

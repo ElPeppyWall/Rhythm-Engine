@@ -11,9 +11,7 @@ class GitarooPause extends MusicBeatState
 	var replaySelect:Bool = false;
 
 	public function new():Void
-	{
 		super();
-	}
 
 	override function create()
 	{

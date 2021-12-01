@@ -22,7 +22,6 @@ class BuildingShaders
 class BuildingShader extends FlxShader
 {
 	@:glFragmentSource("
-
 		varying float openfl_Alphav;
 		varying vec4 openfl_ColorMultiplierv;
 		varying vec4 openfl_ColorOffsetv;

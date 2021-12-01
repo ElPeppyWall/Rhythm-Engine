@@ -2,45 +2,50 @@ package;
 
 class CharactersData
 {
-	public static var characterNames:Map<String, String>;
-	public static final characterWithoutAntialiasing = ['bf-pixel', 'gf-pixel', 'senpai', 'senpai-angry', 'spirit'];
-	public static var characterDead:Map<String, String>;
-
-	public static function init()
-	{
-		characterNames = new Map<String, String>();
-		{
-			characterNames['bf'] = 'Boyfriend';
-			characterNames['gf'] = 'Girlfriend';
-			characterNames['dad'] = 'Daddy Dearest';
-
-			characterNames['spooky'] = 'Skid & Pump';
-			characterNames['monster'] = 'Monster';
-
-			characterNames['pico'] = 'Pico';
-
-			characterNames['bf-car'] = 'Boyfriend';
-			characterNames['gf-car'] = 'Girlfriend';
-			characterNames['mom-car'] = 'Mommy Murderer';
-			characterNames['mom'] = 'Mommy Murderer';
-
-			characterNames['bf-christmas'] = 'Boyfriend';
-			characterNames['gf-christmas'] = 'Girlfriend';
-			characterNames['parents-christmas'] = 'Daddy & Mommy';
-			characterNames['monster-christmas'] = 'Monster';
-
-			characterNames['bf-pixel'] = 'Boyfriend';
-			characterNames['gf-pixel'] = 'Girlfriend';
-			characterNames['senpai'] = 'Senpai';
-			characterNames['senpai-angry'] = 'Senpai';
-			characterNames['spirit'] = '???Senpai???';
-		}
-		characterDead = new Map<String, String>();
-		{
-			characterDead['bf-car'] = 'bf';
-			characterDead['bf-christmas'] = 'bf';
-		}
-	}
+	public static final characterNames:Map<String, String> = [
+		// - DEFAULT GAME
+		'bf' => 'Boyfriend',
+		'gf' => 'Girlfriend',
+		// - WEEK 1
+		'dad' => 'Daddy Dearest',
+		// - WEEK 2
+		'spooky' => 'Skid & Pump',
+		'monster' => 'Monster',
+		// - WEEK 3
+		'pico' => 'Pico',
+		// - WEEK 4
+		'bf-car' => 'Boyfriend',
+		'gf-car' => 'Girlfriend',
+		'mom-car' => 'Mommy Murderer',
+		'mom' => 'Mommy Murderer',
+		// - WEEK 5
+		'bf-christmas' => 'Boyfriend',
+		'gf-christmas' => 'Girlfriend',
+		'parents-christmas' => 'Daddy & Mommy',
+		'monster-christmas' => 'Monster',
+		// - WEEK 6
+		'bf-pixel' => 'Boyfriend',
+		'gf-pixel' => 'Girlfriend',
+		'senpai' => 'Senpai',
+		'senpai-angry' => 'Senpai',
+		'spirit' => '???Senpai???',
+		// - ETC
+		'none' => 'No one',
+	];
+	public static final characterWithoutAntialiasing = [
+		// - WEEK 6
+		'bf-pixel',
+		'gf-pixel',
+		'senpai',
+		'senpai-angry',
+		'spirit',
+	];
+	public static final characterDead:Map<String, String> = [
+		// - WEEK 4
+		'bf-car' => 'bf',
+		// - WEEK 5
+		'bf-christmas' => 'bf',
+	];
 
 	public static function getCharDead(char:String):String
 	{

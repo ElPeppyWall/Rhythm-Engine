@@ -3,15 +3,14 @@ package;
 class NoteJudements
 {
 	static var judementArray = [
-		166, // shit
-		135, // bad
-		90, // good
-		45 // sick
+		166, // - shit
+		135, // - bad
+		90, // - good
+		45 // - sick
 	];
 
 	public static function getJudement(daNote:Note):String
 	{
-		var daRating:String = 'sick';
 		var noteDiff:Float = Math.abs(daNote.strumTime - Conductor.songPosition);
 
 		for (i in 0...judementArray.length)

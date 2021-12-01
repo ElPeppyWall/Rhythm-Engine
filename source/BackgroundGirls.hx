@@ -6,7 +6,6 @@ class BackgroundGirls extends flixel.FlxSprite
 	{
 		super(x, y);
 
-		// BG fangirls dissuaded
 		frames = Paths.getSparrowAtlas('weeb/bgFreaks');
 
 		animation.addByIndices('danceLeft', 'BG girls group', CoolUtil.numberArray(14), "", 24, false);

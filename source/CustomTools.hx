@@ -1,4 +1,4 @@
-class CustomStringTools
+class CustomTools
 {
 	public static function capitalize(s:String, spliter:String = ' '):String
 	{

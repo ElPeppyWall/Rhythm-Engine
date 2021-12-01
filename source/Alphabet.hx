@@ -76,10 +76,6 @@ class Alphabet extends flixel.group.FlxSpriteGroup
 		}
 	}
 
-	public function rewrite(newText:String):Void
-	{
-	}
-
 	function doSplitWords():Void
 	{
 		splitWords = text.split("");
@@ -197,11 +193,6 @@ class AlphaCharacter extends flixel.FlxSprite
 					daOffset.set(-2, 1);
 				case "Z":
 					daOffset.set(-1, -2);
-				//
-				//
-				//
-				//
-				//
 				case "-dash-":
 					daOffset.set(-2, -24);
 				case '_':

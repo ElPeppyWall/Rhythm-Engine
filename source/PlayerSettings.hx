@@ -4,8 +4,6 @@ import Controls;
 import flixel.FlxG;
 import flixel.util.FlxSignal;
 
-// import ui.DeviceManager;
-// import props.Player;
 class PlayerSettings
 {
 	static public var numPlayers(default, null) = 0;
@@ -19,9 +17,6 @@ class PlayerSettings
 	public var id(default, null):Int;
 
 	public final controls:Controls;
-
-	// public var avatar:Player;
-	// public var camera(get, never):PlayCamera;
 
 	function new(id)
 	{

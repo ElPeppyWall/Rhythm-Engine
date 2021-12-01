@@ -229,8 +229,6 @@ class StoryMenuState extends MusicBeatState
 		txtWeekTitle.text = weeks[curWeek].weekName;
 		txtWeekTitle.x = FlxG.width - (txtWeekTitle.width + 10);
 
-		// FlxG.watch.addQuick('font', scoreText.font);
-
 		difficultySelectors.visible = !WeekData.Weeks.lockedWeeks.contains(curWeek);
 
 		grpLocks.forEach(function(lock:FlxSprite)
@@ -276,14 +274,10 @@ class StoryMenuState extends MusicBeatState
 			if (!selectedWeek)
 			{
 				if (up)
-				{
 					changeWeek(-1);
-				}
 
 				if (down)
-				{
 					changeWeek(1);
-				}
 
 				#if !mobileC
 				if (controls.UI_RIGHT)
@@ -304,9 +298,7 @@ class StoryMenuState extends MusicBeatState
 			}
 
 			if (accept)
-			{
 				selectWeek();
-			}
 		}
 
 		var back:Bool = false;

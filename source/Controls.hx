@@ -523,11 +523,19 @@ class Controls extends FlxActionSet
 
 	public function addDefaultGamepad(id):Void
 		addGamepadLiteral(id, [
-			Control.ACCEPT => [A], Control.BACK => [B], Control.NOTE_UP => [DPAD_UP, LEFT_STICK_DIGITAL_UP],
-			Control.NOTE_DOWN => [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN], Control.NOTE_LEFT => [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT],
-			Control.NOTE_RIGHT => [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT], Control.UI_UP => [DPAD_UP, LEFT_STICK_DIGITAL_UP],
-			Control.UI_DOWN => [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN], Control.UI_LEFT => [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT],
-			Control.UI_RIGHT => [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT], Control.PAUSE => [START], Control.RESET => [Y]]);
+			Control.ACCEPT => [A], // - ACCEPT
+			Control.BACK => [B], // - BACK
+			Control.NOTE_UP => [DPAD_UP, LEFT_STICK_DIGITAL_UP], // - NOTE UP
+			Control.NOTE_DOWN => [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN], // - NOTE DOWN
+			Control.NOTE_LEFT => [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT], // - NOTE LEFT
+			Control.NOTE_RIGHT => [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT], // - NOTE RIGHT
+			Control.UI_UP => [DPAD_UP, LEFT_STICK_DIGITAL_UP], // - UI UP
+			Control.UI_DOWN => [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN], // - UI DOWN
+			Control.UI_LEFT => [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT], // - UI LEFT
+			Control.UI_RIGHT => [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT], // - UI RIGHT
+			Control.PAUSE => [START], // - PAUSE
+			Control.RESET => [Y] // - RESET
+		]);
 
 	/**
 	 * Sets all actions that pertain to the binder to trigger when the supplied keys are used.

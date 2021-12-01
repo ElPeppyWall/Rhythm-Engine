@@ -9,14 +9,16 @@ class NoteSplash extends flixel.FlxSprite
 		super(x, y);
 		frames = getSparrowAtlas('noteSplashes', 'shared');
 		var downscroll = getPref('downscroll');
-		animation.addByPrefix("note0-0", "note impact 1 purple", 24, false, false, downscroll);
-		animation.addByPrefix("note0-1", "note impact 2 purple", 24, false, false, downscroll);
-		animation.addByPrefix("note1-0", "note impact 1 blue", 24, false, false, downscroll);
-		animation.addByPrefix("note1-1", "note impact 2 blue", 24, false, false, downscroll);
-		animation.addByPrefix("note2-0", "note impact 1 green", 24, false, false, downscroll);
-		animation.addByPrefix("note2-1", "note impact 2 green", 24, false, false, downscroll);
-		animation.addByPrefix("note3-0", "note impact 1 red", 24, false, false, downscroll);
-		animation.addByPrefix("note3-1", "note impact 2 red", 24, false, false, downscroll);
+		var notesArray = [];
+		for (i in PlayState.notesDir)
+			notesArray.push(i.toLowerCase());
+
+		for (i in notesArray)
+		{
+			final index = notesArray.indexOf(i);
+			animation.addByPrefix('note$index-0', 'note impact 1 $i', 24, false, false, downscroll);
+			animation.addByPrefix('note$index-1', 'note impact 1 $i', 24, false, false, downscroll);
+		}
 
 		antialiasing = getPref('antialiasing');
 
@@ -26,7 +28,7 @@ class NoteSplash extends flixel.FlxSprite
 	public function setupNoteSplash(x:Float, y:Float, noteData:Int):Void
 	{
 		setPosition(x, y);
-		alpha = .6;
+		alpha = .8;
 		animation.play('note${noteData}-${FlxG.random.int(0, 1)}', true);
 		animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
 		updateHitbox();

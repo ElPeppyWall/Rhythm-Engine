@@ -89,8 +89,10 @@ class AlphabetCharEditor extends MusicBeatState
 
 		if (!choosingChar)
 		{
+			#if FLX_MOUSE
 			if (FlxG.mouse.wheel != 0)
 				FlxG.camera.zoom += (FlxG.mouse.wheel / 10);
+			#end
 
 			if (FlxG.keys.pressed.I)
 				camFollow.velocity.y = -180;

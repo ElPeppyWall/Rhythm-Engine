@@ -39,7 +39,6 @@
 	<define name="assetsLogger" if="debug" unless="web" />
 	<define name="mobileC" if='mobile' />
 	<define name="ALLOW_ALONE_FUNKIN" if='windows' />
-	<define name="ALLOW_LOGS" if='windows' />
 	<define name="ALLOW_FILESYSTEM" if='windows' />
 	<!-- _____________________________ DEFINES ____________________________ -->
 

@@ -31,9 +31,7 @@ class OutdatedSubState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		if (controls.ACCEPT)
-		{
 			FlxG.openURL("https://ninja-muffin24.itch.io/funkin");
-		}
 		if (controls.BACK)
 		{
 			leftState = true;

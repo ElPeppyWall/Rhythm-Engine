@@ -12,27 +12,62 @@ typedef WeekClass =
 
 class Weeks
 {
-	public static var librariesNames = ['tutorial', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6'];
-	public static var weeksNames = [
-		'How To Funk',
-		'Daddy Dearest',
-		'Spooky Month!',
-		'Go Pico!, yeah! yeah!',
-		'Mommy Must Murder',
-		'Red Snow',
-		'dating simulator ft. moawling'
+	public static final librariesNames = [
+		'tutorial', // - TUTORIAL (WEEK 0)
+		'week1', // - WEEK 1
+		'week2', // - WEEK 2
+		'week3', // - WEEK 3
+		'week4', // - WEEK 4
+		'week5', // - WEEK 5
+		'week6', // - WEEK 6
 	];
-	public static var weeksSongs = [
-		['Tutorial'],
-		['Bopeebo', 'Fresh', 'Dad-Battle'],
-		['Spookeez', 'South', "Monster"],
-		['Pico', 'Philly-Nice', "Blammed"],
-		['Satin-Panties', "High", "M.I.L.F"],
-		['Cocoa', 'Eggnog', 'Winter-Horrorland'],
-		['Senpai', 'Roses', 'Thorns']
+	public static final weeksNames = [
+		'How To Funk', // - TUTORIAL (WEEK 0)
+		'Daddy Dearest', // - WEEK 1
+		'Spooky Month!', // - WEEK 2
+		'Go Pico!, yeah! yeah!', // - WEEK 3
+		'Mommy Must Murder', // - WEEK 4
+		'Red Snow', // - WEEK 5
+		'dating simulator ft. moawling', // - WEEK 6
 	];
-	public static var weeksFiles = ['tutorial', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6'];
-	public static var weeksCharacters = ['dad', 'dad', 'spooky', 'pico', 'mom', 'parents-christmas', 'senpai'];
-	public static var weeksColors = [-7179779, -7179779, -14535868, -7072173, -223529, -6237697, -34625, -608764];
-	public static var lockedWeeks = [-1];
+	public static final weeksSongs = [
+		['Tutorial'], // - TUTORIAL (WEEK 0)
+		['Bopeebo', 'Fresh', 'Dad-Battle'], // - WEEK 1
+		['Spookeez', 'South', "Monster"], // - WEEK 2
+		['Pico', 'Philly-Nice', "Blammed"], // - WEEK 3
+		['Satin-Panties', "High", "M.I.L.F"], // - WEEK 4
+		['Cocoa', 'Eggnog', 'Winter-Horrorland'], // - WEEK 5
+		['Senpai', 'Roses', 'Thorns'], // - WEEK 6
+	];
+	public static final weeksFiles = [
+		'tutorial', // - TUTORIAL (WEEK 0)
+		'week1', // - WEEK 1
+		'week2', // - WEEK 2
+		'week3', // - WEEK 3
+		'week4', // - WEEK 4
+		'week5', // - WEEK 5
+		'week6', // - WEEK 6
+	];
+	public static final weeksCharacters = [
+		'dad', // - TUTORIAL (WEEK 0)
+		'dad', // - WEEK 1
+		'spooky', // - WEEK 2
+		'pico', // - WEEK 3
+		'mom', // - WEEK 4
+		'parents-christmas', // - WEEK 5
+		'senpai', // - WEEK 6
+	];
+	public static final weeksColors = [ //// I HATE HAXE FORMATER
+		- 7179779, // - TUTORIAL (WEEK 0)
+		- 7179779, // - WEEK 1
+		- 14535868, // - WEEK 2
+		- 7072173, // - WEEK 3
+		- 223529, // - WEEK 4
+		- 6237697, // - WEEK 5
+		- 34625, // - WEEK 6
+		- 608764, // - ALONE FUNKIN' (ONLY FREEPLAY)
+	];
+	public static final lockedWeeks = [
+		-1 // - NO LOCKED WEEKS
+	];
 }
