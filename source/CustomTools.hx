@@ -1,3 +1,5 @@
+package;
+
 class CustomTools
 {
 	public static function capitalize(s:String, spliter:String = ' '):String
@@ -19,6 +21,12 @@ class CustomTools
 			return s.toUpperCase();
 	}
 
+	/**
+	 * IT **ROUNDS** THE FLOAT
+	 */
 	public static inline function int(f:Float):Int
-		return Std.int(f);
+		return Math.round(f);
+
+	public static function truncate(f:Float):Int
+		return Std.parseInt(Std.string(f).split('.')[0]); // ! 3.68 => '3.68' => ['3', '68'] => '3' => 3
 }
