@@ -2,8 +2,6 @@ package;
 
 using StringTools;
 
-#if polymod
-#end
 class Note extends flixel.FlxSprite
 {
 	public static final swagWidth:Float = 160 * 0.7;
