@@ -31,7 +31,12 @@ class FreeplayState extends MusicBeatState
 	var diffText:FlxText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
-	var coolColors = [-7179779, -7179779, -14535868, -7072173, -223529, -6237697, -34625, 0xFF57cde4];
+
+	static var coolColors(get, never):Array<Int>;
+
+	inline static function get_coolColors():Array<Int>
+		return WeekData.weeksColors;
+
 	var bg = new MenuBG(DESAT);
 	var fromPlayState:Bool = false;
 
@@ -52,13 +57,18 @@ class FreeplayState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		addWeek(['Tutorial'], 0, ['gf']);
-		addWeek(['Bopeebo', 'Fresh', 'Dad-Battle'], 1, ['dad']);
-		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
-		addWeek(['Pico', 'Philly-Nice', 'Blammed'], 3, ['pico']);
-		addWeek(['Satin-Panties', 'High', 'M.I.L.F'], 4, ['mom']);
-		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
-		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
+		for (i in 0...WeekData.weeksSongs.length)
+		{
+			var weekSongs = WeekData.weeksSongs[i];
+			for (song in WeekData.onlyFreeplaySongs[i])
+				weekSongs.push(song);
+
+			var weekCharacters = [WeekData.weeksCharacters[i]];
+			if (WeekData.freeplayWeeksOverrideCharacters[i].length > 0)
+				weekCharacters = WeekData.freeplayWeeksOverrideCharacters[i];
+
+			addWeek(weekSongs, i, weekCharacters);
+		}
 		#if ALLOW_ALONE_FUNKIN
 		addWeek(["Alone-Funkin'"], 7, ['']);
 		#end

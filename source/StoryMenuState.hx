@@ -51,31 +51,31 @@ class StoryMenuState extends MusicBeatState
 			});
 		 */
 
-		for (weekNum in 0...WeekData.Weeks.weeksSongs.length)
+		for (weekNum in 0...WeekData.weeksSongs.length)
 		{
-			var length = WeekData.Weeks.weeksSongs.length;
-			while (length > WeekData.Weeks.weeksNames.length)
-				WeekData.Weeks.weeksNames.push('Unknowned Week Name');
+			var length = WeekData.weeksSongs.length;
+			while (length > WeekData.weeksNames.length)
+				WeekData.weeksNames.push('Unknowned Week Name');
 
-			while (length > WeekData.Weeks.librariesNames.length)
-				WeekData.Weeks.librariesNames.push('tutorial');
+			while (length > WeekData.librariesNames.length)
+				WeekData.librariesNames.push('tutorial');
 
-			while (length > WeekData.Weeks.weeksFiles.length)
-				WeekData.Weeks.weeksFiles.push('tutorial');
+			while (length > WeekData.weeksFiles.length)
+				WeekData.weeksFiles.push('tutorial');
 
-			while (length > WeekData.Weeks.weeksCharacters.length)
-				WeekData.Weeks.weeksCharacters.push('dad');
+			while (length > WeekData.weeksCharacters.length)
+				WeekData.weeksCharacters.push('dad');
 
-			while (length > WeekData.Weeks.weeksColors.length)
-				WeekData.Weeks.weeksColors.push(-7179779);
+			while (length > WeekData.weeksColors.length)
+				WeekData.weeksColors.push(-7179779);
 
 			weeks.push({
-				weekFile: WeekData.Weeks.weeksFiles[weekNum],
-				weekName: WeekData.Weeks.weeksNames[weekNum],
-				weekCharacter: WeekData.Weeks.weeksCharacters[weekNum],
-				library: WeekData.Weeks.librariesNames[weekNum],
-				weekSongs: WeekData.Weeks.weeksSongs[weekNum],
-				weekColor: WeekData.Weeks.weeksColors[weekNum]
+				weekFile: WeekData.weeksFiles[weekNum],
+				weekName: WeekData.weeksNames[weekNum],
+				weekCharacter: WeekData.weeksCharacters[weekNum],
+				library: WeekData.librariesNames[weekNum],
+				weekSongs: WeekData.weeksSongs[weekNum],
+				weekColor: WeekData.weeksColors[weekNum]
 			});
 		}
 
@@ -127,7 +127,7 @@ class StoryMenuState extends MusicBeatState
 			// weekThing.updateHitbox();
 
 			// Needs an offset thingie
-			if (WeekData.Weeks.lockedWeeks.contains(i))
+			if (WeekData.lockedWeeks.contains(i))
 			{
 				var lock:FlxSprite = new FlxSprite(weekThing.width + 10 + weekThing.x);
 				lock.frames = ui_tex;
@@ -229,7 +229,7 @@ class StoryMenuState extends MusicBeatState
 		txtWeekTitle.text = weeks[curWeek].weekName;
 		txtWeekTitle.x = FlxG.width - (txtWeekTitle.width + 10);
 
-		difficultySelectors.visible = !WeekData.Weeks.lockedWeeks.contains(curWeek);
+		difficultySelectors.visible = !WeekData.lockedWeeks.contains(curWeek);
 
 		grpLocks.forEach(function(lock:FlxSprite)
 		{
@@ -325,7 +325,7 @@ class StoryMenuState extends MusicBeatState
 
 	function selectWeek()
 	{
-		if (!WeekData.Weeks.lockedWeeks.contains(curWeek))
+		if (!WeekData.lockedWeeks.contains(curWeek))
 		{
 			if (stopspamming == false)
 			{
@@ -403,7 +403,7 @@ class StoryMenuState extends MusicBeatState
 		for (item in grpWeekText.members)
 		{
 			item.targetY = bullShit - curWeek;
-			if (item.targetY == Std.int(0) && !WeekData.Weeks.lockedWeeks.contains(curWeek))
+			if (item.targetY == Std.int(0) && !WeekData.lockedWeeks.contains(curWeek))
 				item.alpha = 1;
 			else
 				item.alpha = 0.6;
