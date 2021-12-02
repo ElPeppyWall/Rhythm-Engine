@@ -13,8 +13,9 @@ class HealthIcon extends FlxSprite
 	public var isOldIcon = false;
 	public var isPlayer:Bool;
 	public var char:String;
+	public var hasWinningAnim:Bool = false;
 
-	var oldChar:String = '';
+	private var oldChar:String = '';
 
 	public function new(_char:String = 'bf', _isPlayer:Bool = false)
 	{
@@ -26,13 +27,13 @@ class HealthIcon extends FlxSprite
 	public function changeIcon(_newChar:String)
 	{
 		char = HealthIconsData.getCharIcon(_newChar);
-		animation.destroyAnimations();
+		hasWinningAnim = HealthIconsData.charsWithWinningIcons.contains(char);
 
 		if (!OpenFlAssets.exists(Paths.image('icons/$char', 'preload')))
 			char = 'face';
 
 		loadGraphic(Paths.image('icons/$char', 'preload'), true, 150, 150);
-		animation.add(char, HealthIconsData.charsWithWinningIcons.contains(char) ? [0, 1, 2] : [0, 1], 0, false, isPlayer);
+		animation.add(char, hasWinningAnim ? [0, 1, 2] : [0, 1], 0, false, isPlayer);
 		animation.play(char, true);
 		antialiasing = getPref('antialiasing') && !CharactersData.characterWithoutAntialiasing.contains(char);
 		scrollFactor.set();
