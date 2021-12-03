@@ -39,12 +39,16 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		bf.playAnim('firstDeath');
 
+		#if mobileC
 		_pad = new FlxVirtualPad(NONE, B);
 		_pad.cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 		add(_pad);
+		#end
 	}
 
+	#if mobileC
 	var _pad:FlxVirtualPad;
+	#end
 
 	override function update(elapsed:Float)
 	{
