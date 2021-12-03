@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="spooky.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="spooky0000" x="3" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0001" x="3" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0002" x="498" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0003" x="498" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0004" x="993" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0005" x="993" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0006" x="1488" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0007" x="1488" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0008" x="3" y="555" width="492" height="549"/>
+	<SubTexture name="spooky0009" x="3" y="555" width="492" height="549"/>
+	<SubTexture name="spooky0010" x="498" y="555" width="492" height="549"/>
+	<SubTexture name="spooky0011" x="498" y="555" width="492" height="549"/>
+	<SubTexture name="spooky0012" x="993" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0013" x="993" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0014" x="1488" y="3" width="492" height="549"/>
+	<SubTexture name="spooky0015" x="1488" y="3" width="492" height="549"/>
+</TextureAtlas>

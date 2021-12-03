@@ -40,44 +40,19 @@ class StoryMenuState extends MusicBeatState
 
 	override function create()
 	{
-		/*
-			weeks.push({
-				weekFile: 'week0',
-				weekName: 'Week 0!',
-				weekCharacter: 'default',
-				library: 'week0',
-				weekSongs: ['First-Song', 'Second-Song', 'Third-Song'],
-				weekColor: 0xFF000000
-			});
-		 */
-
 		for (weekNum in 0...WeekData.weeksSongs.length)
-		{
-			var length = WeekData.weeksSongs.length;
-			while (length > WeekData.weeksNames.length)
-				WeekData.weeksNames.push('Unknowned Week Name');
-
-			while (length > WeekData.librariesNames.length)
-				WeekData.librariesNames.push('tutorial');
-
-			while (length > WeekData.weeksFiles.length)
-				WeekData.weeksFiles.push('tutorial');
-
-			while (length > WeekData.weeksCharacters.length)
-				WeekData.weeksCharacters.push('dad');
-
-			while (length > WeekData.weeksColors.length)
-				WeekData.weeksColors.push(-7179779);
-
 			weeks.push({
 				weekFile: WeekData.weeksFiles[weekNum],
 				weekName: WeekData.weeksNames[weekNum],
 				weekCharacter: WeekData.weeksCharacters[weekNum],
+				weekCharacterBF: Std.isOfType(WeekData.storymodeWeeksOverrideCharacters[weekNum][0],
+					String) ? WeekData.storymodeWeeksOverrideCharacters[weekNum][0] : 'bf',
+				weekCharacterGF: Std.isOfType(WeekData.storymodeWeeksOverrideCharacters[weekNum][1],
+					String) ? WeekData.storymodeWeeksOverrideCharacters[weekNum][1] : 'gf',
 				library: WeekData.librariesNames[weekNum],
 				weekSongs: WeekData.weeksSongs[weekNum],
 				weekColor: WeekData.weeksColors[weekNum]
 			});
-		}
 
 		MusicManager.checkPlaying();
 
@@ -97,7 +72,7 @@ class StoryMenuState extends MusicBeatState
 		rankText.screenCenter(X);
 
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
-		var yellowBG = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
+		yellowBG = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
 
 		grpWeekText = new FlxTypedGroup<MenuItem>();
 		add(grpWeekText);
@@ -148,7 +123,7 @@ class StoryMenuState extends MusicBeatState
 				case 2:
 					'gf';
 				default:
-					weeks[curWeek].weekCharacter;
+					'dad';
 			});
 			weekCharacterThing.y += 70;
 			weekCharacterThing.antialiasing = getPref('antialiasing');
@@ -164,9 +139,6 @@ class StoryMenuState extends MusicBeatState
 					weekCharacterThing.x -= 80;
 				case 'gf':
 					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 0.5));
-					weekCharacterThing.updateHitbox();
-				case 'parents-christmas':
-					weekCharacterThing.setGraphicSize(Std.int(weekCharacterThing.width * 0.9));
 					weekCharacterThing.updateHitbox();
 			}
 
@@ -189,7 +161,6 @@ class StoryMenuState extends MusicBeatState
 		sprDifficulty.animation.addByPrefix('normal', 'NORMAL');
 		sprDifficulty.animation.addByPrefix('hard', 'HARD');
 		sprDifficulty.animation.play('easy');
-		changeDifficulty();
 
 		difficultySelectors.add(sprDifficulty);
 
@@ -214,7 +185,9 @@ class StoryMenuState extends MusicBeatState
 
 		updateText();
 
-		trace("Line 165");
+		changeWeek();
+		changeDifficulty(1);
+		changeDifficulty(-1);
 
 		super.create();
 	}
@@ -318,6 +291,17 @@ class StoryMenuState extends MusicBeatState
 		super.update(elapsed);
 	}
 
+	override function beatHit()
+	{
+		super.beatHit();
+
+		trace('elpepe');
+		grpWeekCharacters.forEach(function(char:MenuCharacter)
+		{
+			char.animation.play(char.curCharacter, true);
+		});
+	}
+
 	var movedBack:Bool = false;
 
 	var selectedWeek:Bool = false;
@@ -332,11 +316,14 @@ class StoryMenuState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 
 				grpWeekText.members[curWeek].startFlashing();
-				grpWeekCharacters.members[1].animation.play('bfConfirm');
+				bfChar.animation.play(bfChar.curCharacter + '-hey');
 				stopspamming = true;
 			}
 
-			PlayState.storyPlaylist = weeks[curWeek].weekSongs;
+			var elpepe:Array<String> = [];
+			for (song in weeks[curWeek].weekSongs)
+				elpepe.push(song);
+			PlayState.storyPlaylist = cast(elpepe);
 			selectedWeek = true;
 
 			PlayState.curDifficulty = curDifficulty;
@@ -373,17 +360,20 @@ class StoryMenuState extends MusicBeatState
 				sprDifficulty.offset.x = 20;
 		}
 
-		sprDifficulty.alpha = 0;
+		if (change != 0)
+			sprDifficulty.alpha = 0;
 
 		// USING THESE WEIRD VALUES SO THAT IT DOESNT FLOAT UP
-		sprDifficulty.y = leftArrow.y - 15;
+		if (change != 0)
+			sprDifficulty.y = leftArrow.y - 15;
 		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
 
 		#if !switch
 		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
 		#end
 
-		FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07);
+		if (change != 0)
+			FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07);
 	}
 
 	var lerpScore:Int = 0;
@@ -391,6 +381,8 @@ class StoryMenuState extends MusicBeatState
 
 	function changeWeek(change:Int = 0):Void
 	{
+		if (change != 0)
+			FlxG.sound.play(Paths.sound('scrollMenu'));
 		curWeek += change;
 
 		if (curWeek >= weeks.length)
@@ -413,38 +405,68 @@ class StoryMenuState extends MusicBeatState
 		if (change != 0)
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 
+		changeDifficulty();
 		updateText();
 	}
 
+	var enemyChar(get, never):MenuCharacter;
+
+	inline function get_enemyChar():MenuCharacter
+		return grpWeekCharacters.members[0];
+
+	var bfChar(get, never):MenuCharacter;
+
+	inline function get_bfChar():MenuCharacter
+		return grpWeekCharacters.members[1];
+
+	var gfChar(get, never):MenuCharacter;
+
+	inline function get_gfChar():MenuCharacter
+		return grpWeekCharacters.members[2];
+
 	function updateText()
 	{
-		grpWeekCharacters.members[0].animation.play(weeks[curWeek].weekCharacter);
-		txtTracklist.text = "Tracks\n";
+		enemyChar.changeCharacter(weeks[curWeek].weekCharacter);
+		bfChar.changeCharacter(weeks[curWeek].weekCharacterBF);
+		gfChar.changeCharacter(weeks[curWeek].weekCharacterGF);
 
-		switch (grpWeekCharacters.members[0].animation.curAnim.name)
+		for (char in grpWeekCharacters.members)
+			FlxTween.color(char, CoolUtil.camLerpShit(.25), char.color, HealthIconsData.getIconColor(HealthIconsData.getCharIcon(char.curCharacter)));
+
+		// FlxTween.color(yellowBG, CoolUtil.camLerpShit(.25), yellowBG.color, weeks[curWeek].weekColor);
+
+		switch (enemyChar.curCharacter)
 		{
-			case 'parents-christmas':
-				grpWeekCharacters.members[0].offset.set(200, 200);
-				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
-
-			case 'senpai':
-				grpWeekCharacters.members[0].offset.set(130, 0);
-				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1.4));
-
-			case 'mom':
-				grpWeekCharacters.members[0].offset.set(100, 200);
-				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
+			default:
+				enemyChar.offset.set(100, 100);
+				enemyChar.setGraphicSize(Std.int(enemyChar.width * 1));
 
 			case 'dad':
-				grpWeekCharacters.members[0].offset.set(120, 200);
-				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
+				enemyChar.offset.set(140, 200);
+				enemyChar.setGraphicSize(Std.int(enemyChar.width * 1));
 
-			default:
-				grpWeekCharacters.members[0].offset.set(100, 100);
-				grpWeekCharacters.members[0].setGraphicSize(Std.int(grpWeekCharacters.members[0].width * 1));
-				// grpWeekCharacters.members[0].updateHitbox();
+			case 'spooky':
+				enemyChar.offset.set(225, 100);
+				enemyChar.setGraphicSize(Std.int(enemyChar.width * 1.2));
+
+			case 'pico':
+				enemyChar.offset.set(200, 75);
+				enemyChar.setGraphicSize(Std.int(enemyChar.width * 1.4));
+
+			case 'mom', 'mom-car':
+				enemyChar.offset.set(200, 210);
+				enemyChar.setGraphicSize(Std.int(enemyChar.width * 1));
+
+			case 'parents-christmas':
+				enemyChar.offset.set(300, 200);
+				enemyChar.setGraphicSize(Std.int(enemyChar.width * 2));
+
+			case 'senpai':
+				enemyChar.offset.set(130, 0);
+				enemyChar.setGraphicSize(Std.int(enemyChar.width * 1.4));
 		}
 
+		txtTracklist.text = "Tracks\n";
 		var stringThing = weeks[curWeek].weekSongs;
 
 		for (i in stringThing)

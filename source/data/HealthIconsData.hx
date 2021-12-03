@@ -17,6 +17,10 @@ class HealthIconsData
 		// - WEEK 6
 		'gf-pixel' => 'gf',
 		'senpai-angry' => 'senpai',
+		// - ETC
+		'bf-hey' => 'bf', // + STORY MODE BF HEY COLOR
+		'bf-car-hey' => 'bf', // + STORY MODE BF CAR HEY COLOR
+		'bf-christmas-hey' => 'bf', // + STORY MODE BF CHRISTMAS HEY COLOR
 	];
 	public static final healthIconsBarColors:Map<String, Int> = [
 		// - DEFAULT GAME

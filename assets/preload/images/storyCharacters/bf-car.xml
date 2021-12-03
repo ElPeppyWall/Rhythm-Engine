@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="bf-car.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="bf-car0000" x="3" y="3" width="411" height="412"/>
+	<SubTexture name="bf-car0001" x="417" y="3" width="411" height="412"/>
+	<SubTexture name="bf-car0002" x="831" y="3" width="411" height="412"/>
+	<SubTexture name="bf-car0003" x="1245" y="3" width="411" height="412"/>
+	<SubTexture name="bf-car0004" x="3" y="418" width="411" height="412"/>
+	<SubTexture name="bf-car0005" x="417" y="418" width="411" height="412"/>
+	<SubTexture name="bf-car0006" x="831" y="418" width="411" height="412"/>
+	<SubTexture name="bf-car0007" x="1245" y="418" width="411" height="412"/>
+	<SubTexture name="bf-car0008" x="3" y="833" width="411" height="412"/>
+	<SubTexture name="bf-car0009" x="417" y="833" width="411" height="412"/>
+	<SubTexture name="bf-car0010" x="831" y="833" width="411" height="412"/>
+	<SubTexture name="bf-car0011" x="1245" y="833" width="411" height="412"/>
+	<SubTexture name="bf-car0012" x="3" y="833" width="411" height="412"/>
+	<SubTexture name="bf-car0013" x="417" y="833" width="411" height="412"/>
+</TextureAtlas>

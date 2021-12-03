@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="dad.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="dad0000" x="3" y="3" width="429" height="767"/>
+	<SubTexture name="dad0001" x="3" y="3" width="429" height="767"/>
+	<SubTexture name="dad0002" x="435" y="3" width="429" height="767"/>
+	<SubTexture name="dad0003" x="435" y="3" width="429" height="767"/>
+	<SubTexture name="dad0004" x="867" y="3" width="429" height="767"/>
+	<SubTexture name="dad0005" x="867" y="3" width="429" height="767"/>
+	<SubTexture name="dad0006" x="1299" y="3" width="429" height="767"/>
+	<SubTexture name="dad0007" x="1299" y="3" width="429" height="767"/>
+	<SubTexture name="dad0008" x="3" y="773" width="429" height="767"/>
+	<SubTexture name="dad0009" x="3" y="773" width="429" height="767"/>
+	<SubTexture name="dad0010" x="435" y="773" width="429" height="767"/>
+	<SubTexture name="dad0011" x="435" y="773" width="429" height="767"/>
+	<SubTexture name="dad0012" x="3" y="3" width="429" height="767"/>
+</TextureAtlas>

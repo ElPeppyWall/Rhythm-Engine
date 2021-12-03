@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="bf-christmas.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="bf-christmas0000" x="3" y="3" width="411" height="416"/>
+	<SubTexture name="bf-christmas0001" x="3" y="3" width="411" height="416"/>
+	<SubTexture name="bf-christmas0002" x="417" y="3" width="411" height="416"/>
+	<SubTexture name="bf-christmas0003" x="417" y="3" width="411" height="416"/>
+	<SubTexture name="bf-christmas0004" x="831" y="3" width="411" height="416"/>
+	<SubTexture name="bf-christmas0005" x="831" y="3" width="411" height="416"/>
+	<SubTexture name="bf-christmas0006" x="1245" y="3" width="411" height="416"/>
+	<SubTexture name="bf-christmas0007" x="1245" y="3" width="411" height="416"/>
+	<SubTexture name="bf-christmas0008" x="3" y="422" width="411" height="416"/>
+	<SubTexture name="bf-christmas0009" x="3" y="422" width="411" height="416"/>
+	<SubTexture name="bf-christmas0010" x="3" y="422" width="411" height="416"/>
+	<SubTexture name="bf-christmas0011" x="3" y="422" width="411" height="416"/>
+	<SubTexture name="bf-christmas0012" x="3" y="422" width="411" height="416"/>
+	<SubTexture name="bf-christmas0013" x="3" y="422" width="411" height="416"/>
+</TextureAtlas>

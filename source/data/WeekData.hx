@@ -7,6 +7,8 @@ typedef WeekClass =
 	var weekSongs:Array<String>;
 	var weekFile:String;
 	var weekCharacter:String;
+	var weekCharacterBF:String;
+	var weekCharacterGF:String;
 	var weekColor:flixel.util.FlxColor;
 }
 
@@ -46,9 +48,22 @@ class WeekData
 		'dad', // - WEEK 1
 		'spooky', // - WEEK 2
 		'pico', // - WEEK 3
-		'mom', // - WEEK 4
+		'mom-car', // - WEEK 4
 		'parents-christmas', // - WEEK 5
 		'senpai', // - WEEK 6
+	];
+
+	/**
+	 * + STORY MODE
+	 */
+	public static final storymodeWeeksOverrideCharacters = [
+		[], // - TUTORIAL (WEEK 0)
+		[], // - WEEK 1
+		[], // - WEEK 2
+		[], // - WEEK 3
+		['bf-car', 'gf-car'], // - WEEK 4
+		['bf-christmas', 'gf-christmas'], // - WEEK 5
+		[], // - WEEK 6
 	];
 
 	/**
@@ -60,7 +75,7 @@ class WeekData
 		['spooky', 'spooky', 'monster'], // - WEEK 2
 		[], // - WEEK 3
 		[], // - WEEK 4
-		['parents-christmas', 'parents-christmas', 'monster-christmas'], // - WEEK 4
+		['parents-christmas', 'parents-christmas', 'monster-christmas'], // - WEEK 5
 		['senpai', 'senpai-angry', 'spirit'], // - WEEK 6
 	];
 

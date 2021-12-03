@@ -12,20 +12,42 @@ class MenuCharacter extends FlxSprite
 
 		this.character = character;
 
-		frames = Paths.getSparrowAtlas('campaign_menu_UI_characters');
+		var texArray:Array<String> = [];
 
-		animation.addByPrefix('bf', "BF idle dance white", 24);
-		animation.addByPrefix('bfConfirm', 'BF HEY!!', 24, false);
-		animation.addByPrefix('gf', "GF Dancing Beat WHITE", 24);
-		animation.addByPrefix('dad', "Dad idle dance BLACK LINE", 24);
-		animation.addByPrefix('spooky', "spooky dance idle BLACK LINES", 24);
-		animation.addByPrefix('pico', "Pico Idle Dance", 24, false, true);
-		animation.addByPrefix('mom', "Mom Idle BLACK LINES", 24);
-		animation.addByPrefix('parents-christmas', "Parent Christmas Idle", 24);
-		animation.addByPrefix('senpai', "SENPAI idle Black Lines", 24);
-		// Parent Christmas Idle
+		for (char in ['bf', 'bf-hey', 'gf'])
+			texArray.push('storyCharacters/$char');
+		for (char in ['bf-car', 'bf-car-hey', 'gf-car'])
+			texArray.push('storyCharacters/$char');
+		for (char in ['bf-christmas', 'bf-christmas-hey', 'gf-christmas'])
+			texArray.push('storyCharacters/$char');
+
+		for (char in WeekData.weeksCharacters)
+			texArray.push('storyCharacters/$char');
+
+		frames = Character.joinFrames(texArray, 'preload');
+
+		for (char in ['bf', 'bf-hey', 'gf'])
+			animation.addByPrefix(char, '${char}0', 24, true);
+		for (char in ['bf-car', 'bf-car-hey', 'gf-car'])
+			animation.addByPrefix(char, '${char}0', 24, true);
+		for (char in ['bf-christmas', 'bf-christmas-hey', 'gf-christmas'])
+			animation.addByPrefix(char, '${char}0', 24, true);
+
+		for (char in WeekData.weeksCharacters)
+			animation.addByPrefix(char, '${char}0', 24, true, char == 'pico');
 
 		animation.play(character);
 		updateHitbox();
 	}
+
+	public inline function changeCharacter(char:String):Void
+	{
+		if (curCharacter != char)
+			animation.play(char);
+	}
+
+	public var curCharacter(get, never):String;
+
+	private inline function get_curCharacter():String
+		return animation.curAnim.name;
 }

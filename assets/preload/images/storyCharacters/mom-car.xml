@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="mom-car.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="mom-car0000" x="3" y="3" width="479" height="814"/>
+	<SubTexture name="mom-car0001" x="485" y="3" width="479" height="814"/>
+	<SubTexture name="mom-car0002" x="967" y="3" width="479" height="814"/>
+	<SubTexture name="mom-car0003" x="1449" y="3" width="479" height="814"/>
+	<SubTexture name="mom-car0004" x="1931" y="3" width="479" height="814"/>
+	<SubTexture name="mom-car0005" x="2413" y="3" width="479" height="814"/>
+	<SubTexture name="mom-car0006" x="2895" y="3" width="479" height="814"/>
+	<SubTexture name="mom-car0007" x="3377" y="3" width="479" height="814"/>
+	<SubTexture name="mom-car0008" x="3" y="820" width="479" height="814"/>
+	<SubTexture name="mom-car0009" x="485" y="820" width="479" height="814"/>
+	<SubTexture name="mom-car0010" x="967" y="820" width="479" height="814"/>
+	<SubTexture name="mom-car0011" x="1449" y="820" width="479" height="814"/>
+	<SubTexture name="mom-car0012" x="1931" y="820" width="479" height="814"/>
+	<SubTexture name="mom-car0013" x="2413" y="820" width="479" height="814"/>
+</TextureAtlas>

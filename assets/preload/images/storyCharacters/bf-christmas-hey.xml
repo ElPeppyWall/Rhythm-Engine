@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="bf-christmas-hey.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="bf-christmas-hey0000" x="3" y="3" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0001" x="3" y="3" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0002" x="421" y="3" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0003" x="421" y="3" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0004" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0005" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0006" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0007" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0008" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0009" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0010" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0011" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0012" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0013" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0014" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0015" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0016" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0017" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0018" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0019" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0020" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0021" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0022" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0023" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0024" x="3" y="427" width="415" height="421"/>
+	<SubTexture name="bf-christmas-hey0025" x="3" y="427" width="415" height="421"/>
+</TextureAtlas>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="mom.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="mom0000" x="3" y="3" width="390" height="829"/>
+	<SubTexture name="mom0001" x="3" y="3" width="390" height="829"/>
+	<SubTexture name="mom0002" x="396" y="3" width="390" height="829"/>
+	<SubTexture name="mom0003" x="396" y="3" width="390" height="829"/>
+	<SubTexture name="mom0004" x="789" y="3" width="390" height="829"/>
+	<SubTexture name="mom0005" x="789" y="3" width="390" height="829"/>
+	<SubTexture name="mom0006" x="1182" y="3" width="390" height="829"/>
+	<SubTexture name="mom0007" x="1182" y="3" width="390" height="829"/>
+	<SubTexture name="mom0008" x="1575" y="3" width="390" height="829"/>
+	<SubTexture name="mom0009" x="1575" y="3" width="390" height="829"/>
+	<SubTexture name="mom0010" x="3" y="835" width="390" height="829"/>
+	<SubTexture name="mom0011" x="3" y="835" width="390" height="829"/>
+	<SubTexture name="mom0012" x="396" y="835" width="390" height="829"/>
+	<SubTexture name="mom0013" x="396" y="835" width="390" height="829"/>
+</TextureAtlas>

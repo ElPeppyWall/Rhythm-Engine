@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="gf-car.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="gf-car0000" x="3" y="3" width="774" height="649"/>
+	<SubTexture name="gf-car0001" x="780" y="3" width="774" height="649"/>
+	<SubTexture name="gf-car0002" x="1557" y="3" width="774" height="649"/>
+	<SubTexture name="gf-car0003" x="2334" y="3" width="774" height="649"/>
+	<SubTexture name="gf-car0004" x="3111" y="3" width="774" height="649"/>
+	<SubTexture name="gf-car0005" x="3" y="655" width="774" height="649"/>
+	<SubTexture name="gf-car0006" x="780" y="655" width="774" height="649"/>
+	<SubTexture name="gf-car0007" x="1557" y="655" width="774" height="649"/>
+	<SubTexture name="gf-car0008" x="2334" y="655" width="774" height="649"/>
+	<SubTexture name="gf-car0009" x="3111" y="655" width="774" height="649"/>
+	<SubTexture name="gf-car0010" x="3" y="1307" width="774" height="649"/>
+	<SubTexture name="gf-car0011" x="3" y="1307" width="774" height="649"/>
+	<SubTexture name="gf-car0012" x="780" y="1307" width="774" height="649"/>
+	<SubTexture name="gf-car0013" x="1557" y="1307" width="774" height="649"/>
+	<SubTexture name="gf-car0014" x="2334" y="1307" width="774" height="649"/>
+	<SubTexture name="gf-car0015" x="3111" y="1307" width="774" height="649"/>
+	<SubTexture name="gf-car0016" x="3" y="1959" width="774" height="649"/>
+	<SubTexture name="gf-car0017" x="780" y="1959" width="774" height="649"/>
+	<SubTexture name="gf-car0018" x="1557" y="1959" width="774" height="649"/>
+	<SubTexture name="gf-car0019" x="2334" y="1959" width="774" height="649"/>
+	<SubTexture name="gf-car0020" x="3111" y="1959" width="774" height="649"/>
+	<SubTexture name="gf-car0021" x="3" y="2611" width="774" height="649"/>
+	<SubTexture name="gf-car0022" x="780" y="2611" width="774" height="649"/>
+	<SubTexture name="gf-car0023" x="780" y="2611" width="774" height="649"/>
+	<SubTexture name="gf-car0024" x="1557" y="2611" width="774" height="649"/>
+	<SubTexture name="gf-car0025" x="2334" y="2611" width="774" height="649"/>
+	<SubTexture name="gf-car0026" x="3111" y="2611" width="774" height="649"/>
+	<SubTexture name="gf-car0027" x="3" y="3263" width="774" height="649"/>
+	<SubTexture name="gf-car0028" x="780" y="3263" width="774" height="649"/>
+	<SubTexture name="gf-car0029" x="780" y="3263" width="774" height="649"/>
+</TextureAtlas>

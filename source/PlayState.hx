@@ -1066,6 +1066,8 @@ class PlayState extends MusicBeatState
 
 	override public function onFocusLost():Void
 	{
+		if (!FlxG.autoPause && !paused)
+			pauseGame();
 		#if (windows && cpp)
 		if (health > 0 && !paused)
 		{
@@ -1074,6 +1076,25 @@ class PlayState extends MusicBeatState
 		#end
 
 		super.onFocusLost();
+	}
+
+	function pauseGame():Void
+	{
+		if (!startedCountdown || !canPause)
+			return;
+		persistentUpdate = false;
+		persistentDraw = true;
+		paused = true;
+
+		// 1 / 1000 chance for Gitaroo Man easter egg
+		if (FlxG.random.bool(0.1))
+			switchState(GitarooPause);
+		else
+			openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+
+		#if (windows && cpp)
+		DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + curDifficultyText + ")", iconRPC);
+		#end
 	}
 
 	function resyncVocals():Void
@@ -1125,24 +1146,8 @@ class PlayState extends MusicBeatState
 		scoreTxt.text = '${langString('score')}: $songScore | ${langString('misses')}: $misses';
 		scoreTxt.screenCenter(X);
 
-		if ((controls.PAUSE #if mobileC || pauseButton.buttonC.justPressed || MobileControls.androidBack #end)
-			&& startedCountdown
-			&& canPause)
-		{
-			persistentUpdate = false;
-			persistentDraw = true;
-			paused = true;
-
-			// 1 / 1000 chance for Gitaroo Man easter egg
-			if (FlxG.random.bool(0.1))
-				switchState(GitarooPause);
-			else
-				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-
-			#if (windows && cpp)
-			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + curDifficultyText + ")", iconRPC);
-			#end
-		}
+		if ((controls.PAUSE #if mobileC || pauseButton.buttonC.justPressed || MobileControls.androidBack #end))
+			pauseGame();
 
 		iconP1.setGraphicSize(Std.int(150 + 0.85 * (iconP1.width - 150)));
 		iconP2.setGraphicSize(Std.int(150 + 0.85 * (iconP2.width - 150)));

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="parents-christmas.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="parents-christmas0000" x="3" y="3" width="884" height="782"/>
+	<SubTexture name="parents-christmas0001" x="890" y="3" width="884" height="782"/>
+	<SubTexture name="parents-christmas0002" x="1777" y="3" width="884" height="782"/>
+	<SubTexture name="parents-christmas0003" x="1777" y="3" width="884" height="782"/>
+	<SubTexture name="parents-christmas0004" x="2664" y="3" width="884" height="782"/>
+	<SubTexture name="parents-christmas0005" x="3" y="788" width="884" height="782"/>
+	<SubTexture name="parents-christmas0006" x="890" y="788" width="884" height="782"/>
+	<SubTexture name="parents-christmas0007" x="890" y="788" width="884" height="782"/>
+	<SubTexture name="parents-christmas0008" x="1777" y="788" width="884" height="782"/>
+	<SubTexture name="parents-christmas0009" x="2664" y="788" width="884" height="782"/>
+	<SubTexture name="parents-christmas0010" x="3" y="1573" width="884" height="782"/>
+	<SubTexture name="parents-christmas0011" x="3" y="1573" width="884" height="782"/>
+	<SubTexture name="parents-christmas0012" x="890" y="1573" width="884" height="782"/>
+	<SubTexture name="parents-christmas0013" x="1777" y="1573" width="884" height="782"/>
+</TextureAtlas>

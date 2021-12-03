@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="bf-hey.png">
+	<!-- Created with Adobe Animate version 21.0.7.42652 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="bf-hey0000" x="3" y="3" width="415" height="418"/>
+	<SubTexture name="bf-hey0001" x="3" y="3" width="415" height="418"/>
+	<SubTexture name="bf-hey0002" x="421" y="3" width="415" height="418"/>
+	<SubTexture name="bf-hey0003" x="421" y="3" width="415" height="418"/>
+	<SubTexture name="bf-hey0004" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0005" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0006" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0007" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0008" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0009" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0010" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0011" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0012" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0013" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0014" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0015" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0016" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0017" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0018" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0019" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0020" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0021" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0022" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0023" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0024" x="3" y="424" width="415" height="418"/>
+	<SubTexture name="bf-hey0025" x="3" y="424" width="415" height="418"/>
+</TextureAtlas>
