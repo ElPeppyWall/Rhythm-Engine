@@ -5,13 +5,7 @@ import flixel.FlxG;
 class GameLoop
 {
 	public function new()
-	{
 		trace('Init Game Loop');
-		trace(function()
-		{
-			trace('hola');
-		});
-	}
 
 	public function update():Void
 	{
