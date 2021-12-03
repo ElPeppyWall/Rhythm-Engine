@@ -44,6 +44,7 @@
 
 	"score": "Score",
 	"misses": "Misses",
+	"accuracy": "Accuracy",
 
 	"pauseOG": [
 		"Resume",

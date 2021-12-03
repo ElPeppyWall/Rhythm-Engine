@@ -67,11 +67,12 @@ class PlayState extends MusicBeatState
 	public static var deathCounter:Int;
 	public static var campaignScore:Int = 0;
 	public static var practiceMode:Bool = false;
-	public static var misses = 0;
-	public static var sicks = 0;
-	public static var goods = 0;
-	public static var bads = 0;
-	public static var shits = 0;
+	public static var accuracy:Float;
+	public static var misses:Int;
+	public static var sicks:Int;
+	public static var goods:Int;
+	public static var bads:Int;
+	public static var shits:Int;
 
 	private var health:Float = 1;
 	private var combo:Int = 0;
@@ -86,12 +87,19 @@ class PlayState extends MusicBeatState
 			practiceMode = false;
 			seenCutscene = false;
 		}
+		accuracy = 0 / 0;
 		misses = 0;
 		sicks = 0;
 		goods = 0;
 		bads = 0;
 		shits = 0;
 	}
+
+	// -----------------------
+	// ---- ACCURACY VARS ----
+	// -----------------------
+	var notesThanShouldBeHitted:Int;
+	var totalNotesHitted:Float;
 
 	// --------------------
 	// ---- CHARACTERS ----
@@ -1143,7 +1151,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = '${langString('score')}: $songScore | ${langString('misses')}: $misses';
+		scoreTxt.text = '${langString('score')}: $songScore | ${langString('misses')}: $misses | ${langString('accuracy')}: ${Math.isFinite(accuracy) ? accuracy.truncate() : 0}% [${NoteJudements.calculateRating(accuracy)}]';
 		scoreTxt.screenCenter(X);
 
 		if ((controls.PAUSE #if mobileC || pauseButton.buttonC.justPressed || MobileControls.androidBack #end))
@@ -1451,6 +1459,9 @@ class PlayState extends MusicBeatState
 				NoteSplash.spawnSplash(this, daNote, 1);
 		}
 
+		totalNotesHitted += NoteJudements.getJudementAccuracy(daRating);
+		recalculateRating();
+
 		if (!practiceMode)
 			songScore += score;
 
@@ -1659,6 +1670,7 @@ class PlayState extends MusicBeatState
 			});
 			vocals.volume = 0;
 		}
+		recalculateRating();
 		misses++;
 		combo = 0;
 		health -= 0.0475;
@@ -1706,6 +1718,12 @@ class PlayState extends MusicBeatState
 			notes.remove(note, true);
 			note.destroy();
 		}
+	}
+
+	inline function recalculateRating():Void
+	{
+		notesThanShouldBeHitted++;
+		accuracy = Math.min(100, Math.max(0, (totalNotesHitted / notesThanShouldBeHitted) * 100));
 	}
 
 	override function stepHit()
