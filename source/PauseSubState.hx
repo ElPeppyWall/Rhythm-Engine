@@ -49,6 +49,8 @@ class PauseSubState extends MusicBeatSubstate
 		fromOptions = _fromOptions;
 		for (i in SongsData.getSongDiffies(curSong))
 			difficultyChoices.push(CoolUtil.getDiffPause(i));
+		if (PlayState.isAloneFunkin)
+			difficultyChoices.remove(langString('pauseOG')[4]);
 
 		difficultyChoices.push(langString('back'));
 		if (!PlayState.isStoryMode)
