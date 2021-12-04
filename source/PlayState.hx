@@ -1130,9 +1130,16 @@ class PlayState extends MusicBeatState
 			healthBar.updateFilledBar();
 		}
 
+		var skipPressed = checkKey('SPACE');
+
+		#if FLX_TOUCH
+		for (touch in FlxG.touches.list)
+			if (touch.overlaps(skipSpr))
+				skipPressed = true;
+		#end
 		if (!skippedIntro && startedSong)
 		{
-			if (checkKey('SPACE'))
+			if (skipPressed)
 			{
 				FlxG.sound.music.time = firstNoteTime - 1500;
 				resyncVocals();
