@@ -1802,16 +1802,18 @@ class PlayState extends MusicBeatState
 
 	function cameraMovement():Void
 	{
-		if (camFollow.getPosition() != getCamDadPos() && !cameraRightSide)
+		if (!cameraRightSide)
 		{
-			camFollow.setPosition(getCamDadPos().x, getCamDadPos().y);
+			var camDadPos = getCamDadPos();
+			camFollow.setPosition(camDadPos.x, camDadPos.y);
 
 			if (curSong == 'tutorial')
 				tweenCamIn();
 		}
-		if (camFollow.getPosition() != getCamBFPos() && cameraRightSide)
+		else
 		{
-			camFollow.setPosition(getCamBFPos().x, getCamBFPos().y);
+			var camBFPos = getCamBFPos();
+			camFollow.setPosition(camBFPos.x, camBFPos.y);
 
 			if (curSong == 'tutorial')
 				FlxTween.tween(FlxG.camera, {zoom: 1}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
