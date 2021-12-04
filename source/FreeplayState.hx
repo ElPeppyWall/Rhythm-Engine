@@ -115,7 +115,7 @@ class FreeplayState extends MusicBeatState
 		playBG.alpha = 0.6;
 		add(playBG);
 
-		playTxt = new FlxText(0, playBG.y, 0, langString('freeplayPlay'));
+		playTxt = new FlxText(0, playBG.y, 0, langString('freeplayPlay' #if mobileC + 'Mobile' #end));
 		playTxt.active = false;
 		playTxt.setFormat(Paths.font("vcr.ttf"), 28, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		playTxt.screenCenter(X);
