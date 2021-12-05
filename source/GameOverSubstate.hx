@@ -57,10 +57,15 @@ class GameOverSubstate extends MusicBeatSubstate
 		var accept = false;
 		var back = false;
 		#if mobileC
+		back = _pad.buttonB.justPressed;
+		#if FLX_TOUCH
 		for (touch in FlxG.touches.list)
 			if (touch.overlaps(bf))
 				accept = true;
-		back = _pad.buttonB.justPressed;
+		#else
+		if (FlxG.mouse.overlaps(bf))
+			accept = true;
+		#end
 		#else
 		accept = controls.ACCEPT;
 		back = controls.BACK;

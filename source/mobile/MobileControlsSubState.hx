@@ -25,12 +25,10 @@ class MobileControlsSubState extends MusicBeatSubstate
 	var _hb:Hitbox;
 
 	var _saveconrtol:FlxSave;
-	var exitbutton:FlxUIButton;
-	var exportbutton:FlxUIButton;
-	var importbutton:FlxUIButton;
 
-	var inputvari:FlxText;
+	var controlModeTxt:FlxText;
 
+	var changeKeyBindsButton:FlxUIButton;
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
 	var controlitems:Array<String> = ['Right', 'Left', 'Double', 'Keyboard', 'Custom', 'Hitbox'];
@@ -39,7 +37,7 @@ class MobileControlsSubState extends MusicBeatSubstate
 
 	var buttonistouched:Bool = false;
 
-	var bindbutton:flixel.ui.FlxButton;
+	var bindbutton:FlxButton;
 
 	public function new()
 	{
@@ -50,82 +48,69 @@ class MobileControlsSubState extends MusicBeatSubstate
 		_pad = new FlxVirtualPad(RIGHT_FULL, NONE);
 		_pad.alpha = 0;
 
-		inputvari = new FlxText(125, 50, 0, controlitems[0].toLowerCase(), 48);
-		inputvari.setFormat(Paths.font("vcr.ttf"), 48, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		inputvari.borderSize = 1.25;
+		_hb = new Hitbox();
+		_hb.visible = false;
 
-		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
+		controlModeTxt = new FlxText(125, 50, 0, controlitems[0], 48);
+		controlModeTxt.setFormat(Paths.font("vcr.ttf"), 48, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		controlModeTxt.borderSize = 1.25;
 
-		leftArrow = new FlxSprite(inputvari.x - 60, inputvari.y - 10);
-		leftArrow.frames = ui_tex;
+		var arrowsFrames = Paths.getSparrowAtlas('campaign_menu_UI_assets');
+
+		leftArrow = new FlxSprite(controlModeTxt.x - 60, controlModeTxt.y - 10);
+		leftArrow.frames = arrowsFrames;
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
 		leftArrow.animation.play('idle');
 
-		rightArrow = new FlxSprite(inputvari.x + inputvari.width + 10, leftArrow.y);
-		rightArrow.frames = ui_tex;
+		rightArrow = new FlxSprite(controlModeTxt.x + controlModeTxt.width + 10, leftArrow.y);
+		rightArrow.frames = arrowsFrames;
 		rightArrow.animation.addByPrefix('idle', 'arrow right');
 		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 		rightArrow.animation.play('idle');
 
-		_hb = new Hitbox();
-		_hb.visible = false;
-
-		exitbutton = new FlxUIButton(FlxG.width - 650, 25, "Exit without Save");
-		exitbutton.resize(125, 50);
-		exitbutton.setLabelFormat("VCR OSD Mono", 24, FlxColor.BLACK, "center", OUTLINE, FlxColor.BLACK);
-		exitbutton.label.borderSize = 1.25;
-
-		var savebutton = new FlxUIButton((exitbutton.x + exitbutton.width + 25), 25, "Exit and Save", () ->
-		{
-			save();
-			FlxG.switchState(new OptionsMenu());
-		});
-		savebutton.resize(250, 50);
-		savebutton.setLabelFormat("VCR OSD Mono", 24, FlxColor.BLACK, "center", OUTLINE, FlxColor.BLACK);
+		var savebutton = new FlxUIButton(FlxG.width - 225, 25, "Exit and Save", exitAndSaveSelected);
+		savebutton.resize(200, 50);
+		savebutton.setLabelFormat("VCR OSD Mono", 18, FlxColor.WHITE, "center", OUTLINE, FlxColor.BLACK);
 		savebutton.label.borderSize = 1.25;
+		savebutton.label.offset.y += 10;
 
-		exportbutton = new FlxUIButton(FlxG.width - 150, 25, "Copy in Clipboard", () ->
+		changeKeyBindsButton = new FlxUIButton(FlxG.width - 825, 25, "KeyBinds", function()
 		{
-			saveToClipboard(_pad);
+			FlxG.state.openSubState(new KeyBindsMenu(false));
 		});
-		exportbutton.resize(125, 50);
-		exportbutton.setLabelFormat("VCR OSD Mono", 24, FlxColor.BLACK, "center", OUTLINE, FlxColor.BLACK);
-		exportbutton.label.borderSize = 1.25;
-
-		importbutton = new FlxUIButton(exportbutton.x, exportbutton.y + 75, "Load from Clipboard", () ->
-		{
-			loadFromClipboard(_pad);
-		});
-		importbutton.resize(125, 50);
-		importbutton.setLabelFormat("VCR OSD Mono", 24, FlxColor.BLACK, "center", OUTLINE, FlxColor.BLACK);
-		importbutton.label.borderSize = 1.25;
-
-		add(exitbutton);
-		add(savebutton);
-		add(exportbutton);
-		add(importbutton);
+		changeKeyBindsButton.resize(150, 50);
+		changeKeyBindsButton.setLabelFormat("VCR OSD Mono", 18, FlxColor.WHITE, "center", OUTLINE, FlxColor.BLACK);
+		changeKeyBindsButton.label.borderSize = 1.25;
+		changeKeyBindsButton.label.offset.y += 10;
+		changeKeyBindsButton.visible = false;
+		changeKeyBindsButton.active = changeKeyBindsButton.visible;
 
 		add(_pad);
-
 		add(_hb);
-
-		add(inputvari);
+		add(savebutton);
+		add(controlModeTxt);
+		add(changeKeyBindsButton);
 		add(leftArrow);
 		add(rightArrow);
 
 		changeSelection();
 	}
 
+	function exitAndSaveSelected():Void
+	{
+		save();
+		FlxG.switchState(new OptionsMenu());
+	}
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		rightArrow.x = inputvari.x + inputvari.width + 10;
-		leftArrow.x = inputvari.x - 60;
+		rightArrow.x = controlModeTxt.x + controlModeTxt.width + 10;
+		leftArrow.x = controlModeTxt.x - 60;
 
-		if (exitbutton.justReleased || MobileControls.androidBack)
-			FlxG.switchState(new OptionsMenu());
-
+		if (MobileControls.androidBack)
+			exitAndSaveSelected();
 		#if windows
 		if (FlxG.keys.justPressed.RIGHT)
 			changeSelection(1);
@@ -161,7 +146,7 @@ class MobileControlsSubState extends MusicBeatSubstate
 		if (forceChange != null)
 			curSelected = forceChange;
 
-		inputvari.text = controlitems[curSelected].toLowerCase();
+		controlModeTxt.text = controlitems[curSelected];
 
 		if (forceChange != null)
 		{
@@ -195,6 +180,8 @@ class MobileControlsSubState extends MusicBeatSubstate
 				add(_pad);
 			case 3:
 				_pad.alpha = 0;
+				changeKeyBindsButton.visible = true;
+				changeKeyBindsButton.active = changeKeyBindsButton.visible;
 			case 4:
 				remove(_pad);
 				_pad = null;

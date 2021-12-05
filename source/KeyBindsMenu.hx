@@ -1,5 +1,6 @@
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.addons.ui.FlxUIButton;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
@@ -100,6 +101,18 @@ class KeyBindsMenu extends MusicBeatSubstate
 		arrowGrp = new ArrowGrp();
 		add(arrowGrp);
 
+		#if mobileC
+		var savebutton = new FlxUIButton(FlxG.width - 225, 25, "Exit", () ->
+		{
+			switchState(OptionsMenu);
+		});
+		savebutton.resize(200, 50);
+		savebutton.setLabelFormat("VCR OSD Mono", 18, FlxColor.WHITE, "center", OUTLINE, FlxColor.BLACK);
+		savebutton.label.borderSize = 1.25;
+		savebutton.label.offset.y += 10;
+		add(savebutton);
+		#end
+
 		daBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		daBG.alpha = .6;
 		daBG.scrollFactor.set();
@@ -186,7 +199,7 @@ class KeyBindsMenu extends MusicBeatSubstate
 				daBG.visible = true;
 			}
 			if (controls.BACK)
-				openSubState(new PreferencesMenu(isPause));
+				switchState(OptionsMenu);
 		}
 		else
 		{
