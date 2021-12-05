@@ -157,6 +157,8 @@ class MobileControlsSubState extends MusicBeatSubstate
 		}
 
 		_hb.visible = false;
+		changeKeyBindsButton.visible = false;
+		changeKeyBindsButton.active = changeKeyBindsButton.visible;
 
 		switch (curSelected)
 		{
