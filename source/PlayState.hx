@@ -523,7 +523,8 @@ class PlayState extends MusicBeatState
 		scoreTxt.setFormat(curStage.startsWith('school') ? "Pixel Arial 11 Bold" : Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER,
 			FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
-		scoreTxt.borderSize = 1.25;
+		scoreTxt.borderSize = 3;
+		scoreTxt.borderQuality = 3;
 
 		songNameTxt = new FlxText(4, FlxG.width,
 			'${prettySong} - ${CoolUtil.getDiffName(curDifficulty, isAloneFunkin)} // Rhythm Engine v${GameVars.engineVer}', 20);
