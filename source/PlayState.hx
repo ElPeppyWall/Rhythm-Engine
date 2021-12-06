@@ -1718,6 +1718,11 @@ class PlayState extends MusicBeatState
 		accuracy = Math.min(100, Math.max(0, (totalNotesHitted / notesThanShouldBeHitted) * 100));
 	}
 
+	var curSection(get, never):Int;
+
+	inline function get_curSection():Int
+		return (curStep / 16).int();
+
 	override function stepHit()
 	{
 		super.stepHit();
