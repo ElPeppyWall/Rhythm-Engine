@@ -11,6 +11,6 @@ labels: compiling help
 
 #### Please check for duplicates or similar compiler issues by filtering for 'compiler help'
 
-## Type the compile command you used:
+## Type the compile command you used: (like `lime test windows -debug`)
 
 ## Please describe your issue. Provide extensive detail and images if possible.
