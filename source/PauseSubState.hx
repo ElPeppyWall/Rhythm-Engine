@@ -28,9 +28,9 @@ class PauseSubState extends MusicBeatSubstate
 	];
 	#if debug
 	var characterList = [
-		PlayState.dad.curCharacter,
-		PlayState.gf.curCharacter,
-		PlayState.boyfriend.curCharacter,
+		PlayState.instance.dad.curCharacter,
+		PlayState.instance.gf.curCharacter,
+		PlayState.instance.boyfriend.curCharacter,
 		'BACK'
 	];
 	var grpIconShit:FlxTypedGroup<HealthIcon>;
