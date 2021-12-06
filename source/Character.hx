@@ -557,9 +557,9 @@ class Character extends flixel.FlxSprite
 			{
 				if (!getPref('ultra-optimize'))
 					trace('failed to load \'$curCharacter\' character, loading \'none\'');
-				curCharacter = 'none';
 			}
-			frames = getCharacterFrames('voidChar', 'shared');
+			curCharacter = 'none';
+			frames = Paths.getSparrowAtlas('voidChar', 'shared');
 			addAnim('idle', {name: 'idle'});
 			playAnim('idle');
 			animation.play('idle', true);
@@ -696,7 +696,7 @@ class Character extends flixel.FlxSprite
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
-		if (curCharacter != 'null' && !getPref('ultra-optimize'))
+		if (curCharacter != 'none' && !getPref('ultra-optimize'))
 		{
 			animation.play(AnimName + animSuffix, Force, Reversed, Frame);
 
