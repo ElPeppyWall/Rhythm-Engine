@@ -310,7 +310,8 @@ class PreferencesMenu extends MusicBeatSubstate
 		if (!isPause)
 			CoolUtil.switchState(MainMenuState);
 		else
-			FlxG.state.openSubState(new PauseSubState(PlayState.boyfriend.getScreenPosition().x, PlayState.boyfriend.getScreenPosition().y, true));
+			FlxG.state.openSubState(new PauseSubState(PlayState.instance.boyfriend.getScreenPosition().x, PlayState.instance.boyfriend.getScreenPosition().y,
+				true));
 	}
 
 	function toggleOption(daPref:String)

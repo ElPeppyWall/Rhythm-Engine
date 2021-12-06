@@ -25,7 +25,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		Conductor.songPosition = 0;
 
-		bf = new Character(x, y, CharactersData.getCharDead(PlayState.boyfriend.curCharacter), ['DEAD'], true, true);
+		bf = new Character(x, y, CharactersData.getCharDead(PlayState.instance.boyfriend.curCharacter), ['DEAD'], true, true);
 		add(bf);
 
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);

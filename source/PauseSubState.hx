@@ -91,13 +91,6 @@ class PauseSubState extends MusicBeatSubstate
 		levelDeaths.updateHitbox();
 		add(levelDeaths);
 
-		var levelAvanced = new FlxText(20, 30 + 96, 0, "", 32);
-		levelAvanced.text += 'Playing VS ${CharactersData.characterNames[PlayState.dad.curCharacter]} ${StagesData.stageNames[PlayState.curStage]}';
-		levelAvanced.scrollFactor.set();
-		levelAvanced.setFormat(Paths.font('vcr.ttf'), 32);
-		levelAvanced.updateHitbox();
-		// add(levelAvanced);
-
 		practiceText = new FlxText(20, 111, 0, langString('practiceMode'), 32);
 		practiceText.scrollFactor.set();
 		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
@@ -109,12 +102,10 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
 		levelDeaths.alpha = 0;
-		levelAvanced.alpha = 0;
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		levelDeaths.x = FlxG.width - (levelDeaths.width + 20);
-		levelAvanced.x = FlxG.width - (levelAvanced.width + 20);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
@@ -242,11 +233,11 @@ class PauseSubState extends MusicBeatSubstate
 					switch (curSelected)
 					{
 						case 0:
-							switchState(AnimationDebug, [PlayState.dad.curCharacter, true]);
+							switchState(AnimationDebug, [PlayState.instance.dad.curCharacter, true]);
 						case 1:
-							switchState(AnimationDebug, [PlayState.gf.curCharacter, true]);
+							switchState(AnimationDebug, [PlayState.instance.gf.curCharacter, true]);
 						case 2:
-							switchState(AnimationDebug, [PlayState.boyfriend.curCharacter, false]);
+							switchState(AnimationDebug, [PlayState.instance.boyfriend.curCharacter, false]);
 					}
 				}
 		}

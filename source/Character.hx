@@ -597,11 +597,11 @@ class Character extends flixel.FlxSprite
 			if (animation.curAnim.name.startsWith('sing'))
 				holdTimer += elapsed;
 
-			var dadVar:Float = 4;
+			var singDuration:Float = 4;
 
 			if (curCharacter == 'dad')
-				dadVar = 6.1;
-			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
+				singDuration = 6.1;
+			if (holdTimer >= Conductor.stepCrochet * singDuration * 0.001)
 			{
 				dance();
 				holdTimer = 0;
@@ -719,6 +719,11 @@ class Character extends flixel.FlxSprite
 			}
 		}
 	}
+
+	public var curAnimName(get, never):String;
+
+	private inline function get_curAnimName():String
+		return animation.curAnim.name;
 
 	public function sing(daNote:Note, ?playState:PlayState)
 	{
