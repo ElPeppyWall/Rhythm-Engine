@@ -1,8 +1,9 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 
-class NoteSplash extends flixel.FlxSprite
+class NoteSplash extends FlxSprite
 {
 	public function new(x:Float, y:Float, noteData:Int)
 	{

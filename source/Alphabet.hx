@@ -1,6 +1,8 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 
@@ -9,7 +11,7 @@ using StringTools;
 /**
  * Loosley based on FlxTypeText lolol
  */
-class Alphabet extends flixel.group.FlxSpriteGroup
+class Alphabet extends FlxSpriteGroup
 {
 	public var delay:Float = 0.05;
 	public var paused:Bool = false;
@@ -102,7 +104,7 @@ enum AlphabetType
 	IGNORE_X;
 }
 
-class AlphaCharacter extends flixel.FlxSprite
+class AlphaCharacter extends FlxSprite
 {
 	public static inline var alphabet:String = "abcdefghijklmnopqrstuvwxyz";
 

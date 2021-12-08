@@ -1,8 +1,9 @@
 package;
 
 import Conductor.BPMChangeEvent;
+import flixel.FlxSubState;
 
-class MusicBeatSubstate extends flixel.FlxSubState
+class MusicBeatSubstate extends FlxSubState
 {
 	public function new()
 		super();

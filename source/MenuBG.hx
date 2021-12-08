@@ -1,6 +1,8 @@
 package;
 
-class MenuBG extends flixel.FlxSprite
+import flixel.FlxSprite;
+
+class MenuBG extends FlxSprite
 {
 	public function new(type:MenuBGType = NORMAL, x = 0.0, y = 0.0)
 	{

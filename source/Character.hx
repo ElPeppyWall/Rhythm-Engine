@@ -1,6 +1,7 @@
 package;
 
 import PlayState.notesDir;
+import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
@@ -8,7 +9,7 @@ using StringTools;
 /**
  * TODO: Rework all characters
  */
-class Character extends flixel.FlxSprite
+class Character extends FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;

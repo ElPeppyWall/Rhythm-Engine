@@ -1,5 +1,7 @@
 package;
 
+import flixel.FlxSprite;
+
 /**
  * `this` is a simplified version of `FlxSprite` especially designed to be a Background Sprite.
  * @param spriteName [0] = SpriteName, [1] = Library
@@ -11,7 +13,7 @@ package;
  * @param anims is the array than contains all anims from the .XML file
  * @param loop if the anims are looped
  */
-class BGSprite extends flixel.FlxSprite
+class BGSprite extends FlxSprite
 {
 	var anims:Map<String, Anims.Anim> = [];
 	var firstAnim:Anims.Anim;

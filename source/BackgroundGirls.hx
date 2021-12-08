@@ -1,6 +1,8 @@
 package;
 
-class BackgroundGirls extends flixel.FlxSprite
+import flixel.FlxSprite;
+
+class BackgroundGirls extends FlxSprite
 {
 	public function new(x:Float, y:Float)
 	{

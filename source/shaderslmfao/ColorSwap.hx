@@ -1,5 +1,7 @@
 package shaderslmfao;
 
+import flixel.system.FlxAssets.FlxShader;
+
 class ColorSwap
 {
 	public var shader:ColorSwapShader;
@@ -22,7 +24,7 @@ class ColorSwap
 	}
 }
 
-class ColorSwapShader extends flixel.system.FlxAssets.FlxShader
+class ColorSwapShader extends FlxShader
 {
 	@:glFragmentSource("    
         varying float openfl_Alphav;

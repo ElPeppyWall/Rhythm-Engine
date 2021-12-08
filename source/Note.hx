@@ -1,8 +1,10 @@
 package;
 
+import flixel.FlxSprite;
+
 using StringTools;
 
-class Note extends flixel.FlxSprite
+class Note extends FlxSprite
 {
 	public static final swagWidth:Float = 160 * 0.7;
 
