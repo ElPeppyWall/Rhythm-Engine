@@ -115,7 +115,7 @@ class FreeplayState extends MusicBeatState
 		playBG.alpha = 0.6;
 		add(playBG);
 
-		playTxt = new FlxText(0, playBG.y, 0, langString('freeplayPlay' #if mobileC + 'Mobile' #end));
+		playTxt = new FlxText(0, playBG.y, 0, 'Press ${#if !mobileC 'SPACE' #else 'PLAY BUTTON' #end} to preview the song.');
 		playTxt.active = false;
 		playTxt.setFormat(Paths.font("vcr.ttf"), 28, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		playTxt.screenCenter(X);
@@ -228,7 +228,7 @@ class FreeplayState extends MusicBeatState
 		// if (bg.color != color2)
 		// 	bg.color = FlxColor.interpolate(bg.color, color2, CoolUtil.camLerpShit(.045));
 
-		scoreText.text = '${langString('personalBest')}:' + lerpScore;
+		scoreText.text = 'PERSONAL BEST:' + lerpScore;
 		positionHighscore();
 
 		if (!exiting)

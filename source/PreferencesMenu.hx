@@ -24,23 +24,188 @@ class PreferencesMenu extends MusicBeatSubstate
 	var menuCamera:FlxCamera;
 	var sprOpt:AlphabetList;
 
-	static final options:Array<Array<Dynamic>> = [
-		['', 'controls'], //
-		['', 'downscroll', Bool], //
-		['', 'midscroll', Bool], //
-		['', 'ghostTapping', Bool],
-		['', 'fpsCap', Int], //
-		['', 'hitsound', Bool], //
-		['', 'ultra-optimize', Bool], //
-		['', 'note-splashes', Bool],
-		['', 'background-opacity', Float], //
-		['', 'language', String], //
-		['', 'flashing-menu', Bool], //
-		['', 'antialiasing', Bool],
-		['', 'camera-zoom', Bool], //
-		['', 'fps-counter', Bool], //
-		['', 'auto-pause', Bool], //
-		['', 'allowReset', Bool] //
+	static final preferencesList:Array<Preference> = [
+		{ // - controls
+			name: 'controls',
+			prettyName: 'Controls',
+			description: 'Change your controls.',
+			type: CUSTOM,
+			defaultValue: null,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - downscroll
+			name: 'downscroll',
+			prettyName: 'Downscroll',
+			description: 'Places gray notes at bottom of the screen.',
+			type: TOGGLE,
+			defaultValue: false,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - midscroll
+			name: 'midscroll',
+			prettyName: 'Midscroll',
+			description: 'Centers gray notes.',
+			type: TOGGLE,
+			defaultValue: false,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - ghostTapping
+			name: 'ghostTapping',
+			prettyName: 'Ghost Tapping',
+			description: "If you press a key and there aren't notes to press, you miss.",
+			type: TOGGLE,
+			defaultValue: true,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - fpsCap
+			name: 'fpsCap',
+			prettyName: 'FPS Cap',
+			description: "Change the game framerate limit.",
+			type: INT,
+			defaultValue: 120,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 60,
+			maxValue: 270,
+		},
+		{ // - hitsound
+			name: 'hitsound',
+			prettyName: 'HitSound',
+			description: "When you press a note, a satisfying sound plays.",
+			type: TOGGLE,
+			defaultValue: false,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - ultra-optimize
+			name: 'ultra-optimize',
+			prettyName: 'Ultra Optimize',
+			description: "Deletes the characters and the background for better performance.",
+			type: TOGGLE,
+			defaultValue: false,
+			hideFromOptionsMenu: false,
+			disableOnPause: true,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - note-splashes
+			name: 'note-splashes',
+			prettyName: 'Note Splashes',
+			description: 'Spawns a fancy splash when you hit a "Sick".',
+			type: TOGGLE,
+			defaultValue: true,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - background-opacity
+			name: 'background-opacity',
+			prettyName: 'Background Opacity',
+			description: 'Adds a black screen behind your notes to hide the background to see them better.',
+			type: FLOAT_WITH_PERCENTAGE,
+			defaultValue: 0,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 1,
+		},
+		{ // - flashing-menu
+			name: 'flashing-menu',
+			prettyName: 'Flashing Lights',
+			description: 'Toggle the flashing lights for photosensitive people.',
+			type: TOGGLE,
+			defaultValue: true,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - antialiasing
+			name: 'antialiasing',
+			prettyName: 'Antialiasing',
+			description: 'Without antialiasing, theres better performance but the game looks worse.',
+			type: TOGGLE,
+			defaultValue: true,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - camera-zoom
+			name: 'camera-zoom',
+			prettyName: 'Camera Beats',
+			description: 'Toggle the camera zooms on a song beat.',
+			type: TOGGLE,
+			defaultValue: true,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - auto-pause
+			name: 'auto-pause',
+			prettyName: 'Auto Pause',
+			description: "Auto pauses the game when it doesn't have focus.",
+			type: TOGGLE,
+			defaultValue: false,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - allowReset
+			name: 'allowReset',
+			prettyName: 'Allow Reset',
+			description: "Allow die on game with the R key.",
+			type: TOGGLE,
+			defaultValue: false,
+			hideFromOptionsMenu: false,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		{ // - mobileControlsType
+			name: 'mobileControlsType',
+			prettyName: 'mobileControlsType',
+			description: "mobileControlsType",
+			type: CUSTOM,
+			defaultValue: 0,
+			hideFromOptionsMenu: true,
+			disableOnPause: true,
+			minValue: 0,
+			maxValue: 100,
+		},
+		{ // - mobileCustomPositions
+			name: 'mobileCustomPositions',
+			prettyName: 'mobileCustomPositions',
+			description: "mobileCustomPositions",
+			type: CUSTOM,
+			defaultValue: [
+				new FlxPoint(FlxG.width - 86 * 3, FlxG.height - 66 - 116 * 3),
+				new FlxPoint(FlxG.width - 130 * 3, FlxG.height - 66 - 81 * 3),
+				new FlxPoint(FlxG.width - 44 * 3, FlxG.height - 66 - 81 * 3),
+				new FlxPoint(FlxG.width - 86 * 3, FlxG.height - 66 - 45 * 3),
+			],
+			hideFromOptionsMenu: true,
+			disableOnPause: true,
+			minValue: 0,
+			maxValue: 0,
+		},
 	];
 
 	var isPause:Bool;
@@ -86,11 +251,11 @@ class PreferencesMenu extends MusicBeatSubstate
 		{
 			if (lol)
 			{
-				descriptionTxt.resetText(Language.langString(curPref)[1]);
+				descriptionTxt.resetText(preferencesList[curSelected].description);
 				descriptionTxt.start(.04, true);
 			}
-			if (curPref != 'controls')
-				prefTxt.text = prefValueToText(getPref(curPref), curPref);
+			if (preferencesList[curSelected].type != CUSTOM)
+				prefTxt.text = prefValueToText();
 			var daColor = new FlxColor(switch (prefTxt.text)
 			{
 				case 'OFF':
@@ -104,7 +269,7 @@ class PreferencesMenu extends MusicBeatSubstate
 			});
 			daColor.alphaFloat = .6;
 			var alphaAAAAA = 1;
-			switch (curPref)
+			switch (preferencesList[curSelected].name)
 			{
 				case 'controls', 'reset options':
 					daColor.alphaFloat = 0;
@@ -133,73 +298,60 @@ class PreferencesMenu extends MusicBeatSubstate
 	inline function get_optionsNameList():Array<String>
 	{
 		var optionsList:Array<String> = [];
-		for (i in options)
-			optionsList.push(Language.langString(i[1])[0]);
+		for (i in preferencesList)
+			if (!i.hideFromOptionsMenu)
+				optionsList.push(i.prettyName);
 
 		return optionsList;
 	}
-
-	var curPref(get, never):String;
-
-	inline function get_curPref():String
-		return options[curSelected][1];
-
-	var curPrefType(get, never):Dynamic;
-
-	inline function get_curPrefType():Dynamic
-		return options[curSelected][2];
 
 	var curSelected(get, never):Int;
 
 	inline function get_curSelected():Int
 		return sprOpt.selectedIndex;
 
-	function prefValueToText(value:Dynamic, daPref:String):String
+	function prefValueToText():String
 	{
-		switch (daPref)
+		switch (preferencesList[curSelected].type)
 		{
-			case 'background-opacity':
-				return '${Std.string(value * 100)}%';
-			case 'language':
-				return value.toUpperCase();
+			case TOGGLE:
+				return switch (getPref(preferencesList[curSelected].name))
+				{
+					case true:
+						'ON';
+					case false:
+						'OFF';
+				}
+			case FLOAT, INT:
+				return '${getPref(preferencesList[curSelected].name)}';
+			case FLOAT_WITH_PERCENTAGE:
+				return '${cast (getPref(preferencesList[curSelected].name), Float) * 100}%';
 			default:
-				if (Std.isOfType(value, Bool))
-					return switch (value)
-					{
-						case true:
-							'ON';
-						case false:
-							'OFF';
-					}
-				else if (Std.isOfType(value, Int) || Std.isOfType(value, Float))
-					return Std.string(value);
-				else
-					return 'UNKNOWN';
+				return 'UNKNOWN';
+				// 	case 'background-opacity':
+				// 	case 'language':
+				// 		return value.toUpperCase();
+				// 	default:
+				// 		if (Std.isOfType(value, Bool))
+
+				// 		else if (Std.isOfType(value, Int) || Std.isOfType(value, Float))
+				// 			return Std.string(value);
+				// 		else
+				// 			return 'UNKNOWN';
 		}
 	}
 
 	function accept():Void
 	{
-		switch (curPrefType)
+		switch (preferencesList[curSelected].type)
 		{
-			case Bool:
-				toggleOption(curPref);
-			default:
-				switch (curPref)
-				{
-					case 'language':
-						if (!isPause)
-						{
-							if (getPref(curPref) == 'english') //
-								setPref(curPref, 'spanish'); //
-							else if (getPref(curPref) == 'spanish') //
-								setPref(curPref, 'english'); //
-							else //
-								setPref(curPref, 'english'); //
+			case TOGGLE:
+				toggleOption(preferencesList[curSelected].name);
+				sprOpt._changeSelection(false);
 
-							LoadingState.loadAndSwitchState(OptionsMenu);
-						}
-						else makeAnError();
+			case CUSTOM:
+				switch (preferencesList[curSelected].name)
+				{
 					case 'controls':
 						#if mobileC
 						if (!isPause)
@@ -210,9 +362,9 @@ class PreferencesMenu extends MusicBeatSubstate
 						FlxG.state.openSubState(new KeyBindsMenu(isPause));
 						#end
 				}
+
+			default:
 		}
-		if (curPref != 'language')
-			sprOpt._changeSelection(false);
 	}
 
 	override function update(elapsed:Float)
@@ -292,14 +444,15 @@ class PreferencesMenu extends MusicBeatSubstate
 			dir *= 10;
 			floatChange *= 10;
 		}
-		switch (curPrefType)
+		switch (preferencesList[curSelected].type)
 		{
-			case Int:
-				setPref(curPref, getPref(curPref) + dir);
-			case Float:
-				setPref(curPref, getPref(curPref) + floatChange);
-			case Bool:
-				toggleOption(curPref);
+			case INT:
+				setPref(preferencesList[curSelected].name, getPref(preferencesList[curSelected].name) + dir);
+			case FLOAT, FLOAT_WITH_PERCENTAGE:
+				setPref(preferencesList[curSelected].name, getPref(preferencesList[curSelected].name) + floatChange);
+			case TOGGLE:
+				toggleOption(preferencesList[curSelected].name);
+			default:
 		}
 		sprOpt._changeSelection(false);
 	}
@@ -316,18 +469,24 @@ class PreferencesMenu extends MusicBeatSubstate
 
 	function toggleOption(daPref:String)
 	{
-		if (isPause)
+		var preferenceData = getPrefDataByName(daPref);
+		if (isPause && preferenceData.disableOnPause)
+			makeAnError();
+		else
 		{
+			setPref(daPref, !getPref(daPref));
 			switch (daPref)
 			{
-				case 'ultra-optimize', 'antialiasing', 'language':
-					makeAnError();
-				default:
-					setPref(daPref, !getPref(daPref));
+				case 'antialiasing':
+					sprOpt.forEach(function(spr:Alphabet)
+					{
+						spr.forEach(function(char:FlxSprite)
+						{
+							char.antialiasing = getPref('antialiasing');
+						});
+					});
 			}
 		}
-		else
-			setPref(daPref, !getPref(daPref));
 	}
 
 	function makeAnError():Void
@@ -354,54 +513,29 @@ class PreferencesMenu extends MusicBeatSubstate
 	public static function getPref(preference:String):Dynamic
 		return preferences[preference];
 
+	public static function getPrefDataByName(name:String):Preference
+	{
+		for (preference in preferencesList)
+			if (preference.name == name)
+				return preference;
+
+		trace(null);
+		return null;
+	}
+
 	public static function setPref(preference:String, value:Dynamic, ?isPrefCheck:Bool = false):Void
 	{
-		if (!isPrefCheck && Std.isOfType(value, String))
-			switch (value.toLowerCase())
-			{
-				case 'false':
-					value = null;
-					value = false;
-				case 'true':
-					value = null;
-					value = true;
+		var preferenceData = getPrefDataByName(preference);
 
-				default:
-					var boolArray:Array<Bool> = [];
-					var a:String = value;
-					for (i in 0...a.length)
-						boolArray.push(alphabet.contains(a.charAt(i)));
-
-					trace(boolArray);
-					if (!boolArray.contains(true))
-					{
-						var tempValue:String = value;
-						value = null;
-						if (!a.contains(','))
-							value = Std.parseInt(tempValue);
-						else
-						{
-							var elpepe = tempValue.split(',').join('.');
-							value = Std.parseFloat(elpepe);
-						}
-					}
-			}
-
-		switch (preference)
+		if ([FLOAT, FLOAT_WITH_PERCENTAGE, INT].contains(preferenceData.type))
 		{
-			case 'background-opacity':
-				value = FlxMath.roundDecimal(value, 2);
-				if (value >= 1)
-					value = 1;
-				if (value <= 0)
-					value = 0;
-
-			case 'fpsCap':
-				if (value > 270)
-					value = 270;
-				if (value < 60)
-					value = 60;
+			value = FlxMath.roundDecimal(value, 2);
+			if (value >= preferenceData.maxValue)
+				value = preferenceData.maxValue;
+			if (value <= preferenceData.minValue)
+				value = preferenceData.minValue;
 		}
+
 		trace('\u001b[96m' + 'setPref (${preference}) to: ${value}\u001b[0m');
 		preferences[preference] = value;
 		FlxG.save.data.prefs = preferences;
@@ -430,35 +564,9 @@ class PreferencesMenu extends MusicBeatSubstate
 			FlxG.save.data.prefs = new Map<String, Dynamic>();
 		preferences = FlxG.save.data.prefs;
 
-		{
-			// gameplay
-			preferenceCheck("mobileControlsType", 0);
-			preferenceCheck("mobileCustomPositions", [
-				new FlxPoint(FlxG.width - 86 * 3, FlxG.height - 66 - 116 * 3),
-				new FlxPoint(FlxG.width - 130 * 3, FlxG.height - 66 - 81 * 3),
-				new FlxPoint(FlxG.width - 44 * 3, FlxG.height - 66 - 81 * 3),
-				new FlxPoint(FlxG.width - 86 * 3, FlxG.height - 66 - 45 * 3),
-			]);
-			preferenceCheck("downscroll", false);
-			preferenceCheck("midscroll", false);
-			preferenceCheck("ghostTapping", true);
-			preferenceCheck("fpsCap", Main.getHZ());
-			preferenceCheck("hitsound", false);
-			preferenceCheck("ultra-optimize", false);
-			// apparence
-			preferenceCheck("note-splashes", true);
-			preferenceCheck("background-opacity", 0.0);
-			// etc
-			preferenceCheck("language", 'english');
-			preferenceCheck("flashing-menu", true);
-			preferenceCheck("censor-naughty", true);
-			preferenceCheck("antialiasing", true);
-			preferenceCheck("camera-zoom", true);
-			preferenceCheck("fps-counter", true);
-			preferenceCheck("auto-pause", false);
-			preferenceCheck("first-time", true);
-			preferenceCheck("allowReset", true);
-		}
+		for (preference in preferencesList)
+			if (preference.defaultValue != null)
+				preferenceCheck(preference.name, preference.defaultValue);
 
 		FlxG.save.flush();
 	}
@@ -473,8 +581,28 @@ class PreferencesMenu extends MusicBeatSubstate
 				cast(openfl.Lib.current.getChildAt(0), Main).setFPSCap(getPref('fpsCap'));
 			case 'auto-pause':
 				FlxG.autoPause = getPref("auto-pause");
-			case 'language':
-				Language.loadFromJSON();
 		}
 	}
+}
+
+typedef Preference =
+{
+	var name:String;
+	var prettyName:String;
+	var description:String;
+	var type:PreferenceType;
+	var defaultValue:Dynamic;
+	var hideFromOptionsMenu:Bool;
+	var disableOnPause:Bool;
+	var minValue:Float;
+	var maxValue:Float;
+}
+
+enum PreferenceType
+{
+	TOGGLE;
+	INT;
+	FLOAT;
+	FLOAT_WITH_PERCENTAGE;
+	CUSTOM;
 }

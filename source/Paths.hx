@@ -54,9 +54,6 @@ class Paths
 	inline static public function json(key:String, ?library:String)
 		return getPath('data/$key.json', TEXT, library);
 
-	inline static public function lang(key:String, ?library:String)
-		return getPath('languages/$key.json', TEXT, library);
-
 	static public function sound(key:String, ?library:String)
 		return getPath('sounds/$key.$SOUND_EXT', SOUND, library);
 

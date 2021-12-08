@@ -784,9 +784,9 @@ class PlayState extends MusicBeatState
 			switch (swagCounter)
 			{
 				case 0:
-					FlxG.sound.play(Paths.sound('intro3'), 0.6);
+					FlxG.sound.play(Paths.sound('uiStyles/$uiStyle/intro3'), 0.6);
 				case 1:
-					FlxG.sound.play(Paths.sound('intro2'), 0.6);
+					FlxG.sound.play(Paths.sound('uiStyles/$uiStyle/intro2'), 0.6);
 					var readyCount = new FlxSprite(Paths.image('uiStyles/$uiStyle/ready', 'shared'));
 					readyCount.cameras = [camHUD];
 
@@ -805,7 +805,7 @@ class PlayState extends MusicBeatState
 						}
 					});
 				case 2:
-					FlxG.sound.play(Paths.sound('intro1'), 0.6);
+					FlxG.sound.play(Paths.sound('uiStyles/$uiStyle/intro1'), 0.6);
 					var setCount = new FlxSprite(Paths.image('uiStyles/$uiStyle/set', 'shared'));
 					setCount.cameras = [camHUD];
 
@@ -824,7 +824,7 @@ class PlayState extends MusicBeatState
 						}
 					});
 				case 3:
-					FlxG.sound.play(Paths.sound('introGo'), 0.6);
+					FlxG.sound.play(Paths.sound('uiStyles/$uiStyle/introGo'), 0.6);
 
 					var goCount = new FlxSprite(Paths.image('uiStyles/$uiStyle/go', 'shared'));
 					goCount.cameras = [camHUD];
@@ -1156,7 +1156,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = '${langString('score')}: $songScore | ${langString('misses')}: $misses | ${langString('accuracy')}: ${Math.isFinite(accuracy) ? accuracy.truncate() : 0}% [${NoteJudements.calculateRating(accuracy)}]';
+		scoreTxt.text = 'SCORE: $songScore | MISSES: $misses | ACCURACY: ${Math.isFinite(accuracy) ? accuracy.truncate() : 0}% [${NoteJudements.calculateRating(accuracy)}]';
 		scoreTxt.screenCenter(X);
 
 		if ((controls.PAUSE #if mobileC || pauseButton.buttonC.justPressed || MobileControls.androidBack #end))
@@ -2297,9 +2297,6 @@ class PlayState extends MusicBeatState
 
 		if (checkKey('H'))
 			debugTxt.visible = !debugTxt.visible;
-
-		if (checkKey('F7'))
-			Console.open(checkSettingsInGame);
 
 		#if FLX_MOUSE
 		if (FlxG.mouse.justPressedMiddle)

@@ -15,10 +15,7 @@ class CoolUtil
 		return isAloneFunkin ? 'JSON File' : difficultyArray[index][0];
 
 	public static inline function getDiffName(index:Int, isAloneFunkin:Bool):String
-		return isAloneFunkin ? langString('jsonFile') : langString('diffies')[index];
-
-	public static function getDiffPause(index:Int):String
-		return langString('pauseDiffies')[index];
+		return isAloneFunkin ? 'JSON File' : difficultyArray[index][0];
 
 	public static inline function getDiffForJSON(index:Int):String
 		return difficultyArray[index][1];

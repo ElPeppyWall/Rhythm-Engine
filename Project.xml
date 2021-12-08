@@ -51,7 +51,6 @@
 	<classpath name="source/debugStates" />
 	<classpath name="source/editors" />
 	<classpath name="source/data" />
-	<classpath name="source/debugTools" if="debug" />
 	<classpath name="source/mobile" />
 
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web" />

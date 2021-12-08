@@ -16,15 +16,15 @@ class PauseSubState extends MusicBeatSubstate
 	var animationDebugMenu = false;
 	var menuItems:Array<String> = [''];
 	var pauseOG = [
-		langString('pauseOG')[0],
-		langString('pauseOG')[1],
-		langString('pauseOG')[2],
-		langString('pauseOG')[3],
-		langString('pauseOG')[4],
+		'Resume',
+		'Restart Song',
+		'Skip Song',
+		'Change Difficulty',
+		'Toggle Practice Mode',
 		#if debug 'Animation Debug', 'Chart Editor',
 		#end
-		langString('pauseOG')[5],
-		langString('pauseOG')[6]
+		'Options',
+		'Exit to menu'
 	];
 	#if debug
 	var characterList = [
@@ -48,15 +48,15 @@ class PauseSubState extends MusicBeatSubstate
 		super();
 		fromOptions = _fromOptions;
 		for (i in SongsData.getSongDiffies(curSong))
-			difficultyChoices.push(CoolUtil.getDiffPause(i));
+			difficultyChoices.push(CoolUtil.getDiffName(i, false));
 		if (PlayState.isAloneFunkin)
-			difficultyChoices.remove(langString('pauseOG')[4]);
+			difficultyChoices.remove('Change Difficulty');
 
-		difficultyChoices.push(langString('back'));
+		difficultyChoices.push('BACK');
 		if (!PlayState.isStoryMode)
-			pauseOG.remove(langString('pauseOG')[2]);
+			pauseOG.remove('Skip Song');
 		if (SongsData.getSongDiffies(curSong).length == 1)
-			pauseOG.remove(langString('pauseOG')[3]);
+			pauseOG.remove('Change Difficulty');
 		menuItems = pauseOG;
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
@@ -91,7 +91,7 @@ class PauseSubState extends MusicBeatSubstate
 		levelDeaths.updateHitbox();
 		add(levelDeaths);
 
-		practiceText = new FlxText(20, 111, 0, langString('practiceMode'), 32);
+		practiceText = new FlxText(20, 111, 0, 'PRACTICE MODE', 32);
 		practiceText.scrollFactor.set();
 		practiceText.setFormat(Paths.font('vcr.ttf'), 32);
 		practiceText.updateHitbox();
@@ -122,7 +122,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		if (fromOptions)
 		{
-			curSelected = menuItems.indexOf(langString('pauseOG')[5]);
+			curSelected = menuItems.indexOf('Options');
 			changeSelection();
 		}
 
@@ -190,24 +190,24 @@ class PauseSubState extends MusicBeatSubstate
 		var daSelected:String = menuItems[curSelected];
 		switch (daSelected)
 		{
-			case "Resume", 'Continuar':
+			case "Resume":
 				resumeSelected();
-			case "Restart Song", 'Reiniciar Cancion':
+			case "Restart Song":
 				FlxG.resetState();
-			case 'Skip Song', "Saltar Cancion":
+			case 'Skip Song':
 				close();
 				PlayState.instance.endSong();
-			case 'Change Difficulty', "Cambiar Dificultad":
+			case 'Change Difficulty':
 				lastSelected = curSelected;
 				menuItems = difficultyChoices;
 				regenMenu();
-			case 'EASY', 'FACIL':
+			case 'EASY':
 				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-easy', PlayState.curWeek, PlayState.weekColor, PlayState.isStoryMode, true);
 			case 'NORMAL':
 				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-normal', PlayState.curWeek, PlayState.weekColor, PlayState.isStoryMode, true);
-			case 'HARD', 'DIFICIL':
+			case 'HARD':
 				PlayState.loadSong('${PlayState.SONG.song.toLowerCase()}-hard', PlayState.curWeek, PlayState.weekColor, PlayState.isStoryMode, true);
-			case 'Toggle Practice Mode', "Alternar modo practica":
+			case 'Toggle Practice Mode':
 				PlayState.practiceMode = !PlayState.practiceMode;
 				practiceText.set_visible(PlayState.practiceMode);
 			#if debug
@@ -218,11 +218,11 @@ class PauseSubState extends MusicBeatSubstate
 			case 'Chart Editor':
 				switchState(ChartingState);
 			#end
-			case 'Options', "Opciones":
+			case 'Options':
 				FlxG.state.openSubState(new PreferencesMenu(true));
-			case "Exit to menu", "Salir al menu":
+			case "Exit to menu":
 				PlayState.exit();
-			case 'BACK', 'ATRAS':
+			case 'BACK':
 				menuItems = pauseOG;
 				regenMenu();
 				curSelected = lastSelected;
