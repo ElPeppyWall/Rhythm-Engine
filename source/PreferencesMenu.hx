@@ -142,7 +142,7 @@ class PreferencesMenu extends MusicBeatSubstate
 			type: TOGGLE,
 			defaultValue: true,
 			hideFromOptionsMenu: false,
-			disableOnPause: false,
+			disableOnPause: true,
 			minValue: 0,
 			maxValue: 0,
 		},
