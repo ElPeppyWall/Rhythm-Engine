@@ -24,7 +24,7 @@ class Character extends FlxSprite
 
 	public var isDead(get, never):Bool;
 
-	function get_isDead():Bool
+	inline function get_isDead():Bool
 		return characterArgs.contains('DEAD');
 
 	public function new(x:Float, y:Float, character:String, _characterArgs:Array<String>, _isPlayer:Bool, _isBF:Bool)
@@ -726,7 +726,7 @@ class Character extends FlxSprite
 	private inline function get_curAnimName():String
 		return animation.curAnim.name;
 
-	public function existsAnim(anim:String):Bool
+	public inline function existsAnim(anim:String):Bool
 		return animation.getByName(anim) != null;
 
 	public function sing(daNote:Note, ?playState:PlayState)
