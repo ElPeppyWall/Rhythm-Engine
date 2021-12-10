@@ -1666,10 +1666,10 @@ class PlayState extends MusicBeatState
 		}
 		recalculateRating();
 		misses++;
+		if (combo > 5 && gf.existsAnim('sad'))
+			gf.playAnim('sad', true);
 		combo = 0;
 		health -= 0.0475;
-		if (combo > 5 && gf.existsAnim('sad'))
-			gf.playAnim('sad');
 
 		if (!practiceMode)
 			songScore -= 10;
