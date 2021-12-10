@@ -726,6 +726,9 @@ class Character extends FlxSprite
 	private inline function get_curAnimName():String
 		return animation.curAnim.name;
 
+	public function existsAnim(anim:String):Bool
+		return animation.getByName(anim) != null;
+
 	public function sing(daNote:Note, ?playState:PlayState)
 	{
 		playAnim('sing${notesDir[daNote.noteData]}${daNote.singSuffix}', !daNote.isSustainNote);
