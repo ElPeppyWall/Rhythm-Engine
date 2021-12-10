@@ -102,7 +102,8 @@ class MainMenuState extends MusicBeatState
 		var versionShit = new FlxText(5, FlxG.height - 50, 0, 'Rhythm Engine v${GameVars.engineVer}', 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		versionShit.borderSize = 1.25;
+		versionShit.borderSize = 3;
+		versionShit.borderQuality = 3;
 		versionShit.screenCenter(X);
 		versionShit.scrollFactor.set();
 		add(versionShit);
@@ -115,6 +116,7 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		camBG.followLerp = CoolUtil.camLerpShit(0.06);
 		if (!selectedSomethin)
 		{
 			var up = false, down = false, accept = false, back = false;
