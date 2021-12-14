@@ -155,7 +155,10 @@ class MainMenuState extends MusicBeatState
 				changeItem(1);
 
 			if (back)
+			{
+				FlxG.sound.play(Paths.sound('cancelMenu'), 0.4);
 				switchState(TitleState);
+			}
 
 			if (accept)
 				selectItem();
@@ -226,7 +229,7 @@ class MainMenuState extends MusicBeatState
 	function changeItem(huh:Int = 0, force:Bool = false)
 	{
 		if (huh != 0)
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		curSelected += huh;
 
 		if (!force)

@@ -37,6 +37,7 @@ class MenuCharacter extends FlxSprite
 			animation.addByPrefix(char, '${char}0', 24, true, char == 'pico');
 
 		animation.play(character);
+		antialiasing = getPref('antialiasing');
 		updateHitbox();
 	}
 

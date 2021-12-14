@@ -341,12 +341,14 @@ class FreeplayState extends MusicBeatState
 				MusicManager.playMainMusic(0);
 				FlxG.sound.music.fadeIn(.25, 0, 1);
 				FlxTween.cancelTweensOf(bg);
+				FlxG.sound.play(Paths.sound('cancelMenu'), 0.4);
 				switchState(MainMenuState);
 			});
 		}
 		else
 		{
 			FlxTween.cancelTweensOf(bg);
+			FlxG.sound.play(Paths.sound('cancelMenu'), 0.4);
 			switchState(MainMenuState);
 		}
 	}

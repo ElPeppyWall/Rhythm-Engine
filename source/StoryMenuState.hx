@@ -153,6 +153,7 @@ class StoryMenuState extends MusicBeatState
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
 		leftArrow.animation.play('idle');
+		leftArrow.antialiasing = getPref('antialiasing');
 		difficultySelectors.add(leftArrow);
 
 		sprDifficulty = new FlxSprite(leftArrow.x + 130, leftArrow.y);
@@ -161,6 +162,7 @@ class StoryMenuState extends MusicBeatState
 		sprDifficulty.animation.addByPrefix('normal', 'NORMAL');
 		sprDifficulty.animation.addByPrefix('hard', 'HARD');
 		sprDifficulty.animation.play('easy');
+		sprDifficulty.antialiasing = getPref('antialiasing');
 
 		difficultySelectors.add(sprDifficulty);
 
@@ -169,6 +171,7 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.addByPrefix('idle', 'arrow right');
 		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 		rightArrow.animation.play('idle');
+		rightArrow.antialiasing = getPref('antialiasing');
 		difficultySelectors.add(rightArrow);
 
 		add(yellowBG);
@@ -283,7 +286,7 @@ class StoryMenuState extends MusicBeatState
 		#end
 		if (back && !movedBack && !selectedWeek)
 		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(Paths.sound('cancelMenu'), 0.4);
 			movedBack = true;
 			switchState(MainMenuState);
 		}
@@ -382,7 +385,7 @@ class StoryMenuState extends MusicBeatState
 	function changeWeek(change:Int = 0):Void
 	{
 		if (change != 0)
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		curWeek += change;
 
 		if (curWeek >= weeks.length)
@@ -403,7 +406,7 @@ class StoryMenuState extends MusicBeatState
 		}
 
 		if (change != 0)
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		changeDifficulty();
 		updateText();

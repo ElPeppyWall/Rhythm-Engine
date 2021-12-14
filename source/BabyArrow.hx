@@ -2,6 +2,7 @@ package;
 
 import PlayState.notesColor;
 import PlayState.notesDir;
+import flixel.FlxG;
 import flixel.FlxSprite;
 
 using StringTools;
@@ -57,8 +58,10 @@ class BabyArrow extends FlxSprite
 		}
 		ID = noteData;
 		animation.play('static');
-		x += 50;
-		x += ((flixel.FlxG.width / 2) * playerID);
+		if (playerID == 0)
+			x += 50;
+		else
+			x += ((FlxG.width - Note.swagWidth * 4 - 50) * playerID);
 	}
 
 	override function update(elapsed:Float)
