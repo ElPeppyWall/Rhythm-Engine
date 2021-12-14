@@ -1570,8 +1570,9 @@ class PlayState extends MusicBeatState
 			#end //
 		];
 
-		if (controlArray.contains(true) && getPref('hitsound'))
-			FlxG.sound.play(Paths.sound('hitsound'), .65);
+		for (control in controlArray)
+			if (control && getPref('hitsound'))
+				FlxG.sound.play(Paths.sound('hitsound'), .65);
 		if (generatedMusic)
 		{
 			notes.forEachAlive(function(daNote:Note)

@@ -100,6 +100,7 @@ class LoadingState extends MusicBeatState
 				fakeRemaining = 0;
 			});
 		}
+		super.create();
 	}
 
 	static inline final maxFakeTime = #if mobileC .5 #else .25 #end;
