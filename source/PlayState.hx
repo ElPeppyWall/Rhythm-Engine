@@ -493,6 +493,7 @@ class PlayState extends MusicBeatState
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 
+		cameraRightSide = !isAloneFunkin ? PlayState.SONG.notes[0].mustHitSection : true;
 		cameraMovement();
 		// camFollow.setPosition(camPos.x, camPos.y);
 
@@ -1221,10 +1222,10 @@ class PlayState extends MusicBeatState
 			// Conductor.lastSongPos = FlxG.sound.music.time;
 		}
 
-		var curSection = PlayState.SONG.notes[Std.int(curStep / 16)];
-		if (generatedMusic && curSection != null)
+		var curSectionData = PlayState.SONG.notes[curSection];
+		if (generatedMusic && curSectionData != null)
 		{
-			cameraRightSide = !isAloneFunkin ? curSection.mustHitSection : true;
+			cameraRightSide = !isAloneFunkin ? curSectionData.mustHitSection : true;
 			cameraMovement();
 		}
 
@@ -1745,11 +1746,11 @@ class PlayState extends MusicBeatState
 		if (generatedMusic)
 			notes.sort(FlxSort.byY, FlxSort.DESCENDING);
 
-		if (SONG.notes[Math.floor(curStep / 16)] != null)
+		if (SONG.notes[curSection] != null)
 		{
-			if (SONG.notes[Math.floor(curStep / 16)].changeBPM)
+			if (SONG.notes[curSection].changeBPM)
 			{
-				Conductor.changeBPM(SONG.notes[Math.floor(curStep / 16)].bpm);
+				Conductor.changeBPM(SONG.notes[curSection].bpm);
 				FlxG.log.add('CHANGED BPM!');
 			}
 		}
