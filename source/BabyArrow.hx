@@ -58,10 +58,18 @@ class BabyArrow extends FlxSprite
 		}
 		ID = noteData;
 		animation.play('static');
-		if (playerID == 0)
-			x += 50;
+		if (!getPref('midscroll'))
+		{
+			if (playerID == 0)
+				x += 50;
+			else
+				x += ((FlxG.width - Note.swagWidth * 4 - 50) * playerID);
+		}
 		else
-			x += ((FlxG.width - Note.swagWidth * 4 - 50) * playerID);
+		{
+			x += 50;
+			x += ((flixel.FlxG.width / 2) * playerID);
+		}
 	}
 
 	override function update(elapsed:Float)
