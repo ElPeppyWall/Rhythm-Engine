@@ -3,6 +3,8 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.addons.ui.FlxUIButton;
+import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
@@ -28,21 +30,62 @@ class AloneFunkinState extends MusicBeatState
 		screenshot.updateHitbox();
 		add(screenshot);
 
+		var mapp:Map<String, String> = getPref('alone-funkin-recent-list');
+		var listt:Array<String> = [''];
+		for (song => paths in mapp)
+			listt.push(song);
+		var recentListDrop = new FlxUIDropDownMenu(100, 300, FlxUIDropDownMenu.makeStrIdLabelArray(listt, false), function(value:String)
+		{
+			onDropFile(mapp.get(value), fullScreen, false);
+		});
+		recentListDrop.selectedLabel = '';
+		for (button in recentListDrop.list)
+		{
+			button.setLabelFormat("VCR OSD Mono", 18, FlxColor.WHITE, "center", OUTLINE, FlxColor.BLACK);
+		}
+		add(recentListDrop);
+
+		var recentListClear = new FlxUIButton(200, 400, 'CLEAR RECENT LIST', function()
+		{
+			setPref('alone-funkin-recent-list', new Map<String, String>());
+		});
+		recentListClear.resize(200, 50);
+		recentListClear.setLabelFormat("VCR OSD Mono", 18, FlxColor.WHITE, "center", OUTLINE, FlxColor.BLACK);
+		recentListClear.label.borderSize = 1.25;
+		recentListClear.label.offset.y += 10;
+		add(recentListClear);
+
 		lime.app.Application.current.window.onDropFile.add(function(path:String)
 		{
-			if (path.endsWith('.json'))
-			{
-				PlayState.loadSong(path, 0, flixel.util.FlxColor.WHITE, false, false, true);
-				FlxG.fullscreen = fullScreen;
-				lime.app.Application.current.window.onDropFile.removeAll();
-			}
+			onDropFile(path, fullScreen, true);
 		});
 
 		super.create();
 	}
 
+	function onDropFile(path:String, fullScreen:Bool, dragged:Bool)
+	{
+		if (path.endsWith('.json'))
+		{
+			PlayState.loadSong(path, 0, flixel.util.FlxColor.WHITE, false, false, true);
+			if (dragged)
+			{
+				var pathMap:Map<String, String> = getPref('alone-funkin-recent-list');
+				var daArray = path.split('\\');
+				var daArray2 = daArray[daArray.length - 1].split('.');
+				daArray2.remove(daArray2[daArray2.length - 1]);
+				pathMap[daArray2.join('')] = path;
+				setPref('alone-funkin-recent-list', pathMap);
+			}
+			FlxG.fullscreen = fullScreen;
+			lime.app.Application.current.window.onDropFile.removeAll();
+		}
+	}
+
 	override function update(elapsed:Float)
 	{
+		if (FlxG.fullscreen)
+			FlxG.fullscreen = false;
 		if (controls.BACK)
 			switchState(FreeplayState);
 		super.update(elapsed);

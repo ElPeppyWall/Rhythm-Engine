@@ -41,7 +41,4 @@ class KeyBinds
 		trace('noteBinds: ${FlxG.save.data.noteBinds}');
 		trace('uiBinds: ${FlxG.save.data.uiBinds}');
 	}
-
-	public static function checkKey(key:String, ?inputType:flixel.input.FlxInput.FlxInputState = JUST_PRESSED):Bool
-		return FlxG.keys.checkStatus(FlxKey.fromString(key.toUpperCase()), inputType);
 }

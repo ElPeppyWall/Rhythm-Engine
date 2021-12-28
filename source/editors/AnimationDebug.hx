@@ -1,6 +1,5 @@
 package;
 
-import KeyBinds.checkKey;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -157,7 +156,7 @@ class AnimationDebug extends FlxState
 			{
 				case 'parents-christmas':
 					singAltList = ['idle', 'singLEFT-alt', 'singDOWN-alt', 'singUP-alt', 'singRIGHT-alt'];
-				case 'bf':
+				case 'bf', 'bf-christmas', 'bf-pixel':
 					singShiftList = ['hey', 'singLEFTmiss', 'singDOWNmiss', 'singUPmiss', 'singRIGHTmiss'];
 					singAltList = ['scared', 'singHIT', 'singDODGE', 'singUP', 'singRIGHT'];
 					if (char.isDead)
@@ -166,7 +165,7 @@ class AnimationDebug extends FlxState
 					singNormalList = ['sad', 'danceLeft', 'sad', 'sad', 'danceRight'];
 					singShiftList = ['sad', 'singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 					singAltList = ['scared', 'cheer', 'duck', 'hairBlow', 'hairFall'];
-				case 'speaker':
+				case 'speaker', 'gf-pixel':
 					singNormalList = ['danceLeft', 'danceLeft', 'danceLeft', 'danceLeft', 'danceRight'];
 				case 'spooky':
 					singShiftList = ['danceLeft', 'danceLeft', 'danceLeft', 'danceLeft', 'danceRight'];
@@ -174,9 +173,9 @@ class AnimationDebug extends FlxState
 			switch (char.curCharacter)
 			{
 				default:
-					if (checkKey('ALT', PRESSED))
+					if (FlxG.keys.pressed.ALT)
 						singList = singAltList;
-					else if (checkKey('SHIFT', PRESSED))
+					else if (FlxG.keys.pressed.SHIFT)
 						singList = singShiftList;
 					else
 						singList = singNormalList;
@@ -185,7 +184,12 @@ class AnimationDebug extends FlxState
 			}
 		}
 
-		var checkArray = [checkKey('UP'), checkKey('DOWN'), checkKey('LEFT'), checkKey('RIGHT')];
+		var checkArray = [
+			FlxG.keys.justPressed.UP,
+			FlxG.keys.justPressed.DOWN,
+			FlxG.keys.justPressed.LEFT,
+			FlxG.keys.justPressed.RIGHT
+		];
 		if (checkArray.contains(true))
 		{
 			var holdShift = FlxG.keys.pressed.SHIFT;
@@ -205,7 +209,7 @@ class AnimationDebug extends FlxState
 			char.playAnim(char.animation.curAnim.name);
 		}
 
-		if (checkKey('U'))
+		if (FlxG.keys.justPressed.U)
 			trace(generateOffsetCode(char.animation.curAnim.name));
 
 		if (FlxG.keys.justPressed.ENTER)

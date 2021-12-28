@@ -8,7 +8,7 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float, y:Float, noteData:Int)
 	{
 		super(x, y);
-		frames = getSparrowAtlas('noteSplashes', 'shared');
+		frames = Paths.getSparrowAtlas('noteSplashes', 'shared');
 		var downscroll = getPref('downscroll');
 		animation.addByPrefix("note0-0", "note impact 1 purple", 24, false, false, downscroll);
 		animation.addByPrefix("note0-1", "note impact 2 purple", 24, false, false, downscroll);

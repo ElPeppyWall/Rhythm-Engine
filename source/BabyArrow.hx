@@ -23,20 +23,14 @@ class BabyArrow extends FlxSprite
 		{
 			default:
 				frames = Paths.getSparrowAtlas('NOTE_assets');
-				animation.addByPrefix(notesColor[noteData], 'arrow${notesDir[noteData]}');
-
 				x += Note.swagWidth * noteData;
+
 				animation.addByPrefix('static', 'arrow${_noteDir.toUpperCase()}', 24, false, false, downscroll);
 				animation.addByPrefix('pressed', '$_noteDir press', 24, false, false, downscroll);
 				animation.addByPrefix('confirm', '$_noteDir confirm', 24, false, false, downscroll);
 				setGraphicSize(Std.int(width * 0.7));
 			case 'pixel':
 				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
-				animation.add('green', [6]);
-				animation.add('red', [7]);
-				animation.add('blue', [5]);
-				animation.add('purplel', [4]);
-
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
 				antialiasing = false;
@@ -58,6 +52,7 @@ class BabyArrow extends FlxSprite
 		}
 		ID = noteData;
 		animation.play('static');
+		// if (['bf-car','bf-christmas'].contains(char))
 		if (!getPref('midscroll'))
 		{
 			if (playerID == 0)

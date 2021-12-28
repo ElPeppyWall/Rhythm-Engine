@@ -447,9 +447,6 @@ class PlayState extends MusicBeatState
 					gf.x += 180;
 					gf.y += 300;
 				case 'schoolEvil':
-					var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
-					add(evilTrail);
-
 					boyfriend.x += 200;
 					boyfriend.y += 220;
 					gf.x += 180;
@@ -470,6 +467,13 @@ class PlayState extends MusicBeatState
 			boyfriendLayer.add(boyfriend);
 			if (afterAddALL != null)
 				afterAddALL();
+		}
+
+		switch (dad.curCharacter)
+		{
+			case 'spirit':
+				var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
+				insert(members.indexOf(dadLayer) - 1, evilTrail);
 		}
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
@@ -549,7 +553,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.borderQuality = 3;
 
 		songNameTxt = new FlxText(4, FlxG.width,
-			'${prettySong} - ${CoolUtil.getDiffName(curDifficulty, isAloneFunkin)} // Rhythm Engine v${GameVars.engineVer}', 20);
+			'${Song.prettySong} - ${CoolUtil.getDiffName(curDifficulty, isAloneFunkin)} // Rhythm Engine v${GameVars.engineVer}', 20);
 		songNameTxt.setFormat(uiStyle == 'pixel' ? "Pixel Arial 11 Bold" : Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,
 			FlxColor.BLACK);
 		songNameTxt.scrollFactor.set();
@@ -1121,7 +1125,7 @@ class PlayState extends MusicBeatState
 		if (stageUpdate != null)
 			stageUpdate(elapsed);
 
-		if (checkKey('NINE'))
+		if (FlxG.keys.justPressed.NINE)
 		{
 			if (!opponentMode)
 				iconP1.swapOldIcon();
@@ -1131,7 +1135,7 @@ class PlayState extends MusicBeatState
 			healthBar.updateFilledBar();
 		}
 
-		var skipPressed = checkKey('SPACE');
+		var skipPressed = FlxG.keys.justPressed.SPACE;
 
 		#if FLX_TOUCH
 		for (touch in FlxG.touches.list)
@@ -1276,7 +1280,7 @@ class PlayState extends MusicBeatState
 
 		if (health <= 0 && !practiceMode)
 			deathAnim(false);
-		if (controls.RESET && getPref('allowReset'))
+		if (controls.RESET && getPref('allow-reset'))
 			deathAnim(true);
 
 		if (unspawnNotes[0] != null)
@@ -2281,25 +2285,25 @@ class PlayState extends MusicBeatState
 		 * H: HIDE/SHOW THIS MESSAGE
 		 */
 
-		if (checkKey('ONE'))
+		if (FlxG.keys.justPressed.ONE)
 			endSong();
 
-		if (checkKey('Q', PRESSED))
+		if (FlxG.keys.pressed.Q)
 			defaultCamZoom += .025;
-		if (checkKey('E', PRESSED))
+		if (FlxG.keys.pressed.E)
 			defaultCamZoom -= .025;
 
-		if (checkKey('U'))
+		if (FlxG.keys.justPressed.U)
 			health += .25;
-		if (checkKey('I'))
+		if (FlxG.keys.justPressed.I)
 			health -= .25;
 
-		if (checkKey('B'))
+		if (FlxG.keys.justPressed.B)
 			trace('curBeat: $curBeat');
-		if (checkKey('N'))
+		if (FlxG.keys.justPressed.N)
 			trace('curStep: $curStep');
 
-		if (checkKey('H'))
+		if (FlxG.keys.justPressed.H)
 			debugTxt.visible = !debugTxt.visible;
 
 		#if FLX_MOUSE

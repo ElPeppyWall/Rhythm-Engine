@@ -178,7 +178,7 @@ class FreeplayState extends MusicBeatState
 
 	inline function checkTest():Void
 	{
-		if (checkKey('T'))
+		if (FlxG.keys.justPressed.T)
 			if (testInt == 0)
 				testInt = 1;
 			else if (testInt == 3)
@@ -186,13 +186,13 @@ class FreeplayState extends MusicBeatState
 			else
 				testInt = 0;
 
-		if (checkKey('E'))
+		if (FlxG.keys.justPressed.E)
 			if (testInt == 1)
 				testInt = 2;
 			else
 				testInt = 0;
 
-		if (checkKey('S'))
+		if (FlxG.keys.justPressed.S)
 			if (testInt == 2)
 				testInt = 3;
 			else
@@ -297,8 +297,8 @@ class FreeplayState extends MusicBeatState
 			left = controls.UI_LEFT_P;
 			right = controls.UI_RIGHT_P;
 			back = controls.BACK;
-			accept = controls.ACCEPT;
-			space = checkKey('SPACE');
+			accept = controls.ACCEPT && !FlxG.keys.justPressed.SPACE;
+			space = FlxG.keys.justPressed.SPACE;
 			#end
 
 			if (up)

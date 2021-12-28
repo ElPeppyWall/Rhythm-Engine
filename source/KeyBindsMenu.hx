@@ -154,7 +154,7 @@ class KeyBindsMenu extends MusicBeatSubstate
 			{
 				if (noteArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
 				{
-					if (checkKey('SHIFT', PRESSED))
+					if (FlxG.keys.pressed.SHIFT)
 						spr.playAnim('confirm');
 					else
 						spr.playAnim('pressed');

@@ -182,7 +182,7 @@ class DialogueBox extends FlxSpriteGroup
 			if (touch.justPressed)
 				touchJustPressed = true;
 		#end
-		if ((checkKey('ANY') #if FLX_TOUCH || touchJustPressed #end) && dialogueEnded && !isEnding)
+		if ((FlxG.keys.justPressed.ANY #if FLX_TOUCH || touchJustPressed #end) && dialogueEnded && !isEnding)
 		{
 			FlxG.sound.play(Paths.sound('clickText'), 0.8);
 

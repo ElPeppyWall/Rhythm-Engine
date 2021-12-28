@@ -168,8 +168,8 @@ class PreferencesMenu extends MusicBeatSubstate
 			minValue: 0,
 			maxValue: 0,
 		},
-		{ // - allowReset
-			name: 'allowReset',
+		{ // - allow-reset
+			name: 'allow-reset',
 			prettyName: 'Allow Reset',
 			description: "Allow die on game with the R key.",
 			type: TOGGLE,
@@ -179,6 +179,18 @@ class PreferencesMenu extends MusicBeatSubstate
 			minValue: 0,
 			maxValue: 0,
 		},
+		{ // - alone funkin recent list
+			name: 'alone-funkin-recent-list',
+			prettyName: 'alone-funkin-recent-list',
+			description: 'alone-funkin-recent-list',
+			type: TOGGLE,
+			defaultValue: new Map<String, String>(),
+			hideFromOptionsMenu: true,
+			disableOnPause: false,
+			minValue: 0,
+			maxValue: 0,
+		},
+		#if mobileC
 		{ // - mobileControlsType
 			name: 'mobileControlsType',
 			prettyName: 'mobileControlsType',
@@ -189,8 +201,7 @@ class PreferencesMenu extends MusicBeatSubstate
 			disableOnPause: true,
 			minValue: 0,
 			maxValue: 100,
-		},
-		{ // - mobileCustomPositions
+		}, { // - mobileCustomPositions
 			name: 'mobileCustomPositions',
 			prettyName: 'mobileCustomPositions',
 			description: "mobileCustomPositions",
@@ -206,6 +217,7 @@ class PreferencesMenu extends MusicBeatSubstate
 			minValue: 0,
 			maxValue: 0,
 		},
+		#end
 	];
 
 	var isPause:Bool;
@@ -439,7 +451,7 @@ class PreferencesMenu extends MusicBeatSubstate
 	function leftOrRight(dir:Int):Void
 	{
 		var floatChange = dir / 100;
-		if (KeyBinds.checkKey('SHIFT', PRESSED))
+		if (FlxG.keys.pressed.SHIFT)
 		{
 			dir *= 10;
 			floatChange *= 10;
