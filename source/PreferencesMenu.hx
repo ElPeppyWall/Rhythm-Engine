@@ -236,8 +236,6 @@ class PreferencesMenu extends MusicBeatSubstate
 		}
 
 		sprOpt = new AlphabetList(optionsNameList);
-		for (i in 0...100)
-			sprOpt.update(0);
 		add(sprOpt);
 
 		descriptionBG = new FlxSprite(0.7 * FlxG.width - 6, 0).makeGraphic(1, Std.int(FlxG.height / 2), FlxColor.BLACK);

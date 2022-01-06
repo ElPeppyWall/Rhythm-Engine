@@ -122,8 +122,6 @@ class FreeplayState extends MusicBeatState
 		add(playTxt);
 
 		changeSelection();
-		for (i in 0...100)
-			grpSongs.update(0);
 		changeDiff();
 
 		MusicManager.checkPlaying();

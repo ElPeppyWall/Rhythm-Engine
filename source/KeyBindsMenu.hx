@@ -56,8 +56,6 @@ class KeyBindsMenu extends MusicBeatSubstate
 		add(textStrums);
 		textArrows = new FlxTypedGroup<FlxText>();
 		add(textArrows);
-		for (i in 0...100)
-			sprOpt.update(0);
 		for (i in 0...4)
 		{
 			var babyArrow = new BabyArrow(50, i, 'normal', 1, false, true);
