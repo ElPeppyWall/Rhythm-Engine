@@ -764,10 +764,11 @@ class PlayState extends MusicBeatState
 
 		skipSpr = new FlxSprite().loadGraphic(Paths.image('skip'));
 		skipSpr.antialiasing = getPref('antialiasing');
-		skipSpr.setGraphicSize(Std.int(skipSpr.width * 0.6));
+		skipSpr.setGraphicSize(Std.int(skipSpr.width * 0.4));
 		skipSpr.updateHitbox();
 		skipSpr.screenCenter();
-		skipSpr.y = FlxG.height - 300;
+		skipSpr.y = FlxG.height - 100;
+		skipSpr.x = FlxG.width - 500;
 		skipSpr.alpha = 0;
 		skipSpr.cameras = [camHUD];
 		add(skipSpr);
@@ -784,6 +785,9 @@ class PlayState extends MusicBeatState
 
 				if (!boyfriend.curAnimName.startsWith('sing'))
 					boyfriend.dance();
+
+				if (stageBeat != null)
+					stageBeat();
 			}
 
 			switch (swagCounter)
@@ -1885,7 +1889,7 @@ class PlayState extends MusicBeatState
 					curStage = 'stage';
 					defaultCamZoom = 0.9;
 					if (curSong == 'tutorial')
-						gfArgs = ['CHEER', 'SING'];
+						dadArgs = ['CHEER', 'SING'];
 
 					var bg = new BGSprite(['stageback', 'shared'], [], -600, -200, .9, .9);
 					add(bg);

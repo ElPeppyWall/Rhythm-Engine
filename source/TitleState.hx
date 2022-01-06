@@ -57,6 +57,9 @@ class TitleState extends MusicBeatState
 			FlxG.sound.muteKeys = [48];
 			loadTransition(transIn, transOut);
 			PreferencesMenu.checkPrefValue('fpsCap');
+			#if debug
+			FlxG.console.registerClass(PreferencesMenu);
+			#end
 		}
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
@@ -229,7 +232,7 @@ class TitleState extends MusicBeatState
 		{
 			titleText.animation.play('press');
 
-			FlxG.camera.flash(FlxColor.WHITE, 1);
+			FlxG.camera.flash(FlxColor.WHITE, 0.5);
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
 			transitioning = true;

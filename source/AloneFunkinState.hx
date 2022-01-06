@@ -7,6 +7,9 @@ import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import openfl.events.Event;
+import openfl.net.FileFilter;
+import openfl.net.FileReference;
 
 using StringTools;
 
@@ -18,7 +21,8 @@ class AloneFunkinState extends MusicBeatState
 
 		final fullScreen = FlxG.fullscreen;
 		FlxG.fullscreen = false;
-		var textUI = new FlxText(125, 153, 'Drag and drop the chart of you want to play. The folder where the chart is located has to be like this:', 20);
+		var textUI = new FlxText(125, 130,
+			'Drag and drop the chart of you want to play.\nThe folder where the chart is located has to be like this: or just browse to find it:', 20);
 		textUI.fieldWidth = 700;
 		textUI.setFormat(Paths.font("vcr.ttf"), 52, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		textUI.scrollFactor.set();
@@ -29,6 +33,23 @@ class AloneFunkinState extends MusicBeatState
 		screenshot.setGraphicSize(Std.int(screenshot.width * 1.6));
 		screenshot.updateHitbox();
 		add(screenshot);
+
+		var browseButton = new FlxUIButton(600, 400, 'BROWSE', function()
+		{
+			var _file = new FileReference();
+			_file.browse([new FileFilter('Chart File (*.json)', '*.json')]);
+			_file.addEventListener(Event.SELECT, function(_)
+			{
+				trace(_);
+				_file.load();
+				trace(_file.name);
+			});
+		});
+		browseButton.resize(200, 50);
+		browseButton.setLabelFormat("VCR OSD Mono", 18, FlxColor.WHITE, "center", OUTLINE, FlxColor.BLACK);
+		browseButton.label.borderSize = 1.25;
+		browseButton.label.offset.y += 10;
+		add(browseButton);
 
 		var mapp:Map<String, String> = getPref('alone-funkin-recent-list');
 		var listt:Array<String> = [''];
@@ -41,7 +62,7 @@ class AloneFunkinState extends MusicBeatState
 		recentListDrop.selectedLabel = '';
 		for (button in recentListDrop.list)
 		{
-			button.setLabelFormat("VCR OSD Mono", 18, FlxColor.WHITE, "center", OUTLINE, FlxColor.BLACK);
+			button.setLabelFormat("VCR OSD Mono", 15, FlxColor.BLACK, "center");
 		}
 		add(recentListDrop);
 

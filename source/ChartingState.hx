@@ -420,14 +420,6 @@ class ChartingState extends MusicBeatState
 
 	var updatedSection:Bool = false;
 
-	/* this function got owned LOL
-		function lengthBpmBullshit():Float
-		{
-			if (_song.notes[curSection].changeBPM)
-				return _song.notes[curSection].lengthInSteps * (_song.notes[curSection].bpm / _song.bpm);
-			else
-				return _song.notes[curSection].lengthInSteps;
-	}*/
 	function sectionStartTime():Float
 	{
 		var daBPM:Float = _song.bpm;
@@ -532,17 +524,16 @@ class ChartingState extends MusicBeatState
 				PlayState.SONG = _song;
 				FlxG.sound.music.stop();
 				vocals.stop();
+				FlxG.sound.muteKeys = [48];
+				FlxG.sound.volumeDownKeys = [MINUS, NUMPADMINUS];
+				FlxG.sound.volumeUpKeys = [PLUS, NUMPADPLUS];
 				switchState(PlayState);
 			}
 
 			if (FlxG.keys.justPressed.E)
-			{
 				changeNoteSustain(Conductor.stepCrochet);
-			}
 			if (FlxG.keys.justPressed.Q)
-			{
 				changeNoteSustain(-Conductor.stepCrochet);
-			}
 
 			if (FlxG.keys.justPressed.TAB)
 			{
@@ -630,15 +621,15 @@ class ChartingState extends MusicBeatState
 					vocals.time = FlxG.sound.music.time;
 				}
 			}
-			FlxG.sound.muteKeys = [];
-			FlxG.sound.volumeDownKeys = [];
-			FlxG.sound.volumeUpKeys = [];
-		}
-		else
-		{
 			FlxG.sound.muteKeys = [48];
 			FlxG.sound.volumeDownKeys = [MINUS, NUMPADMINUS];
 			FlxG.sound.volumeUpKeys = [PLUS, NUMPADPLUS];
+		}
+		else
+		{
+			FlxG.sound.muteKeys = [];
+			FlxG.sound.volumeDownKeys = [];
+			FlxG.sound.volumeUpKeys = [];
 		}
 
 		_song.bpm = tempBpm;
