@@ -197,7 +197,7 @@ class KeyBindsMenu extends MusicBeatSubstate
 				daBG.visible = true;
 			}
 			if (controls.BACK)
-				switchState(OptionsMenu);
+				openSubState(new PreferencesMenu(isPause));
 		}
 		else
 		{
