@@ -183,8 +183,8 @@ class KeyBindsMenu extends MusicBeatSubstate
 				}
 			});
 
-			textStrums.forEach(function(spr:FlxText) spr.text = String.fromCharCode(FlxG.save.data.noteBinds[spr.ID]));
-			textArrows.forEach(function(spr:FlxText) spr.text = String.fromCharCode(FlxG.save.data.uiBinds[spr.ID]));
+			textStrums.forEach(function(spr:FlxText) spr.text = KeyBinds.keyCodeToString(FlxG.save.data.noteBinds[spr.ID]));
+			textArrows.forEach(function(spr:FlxText) spr.text = KeyBinds.keyCodeToString(FlxG.save.data.uiBinds[spr.ID]));
 
 			if (controls.ACCEPT)
 			{
