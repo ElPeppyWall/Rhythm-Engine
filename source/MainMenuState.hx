@@ -52,8 +52,6 @@ class MainMenuState extends MusicBeatState
 
 		MusicManager.checkPlaying();
 
-		persistentUpdate = persistentDraw = true;
-
 		var bg = new FlxSprite(0, 0, Paths.image('menuBG/menuBG'));
 		bg.scrollFactor.set(0, .17);
 		bg.setGraphicSize(Std.int(bg.width * 1.2));
@@ -97,9 +95,9 @@ class MainMenuState extends MusicBeatState
 			menuItem.antialiasing = getPref('antialiasing');
 		}
 
-		camBG.follow(camFollow, null, 0.06);
+		camBG.follow(camFollow, null, 0.04);
 
-		var versionShit = new FlxText(5, FlxG.height - 50, 0, 'Rhythm Engine v${GameVars.engineVer}', 12);
+		var versionShit = new FlxText(5, FlxG.height - 50, 0, '${GameInfo.engineWatermark}', 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		versionShit.borderSize = 3;
@@ -116,7 +114,10 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		camBG.followLerp = CoolUtil.camLerpShit(0.06);
+		camBG.followLerp = CoolUtil.camLerpShit(0.04);
+		if (FlxG.keys.justPressed.SEVEN)
+		{
+		}
 		if (!selectedSomethin)
 		{
 			var up = false, down = false, accept = false, back = false;

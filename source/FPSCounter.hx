@@ -1,8 +1,7 @@
 package;
 
-import GameVars.engineVer;
 import openfl.Lib;
-import openfl.display.Bitmap;
+import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 
@@ -12,68 +11,42 @@ import openfl.text.TextFormat;
 #end
 class FPSCounter extends TextField
 {
-	/**
-		The current frame rate, expressed using frames-per-second
-	**/
 	public var currentFPS(default, null):Int;
 
-	public var bitmap:Bitmap;
+	private var times:Array<Float>;
+	private var memPeak:Float = 0;
 
-	@:noCompletion private var cacheCount:Int;
-	@:noCompletion private var currentTime:Float;
-	@:noCompletion private var times:Array<Float>;
-
-	public function new(x:Float = 10, y:Float = 10, color:Int = 0x000000)
+	public function new(_x:Float = 10, _y:Float = 10)
 	{
 		super();
 
-		this.x = x;
-		this.y = y;
+		x = _x;
+		y = _y;
 
-		currentFPS = 0;
 		selectable = false;
-		mouseEnabled = false;
-		defaultTextFormat = new TextFormat("VCR OSD Mono", 14, 0xFFed698a);
+		defaultTextFormat = new TextFormat("VCR OSD Mono", 16, GameInfo.engineColor);
 		text = "FPS: ";
 		width += 200;
 
-		cacheCount = 0;
-		currentTime = 0;
 		times = [];
-		bitmap = ImageWithOutline.renderImage(this, 1, 0x000000, 1, true);
-		(cast(Lib.current.getChildAt(0), Main)).addChild(bitmap);
+		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 
 	// Event Handlers
-	@:noCompletion
-	private #if !flash override #end function __enterFrame(deltaTime:Float):Void
+	private function onEnterFrame(_)
 	{
-		currentTime += deltaTime;
-		times.push(currentTime);
+		var now = haxe.Timer.stamp();
+		times.push(now);
 
-		while (times[0] < currentTime - 1000)
-		{
+		while (times[0] < now - 1)
 			times.shift();
-		}
 
-		var currentCount = times.length;
-		currentFPS = Math.round((currentCount + cacheCount) / 2);
+		currentFPS = times.length;
+		var mem:Float = Math.round(openfl.system.System.totalMemory / 1024 / 1024 * 100) / 100;
 
-		if (currentCount != cacheCount /*&& visible*/)
-		{
-			text = 'FPS: $currentFPS\nrhythmEngine v$engineVer';
-		}
+		if (mem > memPeak)
+			memPeak = mem;
 
-		visible = true;
-
-		(cast(Lib.current.getChildAt(0), Main)).removeChild(bitmap);
-
-		bitmap = ImageWithOutline.renderImage(this, 2, 0x000000, 1);
-
-		(cast(Lib.current.getChildAt(0), Main)).addChild(bitmap);
-
-		visible = false;
-
-		cacheCount = currentCount;
+		text = 'FPS: $currentFPS\nMEM: $mem mb\n${GameInfo.engineWatermark}';
 	}
 }

@@ -17,7 +17,6 @@ class Main extends Sprite
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
 	static var fpsCounter:FPSCounter;
-	static var fpsBitMap:openfl.display.Bitmap;
 
 	var gameLoop:GameLoop;
 
@@ -64,10 +63,8 @@ class Main extends Sprite
 		}
 
 		gameLoop = new GameLoop();
-		fpsCounter = new FPSCounter(10, 3, 0);
-		fpsBitMap = ImageWithOutline.renderImage(fpsCounter, 1, 0x000000, true);
-		fpsBitMap.smoothing = true;
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
+		fpsCounter = new FPSCounter(10, 3);
 		addChild(fpsCounter);
 	}
 
