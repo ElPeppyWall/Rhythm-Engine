@@ -1,8 +1,9 @@
 package;
 
 import flixel.FlxSprite;
+import flixel.tweens.FlxTween;
 
-class MenuCharacter extends FlxSprite
+class WeekMenuCharacter extends FlxSprite
 {
 	public var character:String;
 
@@ -44,7 +45,11 @@ class MenuCharacter extends FlxSprite
 	public inline function changeCharacter(char:String):Void
 	{
 		if (curCharacter != char)
+		{
 			animation.play(char);
+			FlxTween.color(this, CoolUtil.camLerpShit(.25), this.color, 0xFFF9CF51);
+			// HealthIconsData.getIconColor(HealthIconsData.getCharIcon(this.curCharacter))
+		}
 	}
 
 	public var curCharacter(get, never):String;

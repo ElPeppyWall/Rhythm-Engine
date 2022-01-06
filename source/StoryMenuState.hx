@@ -28,8 +28,8 @@ class StoryMenuState extends MusicBeatState
 
 	var txtTracklist:FlxText;
 
-	var grpWeekText:FlxTypedGroup<MenuItem>;
-	var grpWeekCharacters:FlxTypedGroup<MenuCharacter>;
+	var grpWeekText:FlxTypedGroup<WeekMenuItem>;
+	var grpWeekCharacters:FlxTypedGroup<WeekMenuCharacter>;
 
 	var grpLocks:FlxTypedGroup<FlxSprite>;
 
@@ -56,8 +56,6 @@ class StoryMenuState extends MusicBeatState
 
 		MusicManager.checkPlaying();
 
-		persistentUpdate = persistentDraw = true;
-
 		scoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
 		scoreText.setFormat("VCR OSD Mono", 32);
 
@@ -74,13 +72,13 @@ class StoryMenuState extends MusicBeatState
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
 		yellowBG = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
 
-		grpWeekText = new FlxTypedGroup<MenuItem>();
+		grpWeekText = new FlxTypedGroup<WeekMenuItem>();
 		add(grpWeekText);
 
 		var blackBarThingie:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 56, FlxColor.BLACK);
 		add(blackBarThingie);
 
-		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
+		grpWeekCharacters = new FlxTypedGroup<WeekMenuCharacter>();
 
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 		add(grpLocks);
@@ -92,7 +90,7 @@ class StoryMenuState extends MusicBeatState
 
 		for (i in 0...weeks.length)
 		{
-			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, i);
+			var weekThing = new WeekMenuItem(0, yellowBG.y + yellowBG.height + 10, i);
 			weekThing.y += ((weekThing.height + 20) * i);
 			weekThing.targetY = i;
 			grpWeekText.add(weekThing);
@@ -116,7 +114,7 @@ class StoryMenuState extends MusicBeatState
 
 		for (char in 0...3)
 		{
-			var weekCharacterThing = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, switch (char)
+			var weekCharacterThing = new WeekMenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, switch (char)
 			{
 				case 1:
 					'bf';
@@ -299,7 +297,7 @@ class StoryMenuState extends MusicBeatState
 		super.beatHit();
 
 		trace('elpepe');
-		grpWeekCharacters.forEach(function(char:MenuCharacter)
+		grpWeekCharacters.forEach(function(char:WeekMenuCharacter)
 		{
 			char.animation.play(char.curCharacter, true);
 		});
@@ -412,19 +410,19 @@ class StoryMenuState extends MusicBeatState
 		updateText();
 	}
 
-	var enemyChar(get, never):MenuCharacter;
+	var enemyChar(get, never):WeekMenuCharacter;
 
-	inline function get_enemyChar():MenuCharacter
+	inline function get_enemyChar():WeekMenuCharacter
 		return grpWeekCharacters.members[0];
 
-	var bfChar(get, never):MenuCharacter;
+	var bfChar(get, never):WeekMenuCharacter;
 
-	inline function get_bfChar():MenuCharacter
+	inline function get_bfChar():WeekMenuCharacter
 		return grpWeekCharacters.members[1];
 
-	var gfChar(get, never):MenuCharacter;
+	var gfChar(get, never):WeekMenuCharacter;
 
-	inline function get_gfChar():MenuCharacter
+	inline function get_gfChar():WeekMenuCharacter
 		return grpWeekCharacters.members[2];
 
 	function updateText()
@@ -432,11 +430,6 @@ class StoryMenuState extends MusicBeatState
 		enemyChar.changeCharacter(weeks[curWeek].weekCharacter);
 		bfChar.changeCharacter(weeks[curWeek].weekCharacterBF);
 		gfChar.changeCharacter(weeks[curWeek].weekCharacterGF);
-
-		for (char in grpWeekCharacters.members)
-			FlxTween.color(char, CoolUtil.camLerpShit(.25), char.color, HealthIconsData.getIconColor(HealthIconsData.getCharIcon(char.curCharacter)));
-
-		// FlxTween.color(yellowBG, CoolUtil.camLerpShit(.25), yellowBG.color, weeks[curWeek].weekColor);
 
 		switch (enemyChar.curCharacter)
 		{

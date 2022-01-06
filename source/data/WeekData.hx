@@ -9,7 +9,7 @@ typedef WeekClass =
 	var weekCharacter:String;
 	var weekCharacterBF:String;
 	var weekCharacterGF:String;
-	var weekColor:flixel.util.FlxColor;
+	var weekColor:Int;
 }
 
 class WeekData
