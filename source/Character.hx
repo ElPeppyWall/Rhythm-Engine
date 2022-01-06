@@ -1,5 +1,6 @@
 package;
 
+import CoolUtil.numberArray as numArr;
 import PlayState.notesDir;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -247,15 +248,15 @@ class Character extends FlxSprite
 					var tex = getCharacterFrames('bfCar', 'week4');
 					frames = tex;
 					animation.addByPrefix('idle', 'BF idle dance', 24, false);
-					animation.addByIndices('idleHOLD', 'BF idle dance', [10, 11, 12, 13], "", 24, true);
+					animation.addByIndices('idleHOLD', 'BF idle dance', numArr(10, 13), "", 24, true);
 					animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
-					animation.addByIndices('singUPHOLD', 'BF NOTE UP0', [12, 13, 14, 15], "", 24, true);
+					animation.addByIndices('singUPHOLD', 'BF NOTE UP0', numArr(12, 15), "", 24, true);
 					animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
-					animation.addByIndices('singLEFTHOLD', 'BF NOTE LEFT0', [13, 14, 15, 16], "", 24, true);
+					animation.addByIndices('singLEFTHOLD', 'BF NOTE LEFT0', numArr(13, 16), "", 24, true);
 					animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
-					animation.addByIndices('singRIGHTHOLD', 'BF NOTE RIGHT0', [59, 60, 61, 62], "", 24, true);
+					animation.addByIndices('singRIGHTHOLD', 'BF NOTE RIGHT0', numArr(59, 62), "", 24, true);
 					animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
-					animation.addByIndices('singDOWNHOLD', 'BF NOTE DOWN0', [27, 28, 29, 30], "", 24, true);
+					animation.addByIndices('singDOWNHOLD', 'BF NOTE DOWN0', numArr(27, 30), "", 24, true);
 					animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
 					animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
 					animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
@@ -295,17 +296,17 @@ class Character extends FlxSprite
 					frames = getCharacterFrames('momCar', 'week4');
 
 					animation.addByPrefix('idle', "Mom Idle", 24, false);
-					animation.addByIndices('idleHOLD', 'Mom Idle', [11, 12, 13, 14], "", 24, true);
+					animation.addByIndices('idleHOLD', 'Mom Idle', numArr(11, 14), "", 24, true);
 					animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
-					animation.addByIndices('singUPHOLD', 'Mom Up Pose', [12, 13, 14, 15], "", 24, true);
+					animation.addByIndices('singUPHOLD', 'Mom Up Pose', numArr(12, 15), "", 24, true);
 					animation.addByPrefix('singDOWN', "MOM DOWN POSE", 24, false);
-					animation.addByIndices('singDOWNHOLD', 'MOM DOWN POSE', [12, 13, 14, 15], "", 24, true);
+					animation.addByIndices('singDOWNHOLD', 'MOM DOWN POSE', numArr(12, 15), "", 24, true);
 					animation.addByPrefix('singLEFT', 'Mom Left Pose', 24, false);
-					animation.addByIndices('singLEFTHOLD', 'Mom Left Pose', [7, 8, 9, 10], "", 24, true);
+					animation.addByIndices('singLEFTHOLD', 'Mom Left Pose', numArr(7, 10), "", 24, true);
 					// ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
 					// CUZ DAVE IS DUMB!
 					animation.addByPrefix('singRIGHT', 'Mom Pose Left', 24, false);
-					animation.addByIndices('singRIGHTHOLD', 'Mom Pose Left', [7, 8, 9, 10], "", 24, true);
+					animation.addByIndices('singRIGHTHOLD', 'Mom Pose Left', numArr(7, 10), "", 24, true);
 
 					addOffset('idle');
 					addOffset('idleHOLD');
