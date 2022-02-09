@@ -80,10 +80,7 @@ class LoadingState extends MusicBeatState
 				if (PlayState.SONG.needsVoices)
 					checkLoadSong(getVocalPath());
 				checkLibrary("shared");
-				if (PlayState.curWeek > 0)
-					checkLibrary("week" + PlayState.curWeek);
-				else
-					checkLibrary("tutorial");
+				checkLibrary(WeekData.librariesNames[PlayState.curWeek]);
 
 				var fadeTime = 0.5;
 				FlxG.camera.fade(FlxG.camera.bgColor, fadeTime, true);
