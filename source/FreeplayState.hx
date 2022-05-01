@@ -25,7 +25,7 @@ class FreeplayState extends MusicBeatState
 
 	static var curSelected:Int = 0;
 	static var curDifficulty:Int = 1;
-
+//hhh
 	var scoreText:FlxText;
 	var scoreBG:FlxSprite;
 	var diffText:FlxText;
